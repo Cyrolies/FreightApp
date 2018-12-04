@@ -1,0 +1,30 @@
+page-speaker-list {
+  .scroll {
+    background: #EDEDED;
+  }
+  .backImg
+  {
+    background-image: url('../../../assets/img/Ocean.png');
+    background-color: transparent;
+  }
+  .speaker-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .speaker-card ion-card-header {
+    padding: 0;
+    background-color:  orange
+  }
+
+  .speaker-card ion-card-header .item {
+    padding: 4px 16px;
+  }
+
+  .speaker-card ion-card-content {
+    flex: 1 1 auto;
+    background-color:  orange;
+    padding: 0;
+  }
+}

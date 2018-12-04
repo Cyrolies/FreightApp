@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Reports</ion-title>
+   <!-- <ion-buttons slot="end">
+      <ion-button (click)="presentPopover($event)">
+        <ion-icon slot="icon-only" name="more"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- <div class="about-header">
+    <img src="assets/img/ionic-logo-white.svg" alt="ionic logo">
+  </div> -->
+  <div padding class="about-info">
+    <h4>Select report to view</h4>
+    <ion-row responsive-sm>
+      <ion-col>
+        <ion-button (click)="onOpenReport('Freght Spend')" type="submit" expand="block">Freight Spend</ion-button>
+        <ion-button (click)="onOpenReport('Freght Mobile')" type="submit" expand="block">Freight Mobile</ion-button>
+        <ion-button (click)="onOpenReport('Freght Milestone')" type="submit" expand="block">Freight Milestone</ion-button>
+      </ion-col>
+     <!-- <ion-col>
+        <ion-button (click)="onSignup()" color="light" expand="block">Signup</ion-button>
+      </ion-col>-->
+    </ion-row>
+    
+  </div>
+  <iframe  id="reportContainer" ></iframe>
+</ion-content>

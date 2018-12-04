@@ -12,6 +12,7 @@ import { SessionDetailModule } from '../session-detail/session-detail.module';
 import { SpeakerDetailModule } from '../speaker-detail/speaker-detail.module';
 import { SpeakerListModule } from '../speaker-list/speaker-list.module';
 import { ReportsModule } from '../reports/reports.module';
+import { SubscriptionsModule } from '../subscriptions/subscriptions.module';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { ReportsModule } from '../reports/reports.module';
     SessionDetailModule,
     SpeakerDetailModule,
     SpeakerListModule,
+    SubscriptionsModule,
     TabsPageRoutingModule
   ],
   declarations: [

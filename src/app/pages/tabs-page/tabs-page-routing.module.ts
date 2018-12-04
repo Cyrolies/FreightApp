@@ -10,6 +10,7 @@ import { SessionDetailPage } from '../session-detail/session-detail';
 import { SpeakerDetailPage } from '../speaker-detail/speaker-detail';
 import { SpeakerListPage } from '../speaker-list/speaker-list';
 import { ReportsPage } from '../reports/reports';
+import { SubscriptionsPage } from './../subscriptions/subscriptions';
 
 
 
@@ -57,10 +58,17 @@ const routes: Routes = [
         component: AboutPage,
         outlet: 'about'
       },
+      // tab five
       {
         path: 'reports',
         component: ReportsPage,
         outlet: 'reports'
+      },
+      // tab six
+      {
+        path: 'subscriptions',
+        component: SubscriptionsPage,
+        outlet: 'subscriptions'
       }
     ]
   }

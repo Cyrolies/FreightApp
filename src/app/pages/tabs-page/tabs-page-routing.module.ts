@@ -10,7 +10,7 @@ import { SessionDetailPage } from '../session-detail/session-detail';
 import { SpeakerDetailPage } from '../speaker-detail/speaker-detail';
 import { SpeakerListPage } from '../speaker-list/speaker-list';
 import { ReportsPage } from '../reports/reports';
-import { SubscriptionsPage } from './../subscriptions/subscriptions';
+import { SubscriptionsPage } from '../subscriptions/subscriptions';
 
 
 

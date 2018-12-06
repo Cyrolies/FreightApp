@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
@@ -9,6 +9,7 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AppHttpInterceptor } from './providers/app-http-interceptor.service';
 
 @NgModule({
   imports: [
@@ -19,7 +20,15 @@ import { AppComponent } from './app.component';
     IonicStorageModule.forRoot()
   ],
   declarations: [AppComponent],
-  providers: [InAppBrowser, SplashScreen, StatusBar],
+  providers: [
+    InAppBrowser,
+    SplashScreen,
+    StatusBar,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AppHttpInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

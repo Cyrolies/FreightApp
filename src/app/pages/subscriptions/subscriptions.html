@@ -20,7 +20,7 @@
       <ion-item *ngFor="let topic of topics" [attr.track]="topic.$id">
         <span slot="start" class="dot"></span>
         <ion-label>{{topic.name}}</ion-label>
-        <ion-toggle [(ngModel)]="topic.isChecked" color="success"></ion-toggle>
+        <ion-toggle [(ngModel)]="topic.isSubscribed" color="success"></ion-toggle>
       </ion-item>
   
     </ion-list>

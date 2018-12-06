@@ -1,8 +1,8 @@
-import { FreightApiService } from './../../providers/freight-api.service';
+import { FreightApiService, EventTopic } from './../../providers/freight-api.service';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { ActionSheetController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
+
 
 @Component({
   selector: 'page-subscriptions',
@@ -11,40 +11,50 @@ import { ActionSheetController } from '@ionic/angular';
   encapsulation: ViewEncapsulation.None
 })
 export class SubscriptionsPage {
-  tracks: {name: string, isChecked: boolean}[] = [];
-  topics: {$id: string, name: string, code: string, isChecked: boolean}[] = [
-    {
-      $id: '2',
-      name: 'Cargo Booked',
-      code: 'ADD',
-      isChecked: true
-    },
-    {
-      $id: '3',
-      name: 'ATA',
-      code: 'ATA',
-      isChecked: false
-    },
 
-  ];
+  topics: EventTopic[] = new Array<EventTopic>();
 
   constructor(
     public freightApiService: FreightApiService,
-    public router: Router
+    public router: Router,
+    public toastCtrl: ToastController
   ) {}
 
   ionViewDidEnter() {
-    // this.freightApiService.GetEventSubscriptions().subscribe((subscriptions: any[]) => {
-    //   this.subscriptions = subscriptions;
-    // });
+
     console.log('SubscriptionsPage: this.ionViewDidEnter');
+
+    this.freightApiService.GetEventSubscriptions().subscribe((topics: EventTopic[]) => {
+      console.log('Received Subscriptions from FreightApi.');
+
+      this.topics = topics;
+    }, (error) => {
+
+      console.log(`Failed to get Subscriptions from FreightApi.\nDetails:\n${JSON.stringify(error)}`);
+
+      this.presentToast().then(() => {});
+
+      this.topics = new Array<EventTopic>();
+
+    });
   }
 
   resetFilters() {
     // reset all of the toggles to be checked
     this.topics.forEach(topic => {
-      topic.isChecked = false;
+      topic.isSubscribed = false;
     });
+  }
+
+  async presentToast() {
+    const toast = await this.toastCtrl.create({
+      message: 'Failed to retrieve Subscriptions.',
+      duration: 5000,
+      position: 'middle',
+      showCloseButton: true
+    });
+
+    await toast.present();
   }
 
 }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import {plainToClass} from 'class-transformer';
+import { plainToClass } from 'class-transformer';
 
 export class EventTopic {
   $id: string;
@@ -18,9 +18,25 @@ export class EventTopic {
     this.subscribers = Number(isSubscribed);
   }
 
-  constructor(values: Object = {}) {
-    Object.assign(this, values);
-  }
+  // constructor(values: Object = {}) {
+  //   Object.assign(this, values);
+  // }
+}
+
+export class ShipmentEvent {
+  $id: string;
+  Id: number;
+  ConsigneeCode: string;
+  Consignee: string;
+  ConsignorCode: string;
+  Consignor: string;
+  EventCode: string;
+  ShipmentNo: string;
+  EventDescription: string;
+  AdditionalInfo: string;
+  ActualDate: Date | null;
+  EstimatedDate: Date | null;
+  CreateDateTime: Date | null;
 }
 
 
@@ -57,6 +73,24 @@ export class FreightApiService {
     //       return of(new Array<EventTopic>());
     //     }
     //   ));
+  }
+
+  public GetShipmentEvents(cargoWiseCode: string): Observable<ShipmentEvent[]> {
+
+    console.log('FreightApiService: Get shipment events.');
+
+    const endpoint = environment.freightApiUrl + 'FreightShipping/GetShipmentEvents';
+
+    const params = new HttpParams()
+      .set('cargowisecode', cargoWiseCode)
+      .set('userName', environment.defaultUser);
+
+    return this.http
+    .get(endpoint, {params})
+    .pipe(map((events: object[]) => {
+
+      return plainToClass(ShipmentEvent, events);
+    }));
   }
 
   public SubscribeToShipmentEvents (topics: EventTopic[]): Observable<boolean> {

@@ -1,3 +1,4 @@
+import { ShipmentEvent } from './../../providers/freight-api.service';
 import { HttpClient } from '@angular/common/http';
 import { FreightApiService, EventTopic } from '../../providers/freight-api.service';
 import { Component, ViewEncapsulation } from '@angular/core';
@@ -75,6 +76,17 @@ export class SubscriptionsPage {
       this.freightApiService.SubscribeToShipmentEvents(this.topics).subscribe((isSuccessful: boolean) => {
 
         this.logBoolServerResponse('Save Suscriptions', isSuccessful);
+        spinner.dismiss();
+
+      }, error =>  spinner.dismiss());
+    });
+
+    // Test various FreightAPI methods:
+    console.log('Testing FreightApi.GetShipmentEvents...');
+    const testCargoWiseCode = 'SIMFISSEA';
+    spinner.present().then(() => {
+      this.freightApiService.GetShipmentEvents(testCargoWiseCode).subscribe((shipmentEvents: ShipmentEvent[]) => {
+
         spinner.dismiss();
 
       }, error =>  spinner.dismiss());

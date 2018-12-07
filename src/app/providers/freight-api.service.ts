@@ -4,6 +4,11 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { plainToClass } from 'class-transformer';
+import { stringify } from '../../../node_modules/@angular/core/src/util';
+
+export class CargoWiseFilter {
+  constructor(readonly Name: string, readonly DatabaseColumnName: string, readonly Value: string) {}
+}
 
 export class EventTopic {
   $id: string;
@@ -38,6 +43,37 @@ export class ShipmentEvent {
   EstimatedDate: Date | null;
   CreateDateTime: Date | null;
 }
+
+export class Shipment {
+  Status: string;
+  HouseBill: string;
+  TransportMode: string;
+  ConsigneeRef: string;
+  ShipmentRef: string;
+  PortOfLoading: string;
+  Shipper: string;
+  Consignee: string;
+  Origin: string;
+  Destination: string;
+  EstimatedDeparture: string;
+  PortOfDischarge: string;
+  EstimatedDelivery: string;
+  CargoBooked: string;
+  Pickup: string;
+  ActualDeparture: string;
+  ImportCustomsClearance: string;
+  TruckerNotified: string;
+  ActualDelivery: string;
+  ParcelDelivered: string;
+  Inco: string;
+  Weight: number;
+  Volume: number;
+  WeightUnit: string;
+  VolumeUnit: string;
+  LocalClient: string;
+  JS_SystemCreateTimeUtc: Date;
+}
+
 
 
 @Injectable({
@@ -90,6 +126,36 @@ export class FreightApiService {
     .pipe(map((events: object[]) => {
 
       return plainToClass(ShipmentEvent, events);
+    }));
+  }
+
+  public GetShipments(cargoWiseCode: string,
+    shipmentNo: string,
+    orderNo: string,
+    fromDate: Date,
+    toDate: Date,
+    includeOpenShipments: boolean): Observable<Shipment[]> {
+
+    console.log('FreightApiService: Get shipments.');
+
+    const endpoint = environment.freightApiUrl + 'FreightShipping/GetShipments';
+
+    const filters = new Array<CargoWiseFilter>();
+      filters.push(new CargoWiseFilter('cargowisecode', 'cargowisecode', cargoWiseCode));
+      filters.push(new CargoWiseFilter('shipmentNumber', 'shipmentNumber', shipmentNo));
+      filters.push(new CargoWiseFilter('orderNumber', 'orderNumber', orderNo));
+      filters.push(new CargoWiseFilter('DateFrom', 'DateFrom', fromDate != null ? fromDate.toDateString() : ''));
+      filters.push(new CargoWiseFilter('DateTo', 'DateTo', toDate != null ? toDate.toDateString() : ''));
+      filters.push(new CargoWiseFilter('OpenShipments', 'OpenShipments', includeOpenShipments ? '1' : '0'));
+
+    const params = new HttpParams()
+      .set('parameters', JSON.stringify(filters));
+
+    return this.http
+    .get(endpoint, {params})
+    .pipe(map((shipments: object[]) => {
+
+      return plainToClass(Shipment, shipments);
     }));
   }
 

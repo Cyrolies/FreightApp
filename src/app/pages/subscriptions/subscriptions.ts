@@ -1,4 +1,4 @@
-import { ShipmentEvent } from './../../providers/freight-api.service';
+import { ShipmentEvent, Shipment } from './../../providers/freight-api.service';
 import { HttpClient } from '@angular/common/http';
 import { FreightApiService, EventTopic } from '../../providers/freight-api.service';
 import { Component, ViewEncapsulation } from '@angular/core';
@@ -86,6 +86,27 @@ export class SubscriptionsPage {
     const testCargoWiseCode = 'SIMFISSEA';
     spinner.present().then(() => {
       this.freightApiService.GetShipmentEvents(testCargoWiseCode).subscribe((shipmentEvents: ShipmentEvent[]) => {
+
+        spinner.dismiss();
+
+      }, error =>  spinner.dismiss());
+    });
+
+    // Test various FreightAPI methods:
+    console.log('Testing FreightApi.GetShipments...');
+    const testShipmentNumber = 'S01004368'; // ShipmentRef
+    const testOrderNumber = '';
+    const testDateFrom = new Date('01 Dec 2018'); // Dates compared against shipment create date.
+    const testDateTo = undefined;
+    const testOpenShipments = false;
+
+    spinner.present().then(() => {
+      this.freightApiService.GetShipments(testCargoWiseCode,
+        testShipmentNumber,
+        testOrderNumber,
+        testDateFrom,
+        testDateTo,
+        testOpenShipments).subscribe((shipments: Shipment[]) => {
 
         spinner.dismiss();
 

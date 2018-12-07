@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { FreightApiService, EventTopic } from '../../providers/freight-api.service';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
@@ -18,18 +19,16 @@ export class SubscriptionsPage {
     public freightApiService: FreightApiService,
     public router: Router,
     public toastCtrl: ToastController,
-    public loading: LoadingController
+    public loading: LoadingController,
+    public http: HttpClient
   ) {}
 
   async ionViewDidEnter() {
-
-    console.log('SubscriptionsPage: this.ionViewDidEnter');
 
     const spinner = await this.loading.create();
 
     spinner.present().then(() => {
       this.freightApiService.GetEventSubscriptions().subscribe((topics: EventTopic[]) => {
-        console.log('Received Subscriptions from FreightApi.');
 
         this.topics = topics;
 
@@ -51,6 +50,7 @@ export class SubscriptionsPage {
   }
 
   resetFilters() {
+
     // reset all of the toggles to be checked
     this.topics.forEach(topic => {
       topic.isSubscribed = false;
@@ -67,5 +67,24 @@ export class SubscriptionsPage {
 
   //   await toast.present();
   // }
+
+  async save() {
+    const spinner = await this.loading.create();
+
+    spinner.present().then(() => {
+      this.freightApiService.SubscribeToShipmentEvents(this.topics).subscribe((isSuccessful: boolean) => {
+
+        this.logBoolServerResponse('Save Suscriptions', isSuccessful);
+        spinner.dismiss();
+
+      }, error =>  spinner.dismiss());
+    });
+  }
+
+  logBoolServerResponse(attemptedAction: string, isSuccessful) {
+
+    console.log(`Attempted: ${attemptedAction}. Server responded with: ${isSuccessful ? 'success' : 'failed'}.`);
+
+  }
 
 }

@@ -4,6 +4,7 @@ import {Observable} from 'rxjs/Observable';
 
 import 'rxjs/add/operator/do';
 import { catchError } from '../../../node_modules/rxjs/operators';
+import { environment } from '../../environments/environment';
 
 
 @Injectable()
@@ -14,6 +15,14 @@ export class AppHttpInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         console.log(`Request:\n${JSON.stringify(req)}`);
+
+        if (environment.useOAuth) {
+            req = req.clone({
+                setHeaders: {
+                  Authorization: `Bearer ${environment.defaultOAuthToken}` // Todo: get token from authorization service.
+                }
+              });
+        }
 
         return next.handle(req)
           .pipe(catchError(error => {

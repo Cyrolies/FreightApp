@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-
+import {plainToClass} from 'class-transformer';
 
 export class EventTopic {
   $id: string;
@@ -47,7 +47,9 @@ export class FreightApiService {
     .get(endpoint, {params})
     .pipe(map(response => {
       const topics = response['topics'];
-      return topics.map((topic) => new EventTopic(topic));
+
+      return plainToClass(EventTopic, topics);
+      // return topics.map((topic) => new EventTopic(topic));
     }));
     // .pipe(catchError(error => {
     //       console.log(`Failed request for Subscriptions. Details: ${error}`);
@@ -55,5 +57,23 @@ export class FreightApiService {
     //       return of(new Array<EventTopic>());
     //     }
     //   ));
+  }
+
+  public SubscribeToShipmentEvents (topics: EventTopic[]): Observable<boolean> {
+
+    console.log('FreightApiService: Subscribe to shipment events.');
+
+    const endpoint = environment.freightApiUrl + 'FreightShipping/SubscribeToShipmentEvents';
+
+    const body = {
+      userName: environment.defaultUser,
+      eventCodes: topics
+        .filter(topic => topic.isSubscribed)
+        .map(topic => topic.code)
+    };
+
+    return this.http
+      .post(endpoint, body)
+      .pipe(map(response => !!response)); // Return isSuccessful.
   }
 }

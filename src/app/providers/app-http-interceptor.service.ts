@@ -1,3 +1,4 @@
+import { UserData } from './user-data';
 import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse, HttpErrorResponse} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
@@ -11,7 +12,8 @@ import { Events } from '../../../node_modules/@ionic/angular';
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
 
-    constructor(private events: Events) {
+    constructor(private events: Events,
+        private userData: UserData) {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -40,11 +42,17 @@ export class AppHttpInterceptor implements HttpInterceptor {
                 console.log(`HTTP status: ${res.status}.`);
 
                 if (res.status === 401 || res.status === 403) {
-                    // handle authorization errors by navigating to login:
-                    console.log('Error_Token_Expired: redirecting to login.');
-                    this.events.publish('user:logout');
 
-                    // localStorage.removeItem('token');
+                    this.userData.isLoggedIn().then(currentlyLoggedIn => {
+                        if (currentlyLoggedIn) {
+                            // handle authorization errors by navigating to login:
+                            console.log('Error_Token_Expired.');
+                            this.events.publish('user:logout');
+
+                            // localStorage.removeItem('token');
+                        }
+                        // Else: probably detected failed login attempt on Login Page.
+                    });
                 }
             }
 

@@ -59,17 +59,6 @@ export class SubscriptionsPage {
     });
   }
 
-  // async presentErrorToast() {
-  //   const toast = await this.toastCtrl.create({
-  //     message: 'Failed to retrieve Subscriptions.',
-  //     duration: 5000,
-  //     position: 'middle',
-  //     showCloseButton: true
-  //   });
-
-  //   await toast.present();
-  // }
-
   async save() {
     const spinner = await this.loading.create();
 

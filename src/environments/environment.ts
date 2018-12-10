@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   freightApiUrl: 'https://freight-portal-mobile-api-test.production-ase1.p.azurewebsites.net/api/', // 'http://localhost:9773/api/',
   defaultUser: 'lizelle.britz@go2tigers.com',
+  defaultPassword: 'Lizelle.12',
   useOAuth: false,
   // tslint:disable-next-line:max-line-length
   defaultOAuthToken: 'xEr2jrPyUf1g75byz5LMc2XImNUGAOJEC97zhqGAb9WSxbR4dOMFn3XvHwuKCZ-wiGoKJWUqltEOPQmNvkNHJJGRAjfRbfOukS2lbMm-HtUZHc-A8CoUlLTF3WUu4WcJEPLNuegoCZa2apodEMeEmmf1UDTEcXwqMNhgtto_QXMa4vVWJRX0cdv0lG-EvOE0vjWtYDltmu5oZBB1aJ33DxqdqF4lYurWslBopIx2LV3nZyPVhzTjfqqmaaHbUD8SwDoXqvSmWKllL6E9rx_efvYf-zsX6SaoKWPm1KWN5PKYT1XhyP6h31rG4oFisBJd4pbkV0FEtjgyl5oEob5-6soEZVC5t0qK1HHplXdLRD9TLr6Pv0y3ZYAQ8SEZI0MAZCeQN6QXzG-dulT9LLLVHdniq8U6EfmMxZaVuW4KAk5CcQ8ehQDDdvNdjMliTNAJJ69ff3zk0T1zxteoIZArQbnB2LozANMRNCLkdLcszXeZJEUdaoHxEdHBOCUsa-wYktk2oEnX4nOm6hwZlMJPUBKAhHL8tVCUJ8gr-1mRSKw'

@@ -74,6 +74,50 @@ export class Shipment {
   JS_SystemCreateTimeUtc: Date;
 }
 
+export class ShipmentMilestone {
+  $id: string;
+  EventCode: string;
+  Description: string;
+  EstimatedDate: Date;
+  ActualDate: Date;
+}
+
+export class ShipmentOrder {
+  $id: string;
+  OrderStatus: string;
+  Currency: string;
+  Department: string;
+  GoodsDescription: string;
+  MarksAndNumbers: string;
+}
+
+export class ShipmentContainer {
+}
+
+export class ShipmentTransportLeg {
+}
+
+export class ApplicationUser {
+  public Id: string;
+  public FirstName: string;
+
+  public LastName: string;
+
+  public Profiles: Profile[];
+
+  public MessageResult: string;
+}
+
+export class Profile {
+  public ProfileId: number;
+  public CustomerName: string;
+  public CargoWiseCode: string;
+}
+
+
+
+
+
 
 
 @Injectable({
@@ -189,5 +233,20 @@ export class FreightApiService {
     return this.http
       .post(endpoint, body)
       .pipe(map(response => !!response)); // Return isSuccessful.
+  }
+
+  public Authenticate(username: string, password): Observable<any> {
+
+    console.log('FreightApiService: Get [single] shipment.');
+
+    const endpoint = environment.freightApiUrl + 'FreightShipping/auth';
+
+    const params = new HttpParams()
+      .set('username', username)
+      .set('password', password);
+
+    return this.http
+    .get(endpoint, {params})
+    .pipe(map(response => response)); // Todo: Map response into complex object.
   }
 }

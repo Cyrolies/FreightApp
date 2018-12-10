@@ -4,6 +4,7 @@ import { FreightApiService, EventTopic } from '../../providers/freight-api.servi
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController, LoadingController } from '@ionic/angular';
+import { environment } from '../../../environments/environment';
 
 
 @Component({
@@ -116,6 +117,16 @@ export class SubscriptionsPage {
     spinner.present().then(() => {
       this.freightApiService.GetShipment(testShipmentNumber)
       .subscribe((shipment: any) => {
+
+        spinner.dismiss();
+
+      }, error =>  spinner.dismiss());
+    });
+
+    console.log('Testing FreightApi.Authenticate...');
+    spinner.present().then(() => {
+      this.freightApiService.Authenticate(environment.defaultUser, environment.defaultPassword)
+      .subscribe((authResult: any) => {
 
         spinner.dismiss();
 

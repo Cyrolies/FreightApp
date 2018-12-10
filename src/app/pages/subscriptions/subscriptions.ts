@@ -92,7 +92,6 @@ export class SubscriptionsPage {
       }, error =>  spinner.dismiss());
     });
 
-    // Test various FreightAPI methods:
     console.log('Testing FreightApi.GetShipments...');
     const testShipmentNumber = 'S01004368'; // ShipmentRef
     const testOrderNumber = '';
@@ -112,6 +111,18 @@ export class SubscriptionsPage {
 
       }, error =>  spinner.dismiss());
     });
+
+    console.log('Testing FreightApi.GetShipment...');
+    spinner.present().then(() => {
+      this.freightApiService.GetShipment(testShipmentNumber)
+      .subscribe((shipment: any) => {
+
+        spinner.dismiss();
+
+      }, error =>  spinner.dismiss());
+    });
+
+
   }
 
   logBoolServerResponse(attemptedAction: string, isSuccessful) {

@@ -159,6 +159,20 @@ export class FreightApiService {
     }));
   }
 
+  public GetShipment(shipmentNo: string): Observable<any> {
+
+    console.log('FreightApiService: Get [single] shipment.');
+
+    const endpoint = environment.freightApiUrl + 'FreightShipping/GetShipment';
+
+    const params = new HttpParams()
+      .set('shipmentNo', shipmentNo);
+
+    return this.http
+    .get(endpoint, {params})
+    .pipe(map(response => response));
+  }
+
   public SubscribeToShipmentEvents (topics: EventTopic[]): Observable<boolean> {
 
     console.log('FreightApiService: Subscribe to shipment events.');

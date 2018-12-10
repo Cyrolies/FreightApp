@@ -13,48 +13,57 @@ import { UserData } from './providers/user-data';
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit {
+
   appPages = [
     {
-      title: 'Schedule',
-      url: '/app/tabs/(schedule:schedule)',
-      icon: 'calendar'
-    },
-    {
-      title: 'Shipments',
-      url: '/app/tabs/(speakers:speakers)',
-      icon: 'contacts'
-    },
-    { title: 'Map', url: '/app/tabs/(map:map)', icon: 'map' },
-    {
-      title: 'About',
-      url: '/app/tabs/(about:about)',
-      icon: 'information-circle'
+      title: 'Subscribe',
+      url: '/subscriptions',
+      icon: 'mail'
     }
   ];
 
-  tigersPages = [
-    {
-      title: 'Schedule',
-      url: '/app/tabs/(schedule:schedule)',
-      icon: 'calendar'
-    },
-    {
-      title: 'Shipments',
-      url: '/app/tabs/(speakers:speakers)',
-      icon: 'contacts'
-    },
-    {
-      title: 'Reports',
-      url: '/app/tabs/(reports:reports)',
-      icon: 'contacts'
-    },
-    { title: 'Events', url: '/app/tabs/(map:map)', icon: 'map' },
-    {
-      title: 'Events Subscription',
-      url: '/app/tabs/(about:about)',
-      icon: 'information-circle'
-    }
-  ];
+  // appPages = [
+  //   {
+  //     title: 'Schedule',
+  //     url: '/app/tabs/(schedule:schedule)',
+  //     icon: 'calendar'
+  //   },
+  //   {
+  //     title: 'Shipments',
+  //     url: '/app/tabs/(speakers:speakers)',
+  //     icon: 'contacts'
+  //   },
+  //   { title: 'Map', url: '/app/tabs/(map:map)', icon: 'map' },
+  //   {
+  //     title: 'About',
+  //     url: '/app/tabs/(about:about)',
+  //     icon: 'information-circle'
+  //   }
+  // ];
+
+  // tigersPages = [
+  //   {
+  //     title: 'Schedule',
+  //     url: '/app/tabs/(schedule:schedule)',
+  //     icon: 'calendar'
+  //   },
+  //   {
+  //     title: 'Shipments',
+  //     url: '/app/tabs/(speakers:speakers)',
+  //     icon: 'contacts'
+  //   },
+  //   {
+  //     title: 'Reports',
+  //     url: '/app/tabs/(reports:reports)',
+  //     icon: 'contacts'
+  //   },
+  //   { title: 'Events', url: '/app/tabs/(map:map)', icon: 'map' },
+  //   {
+  //     title: 'Events Subscription',
+  //     url: '/app/tabs/(about:about)',
+  //     icon: 'information-circle'
+  //   }
+  // ];
   loggedIn = false;
 
   constructor(
@@ -129,7 +138,7 @@ export class AppComponent implements OnInit {
 
   logout() {
     this.userData.logout().then(() => {
-      return this.navigate('/app/tabs/(schedule:schedule)');
+      return this.navigate('/login'); // ('/app/tabs/(schedule:schedule)');
     });
   }
 

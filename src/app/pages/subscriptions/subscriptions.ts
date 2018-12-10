@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { FreightApiService, EventTopic } from '../../providers/freight-api.service';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastController, LoadingController } from '@ionic/angular';
+import { ToastController, LoadingController, NavController, NavParams, Events } from '@ionic/angular';
 import { environment } from '../../../environments/environment';
+import { UserData } from '../../providers/user-data';
 
 
 @Component({
@@ -22,10 +23,20 @@ export class SubscriptionsPage {
     public router: Router,
     public toastCtrl: ToastController,
     public loading: LoadingController,
-    public http: HttpClient
+    public http: HttpClient,
+    private userData: UserData,
+    public navCtrl: NavController,
+    private events: Events
   ) {}
 
   async ionViewDidEnter() {
+
+    // this.userData.isLoggedIn()
+    //   .then((isLoggedIn: boolean) => {
+    //     if (!isLoggedIn){
+    //       this.events.publish('user:logout');
+    //     }
+    //   });
 
     const spinner = await this.loading.create();
 
@@ -38,17 +49,6 @@ export class SubscriptionsPage {
 
       }, error =>  spinner.dismiss());
     });
-
-
-    // }, (error) => {
-
-    //   // Console.log(`Failed to get Subscriptions from FreightApi.\nDetails:\n${JSON.stringify(error)}`);
-
-    //   this.presentToast().then(() => {});
-
-    //   this.topics = new Array<EventTopic>();
-
-    // });
   }
 
   resetFilters() {

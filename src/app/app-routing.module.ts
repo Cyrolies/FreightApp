@@ -4,37 +4,41 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/tutorial',
+    redirectTo: 'login', // '/tutorial'
     pathMatch: 'full'
   },
   {
-    path: 'account',
-    loadChildren: './pages/account/account.module#AccountModule'
-  },
-  {
-    path: 'reports',
-    loadChildren: './pages/reports/reports.module#ReportsModule'
-  },
-  {
-    path: 'support',
-    loadChildren: './pages/support/support.module#SupportModule'
+    path: 'subscriptions',
+    loadChildren: './pages/subscriptions/subscriptions.module#SubscriptionsModule'
   },
   {
     path: 'login',
     loadChildren: './pages/login/login.module#LoginModule'
   },
   {
-    path: 'signup',
-    loadChildren: './pages/signup/signup.module#SignUpModule'
-  },
-  {
-    path: 'app',
-    loadChildren: './pages/tabs-page/tabs-page.module#TabsModule'
-  },
-  {
-    path: 'tutorial',
-    loadChildren: './pages/tutorial/tutorial.module#TutorialModule'
+    path: 'support',
+    loadChildren: './pages/support/support.module#SupportModule'
   }
+  // {
+  //   path: 'account',
+  //   loadChildren: './pages/account/account.module#AccountModule'
+  // },
+  // {
+  //   path: 'reports',
+  //   loadChildren: './pages/reports/reports.module#ReportsModule'
+  // },
+  // {
+  //   path: 'signup',
+  //   loadChildren: './pages/signup/signup.module#SignUpModule'
+  // },
+  // {
+  //   path: 'app',
+  //   loadChildren: './pages/tabs-page/tabs-page.module#TabsModule'
+  // },
+  // {
+  //   path: 'tutorial',
+  //   loadChildren: './pages/tutorial/tutorial.module#TutorialModule'
+  // }
 ];
 
 @NgModule({

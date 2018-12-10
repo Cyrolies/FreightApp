@@ -5,12 +5,13 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import { catchError } from '../../../node_modules/rxjs/operators';
 import { environment } from '../../environments/environment';
+import { Events } from '../../../node_modules/@ionic/angular';
 
 
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
 
-    constructor() {
+    constructor(private events: Events) {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -26,6 +27,8 @@ export class AppHttpInterceptor implements HttpInterceptor {
 
         return next.handle(req)
           .pipe(catchError(error => {
+
+
             console.log(`Intercepted HTTP error (${JSON.stringify(new Date())}):`);
             console.log(`Error type: ${typeof error}.`);
             console.log(`Error body:\n${JSON.stringify(error)}`);
@@ -33,7 +36,16 @@ export class AppHttpInterceptor implements HttpInterceptor {
             // console.log(JSON.stringify(next));
 
             if (error instanceof HttpErrorResponse) {
-                 console.log(`HTTP status: ${(<HttpErrorResponse>error).status}.`);
+                const res = <HttpErrorResponse>error;
+                console.log(`HTTP status: ${res.status}.`);
+
+                if (res.status === 401 || res.status === 403) {
+                    // handle authorization errors by navigating to login:
+                    console.log('Error_Token_Expired: redirecting to login.');
+                    this.events.publish('user:logout');
+
+                    // localStorage.removeItem('token');
+                }
             }
 
             return Observable.throw(error); // Rethrow.

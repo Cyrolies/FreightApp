@@ -3,29 +3,30 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, Expose, Exclude } from 'class-transformer';
 import { stringify } from '../../../node_modules/@angular/core/src/util';
 
 export class CargoWiseFilter {
   constructor(readonly Name: string, readonly DatabaseColumnName: string, readonly Value: string) {}
 }
 
+@Exclude()
 export class EventTopic {
   $id: string;
+  @Expose()
   name: string;
+  @Expose()
   code: string;
+  @Expose()
   private subscribers: number;
 
+  @Expose()
   get isSubscribed() {
     return this.subscribers > 0;
   }
   set isSubscribed(isSubscribed: boolean) {
     this.subscribers = Number(isSubscribed);
   }
-
-  // constructor(values: Object = {}) {
-  //   Object.assign(this, values);
-  // }
 }
 
 export class ShipmentEvent {

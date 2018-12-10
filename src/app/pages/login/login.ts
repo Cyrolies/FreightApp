@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { UserData } from '../../providers/user-data';
 
 import { UserOptions } from '../../interfaces/user-options';
+import { MenuController } from '../../../../node_modules/@ionic/angular';
 
 
 
@@ -20,15 +21,24 @@ export class LoginPage {
 
   constructor(
     public userData: UserData,
-    public router: Router
+    public router: Router,
+    public menu: MenuController
   ) { }
+
+  ionViewWillEnter() {
+    this.menu.enable(false);
+  }
+  ionViewDidLeave() {
+    // enable the root left menu when leaving the tutorial page
+    this.menu.enable(true);
+  }
 
   onLogin(form: NgForm) {
     this.submitted = true;
 
     if (form.valid) {
       this.userData.login(this.login.username);
-      this.router.navigateByUrl('/app/tabs/(schedule:schedule)');
+      this.router.navigateByUrl('/subscriptions'); // this.router.navigateByUrl('/app/tabs/(schedule:schedule)');
     }
   }
 

@@ -20,7 +20,6 @@ export class EventTopic {
   @Expose()
   private subscribers: number;
 
-  @Expose()
   get isSubscribed() {
     return this.subscribers > 0;
   }

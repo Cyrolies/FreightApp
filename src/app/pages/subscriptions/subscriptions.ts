@@ -72,55 +72,55 @@ export class SubscriptionsPage {
     });
 
     // Test various FreightAPI methods:
-    console.log('Testing FreightApi.GetShipmentEvents...');
-    const testCargoWiseCode = 'SIMFISSEA';
-    spinner.present().then(() => {
-      this.freightApiService.GetShipmentEvents(testCargoWiseCode).subscribe((shipmentEvents: ShipmentEvent[]) => {
+    // console.log('Testing FreightApi.GetShipmentEvents...');
+    // const testCargoWiseCode = 'SIMFISSEA';
+    // spinner.present().then(() => {
+    //   this.freightApiService.GetShipmentEvents(testCargoWiseCode).subscribe((shipmentEvents: ShipmentEvent[]) => {
 
-        spinner.dismiss();
+    //     spinner.dismiss();
 
-      }, error =>  spinner.dismiss());
-    });
+    //   }, error =>  spinner.dismiss());
+    // });
 
-    console.log('Testing FreightApi.GetShipments...');
-    const testShipmentNumber = 'S01004368'; // ShipmentRef
-    const testOrderNumber = '';
-    const testDateFrom = new Date('01 Dec 2018'); // Dates compared against shipment create date.
-    const testDateTo = undefined;
-    const testOpenShipments = false;
+    // console.log('Testing FreightApi.GetShipments...');
+    // const testShipmentNumber = 'S01004368'; // ShipmentRef
+    // const testOrderNumber = '';
+    // const testDateFrom = new Date('01 Dec 2018'); // Dates compared against shipment create date.
+    // const testDateTo = undefined;
+    // const testOpenShipments = false;
 
-    spinner.present().then(() => {
-      this.freightApiService.GetShipments(testCargoWiseCode,
-        testShipmentNumber,
-        testOrderNumber,
-        testDateFrom,
-        testDateTo,
-        testOpenShipments).subscribe((shipments: Shipment[]) => {
+    // spinner.present().then(() => {
+    //   this.freightApiService.GetShipments(testCargoWiseCode,
+    //     testShipmentNumber,
+    //     testOrderNumber,
+    //     testDateFrom,
+    //     testDateTo,
+    //     testOpenShipments).subscribe((shipments: Shipment[]) => {
 
-        spinner.dismiss();
+    //     spinner.dismiss();
 
-      }, error =>  spinner.dismiss());
-    });
+    //   }, error =>  spinner.dismiss());
+    // });
 
-    console.log('Testing FreightApi.GetShipment...');
-    spinner.present().then(() => {
-      this.freightApiService.GetShipment(testShipmentNumber)
-      .subscribe((shipment: any) => {
+    // console.log('Testing FreightApi.GetShipment...');
+    // spinner.present().then(() => {
+    //   this.freightApiService.GetShipment(testShipmentNumber)
+    //   .subscribe((shipment: any) => {
 
-        spinner.dismiss();
+    //     spinner.dismiss();
 
-      }, error =>  spinner.dismiss());
-    });
+    //   }, error =>  spinner.dismiss());
+    // });
 
-    console.log('Testing FreightApi.Authenticate...');
-    spinner.present().then(() => {
-      this.freightApiService.Authenticate(environment.defaultUser, environment.defaultPassword)
-      .subscribe((authResult: any) => {
+    // console.log('Testing FreightApi.Authenticate...');
+    // spinner.present().then(() => {
+    //   this.freightApiService.Authenticate(environment.defaultUser, environment.defaultPassword)
+    //   .subscribe((authResult: any) => {
 
-        spinner.dismiss();
+    //     spinner.dismiss();
 
-      }, error =>  spinner.dismiss());
-    });
+    //   }, error =>  spinner.dismiss());
+    // });
 
 
   }

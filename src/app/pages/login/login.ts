@@ -1,3 +1,4 @@
+import { AuthResult } from './../../providers/freight-api.service';
 import { environment } from './../../../environments/environment';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -7,7 +8,7 @@ import { UserData } from '../../providers/user-data';
 
 import { UserOptions } from '../../interfaces/user-options';
 import { MenuController, LoadingController, ToastController } from '../../../../node_modules/@ionic/angular';
-import { FreightApiService } from '../../providers/freight-api.service';
+import { FreightApiService, ApplicationUser } from '../../providers/freight-api.service';
 
 
 
@@ -49,13 +50,13 @@ export class LoginPage {
       spinner.present().then(() => {
         this.freightApiService
         .Authenticate(this.login.username, this.login.password)
-        .subscribe((response: any) => {
+        .subscribe((result: AuthResult) => {
 
-          if (response.hasOwnProperty('Message') && !!response['Message']) {
+          if (!result.IsAuthSuccessful) {
             // Invalid login
             this.onLoginFailed();
           } else {
-            this.userData.login(this.login.username);
+            this.userData.login(this.login.username, result.User);
             this.router.navigateByUrl('/subscriptions'); // this.router.navigateByUrl('/app/tabs/(schedule:schedule)');
           }
 

@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Event Notifications</ion-title>
+    <ion-buttons slot="end">
+        <ion-button >
+          <ion-icon slot="icon-only" name="options"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="backImg">
+  <ion-list class="backImg">
+    <ion-grid fixed>
+      <ion-row align-items-stretch>
+        <ion-col size="12" size-md="6" *ngFor="let speaker of speakers">
+          <ion-card class="speaker-card">
+            <ion-card-header>
+                <ion-item detail="false" lines="none" button (click)="goToShipmentDetail(speaker)">
+              <!-- <ion-item detail="false" lines="none" button [href]="'app/tabs/(speakers:speaker-details/'+ speaker.id"> -->
+                  <ion-avatar slot="start">
+                  <img [src]="speaker.profilePic" alt="Speaker profile pic">
+                </ion-avatar>
+                {{speaker.name}}
+              </ion-item>
+            </ion-card-header>
+
+            <ion-card-content>
+              <ion-list>
+                <ion-item *ngFor="let session of speaker.sessions" button [href]="'app/tabs/(speakers:session/'+session.id">
+                  <h3>{{session.name}}</h3>
+                </ion-item>
+
+                <ion-item button (click)="goToSpeakerDetail(speaker)" [href]="'app/tabs/(speakers:speaker-details/'+ speaker.id">
+                  <h3>About {{speaker.name}}</h3>
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-list>
+</ion-content>

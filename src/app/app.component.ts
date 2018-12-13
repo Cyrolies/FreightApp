@@ -27,6 +27,11 @@ export class AppComponent implements OnInit {
       icon: 'boat'
     },
     {
+      title: 'Event Notifications',
+      url: '/event-notifications',
+      icon: 'notifications'
+    },
+    {
       title: 'Subscribe',
       url: '/subscriptions',
       icon: 'mail'

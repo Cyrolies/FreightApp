@@ -8,6 +8,10 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'home',
+    loadChildren: './pages/home/home.module#HomeModule'
+  },
+  {
     path: 'shipment-search',
     loadChildren: './pages/shipment-search/shipment-search.module#ShipmentSearchModule'
   },

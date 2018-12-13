@@ -17,6 +17,11 @@ export class AppComponent implements OnInit {
 
   appPages = [
     {
+      title: 'Home',
+      url: '/home',
+      icon: 'home'
+    },
+    {
       title: 'Shipments',
       url: '/shipment-search',
       icon: 'boat'

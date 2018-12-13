@@ -4,37 +4,65 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/tutorial',
+    redirectTo: 'login', // '/tutorial'
     pathMatch: 'full'
   },
   {
-    path: 'account',
-    loadChildren: './pages/account/account.module#AccountModule'
+    path: 'home',
+    loadChildren: './pages/home/home.module#HomeModule'
+  },
+  {
+    path: 'shipment-search',
+    loadChildren: './pages/shipment-search/shipment-search.module#ShipmentSearchModule'
+  },
+  {
+    path: 'shipments',
+    loadChildren: './pages/shipment-list/shipment-list.module#ShipmentListModule'
+  },
+  {
+    path: 'shipment-details',
+    loadChildren: './pages/shipment-detail/shipment-detail.module#ShipmentDetailModule'
+  },
+  {
+    path: 'event-notifications',
+    loadChildren: './pages/event-notification-list/event-notification-list.module#EventNotificationListModule'
+  },
+  {
+    path: 'subscriptions',
+    loadChildren: './pages/subscriptions/subscriptions.module#SubscriptionsModule'
   },
   {
     path: 'reports',
     loadChildren: './pages/reports/reports.module#ReportsModule'
   },
   {
-    path: 'support',
-    loadChildren: './pages/support/support.module#SupportModule'
-  },
-  {
     path: 'login',
     loadChildren: './pages/login/login.module#LoginModule'
   },
   {
-    path: 'signup',
-    loadChildren: './pages/signup/signup.module#SignUpModule'
+    path: 'support',
+    loadChildren: './pages/support/support.module#SupportModule'
   },
   {
-    path: 'app',
-    loadChildren: './pages/tabs-page/tabs-page.module#TabsModule'
-  },
-  {
-    path: 'tutorial',
-    loadChildren: './pages/tutorial/tutorial.module#TutorialModule'
+    path: 'about',
+    loadChildren: './pages/about/about.module#AboutModule'
   }
+  // {
+  //   path: 'account',
+  //   loadChildren: './pages/account/account.module#AccountModule'
+  // },
+  // {
+  //   path: 'signup',
+  //   loadChildren: './pages/signup/signup.module#SignUpModule'
+  // },
+  // {
+  //   path: 'app',
+  //   loadChildren: './pages/tabs-page/tabs-page.module#TabsModule'
+  // },
+  // {
+  //   path: 'tutorial',
+  //   loadChildren: './pages/tutorial/tutorial.module#TutorialModule'
+  // }
 ];
 
 @NgModule({

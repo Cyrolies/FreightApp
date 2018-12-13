@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Shipments</ion-title>
+    <ion-buttons slot="end">
+        <ion-button >
+          <ion-icon slot="icon-only" name="options"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="backImg">
+  <ion-list class="backImg">
+    <ion-grid fixed>
+      <ion-row align-items-stretch>
+        <ion-col size="12" size-md="6">
+            <shipment-filter></shipment-filter>
+        </ion-col>
+      </ion-row>
+      <ion-row align-items-stretch>
+          <ion-col size="12" size-md="6">
+              <ion-button (click)="listShipments()">Search</ion-button>
+          </ion-col>
+        </ion-row>
+    </ion-grid>
+  </ion-list>
+</ion-content>

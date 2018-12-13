@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Shipments</ion-title>
+    <ion-title>Event Notifications</ion-title>
     <ion-buttons slot="end">
         <ion-button >
           <ion-icon slot="icon-only" name="options"></ion-icon>
@@ -19,8 +19,9 @@
         <ion-col size="12" size-md="6" *ngFor="let speaker of speakers">
           <ion-card class="speaker-card">
             <ion-card-header>
-              <ion-item detail="false" lines="none" button [href]="'app/tabs/(speakers:speaker-details/'+ speaker.id">
-                <ion-avatar slot="start">
+                <ion-item detail="false" lines="none" button (click)="goToShipmentDetail(speaker)">
+              <!-- <ion-item detail="false" lines="none" button [href]="'app/tabs/(speakers:speaker-details/'+ speaker.id"> -->
+                  <ion-avatar slot="start">
                   <img [src]="speaker.profilePic" alt="Speaker profile pic">
                 </ion-avatar>
                 {{speaker.name}}
@@ -39,26 +40,6 @@
               </ion-list>
             </ion-card-content>
 
-            <!-- <ion-row no-padding justify-content-center>
-              <ion-col text-left size="4">
-                <ion-button fill="clear" size="small" color="primary" (click)="goToSpeakerTwitter(speaker)">
-                  <ion-icon name="logo-twitter" slot="start"></ion-icon>
-                  Tweet
-                </ion-button>
-              </ion-col>
-              <ion-col text-center size="4">
-                <ion-button fill="clear" size="small" color="primary" (click)="openSpeakerShare(speaker)">
-                  <ion-icon name='share-alt' slot="start"></ion-icon>
-                  Share
-                </ion-button>
-              </ion-col>
-              <ion-col text-right size="4">
-                <ion-button fill="clear" size="small" color="primary" (click)="openContact(speaker)">
-                  <ion-icon name='chatboxes' slot="start"></ion-icon>
-                  Contact
-                </ion-button>
-              </ion-col>
-            </ion-row> -->
           </ion-card>
         </ion-col>
       </ion-row>

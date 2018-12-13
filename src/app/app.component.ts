@@ -1,8 +1,9 @@
+import { AboutModal } from './pages/about-modal/about-modal';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Events, MenuController, Platform } from '@ionic/angular';
+import { Events, MenuController, Platform, ModalController } from '@ionic/angular';
 
 import { UserData } from './providers/user-data';
 
@@ -13,48 +14,77 @@ import { UserData } from './providers/user-data';
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit {
+
   appPages = [
     {
-      title: 'Schedule',
-      url: '/app/tabs/(schedule:schedule)',
-      icon: 'calendar'
+      title: 'Home',
+      url: '/home',
+      icon: 'home'
     },
     {
       title: 'Shipments',
-      url: '/app/tabs/(speakers:speakers)',
-      icon: 'contacts'
-    },
-    { title: 'Map', url: '/app/tabs/(map:map)', icon: 'map' },
-    {
-      title: 'About',
-      url: '/app/tabs/(about:about)',
-      icon: 'information-circle'
-    }
-  ];
-
-  tigersPages = [
-    {
-      title: 'Schedule',
-      url: '/app/tabs/(schedule:schedule)',
-      icon: 'calendar'
+      url: '/shipment-search',
+      icon: 'boat'
     },
     {
-      title: 'Shipments',
-      url: '/app/tabs/(speakers:speakers)',
-      icon: 'contacts'
+      title: 'Event Notifications',
+      url: '/event-notifications',
+      icon: 'notifications'
+    },
+    {
+      title: 'Subscribe',
+      url: '/subscriptions',
+      icon: 'mail'
     },
     {
       title: 'Reports',
-      url: '/app/tabs/(reports:reports)',
-      icon: 'contacts'
-    },
-    { title: 'Events', url: '/app/tabs/(map:map)', icon: 'map' },
-    {
-      title: 'Events Subscription',
-      url: '/app/tabs/(about:about)',
-      icon: 'information-circle'
+      url: '/reports',
+      icon: 'stats'
     }
   ];
+
+  // appPages = [
+  //   {
+  //     title: 'Schedule',
+  //     url: '/app/tabs/(schedule:schedule)',
+  //     icon: 'calendar'
+  //   },
+  //   {
+  //     title: 'Shipments',
+  //     url: '/app/tabs/(speakers:speakers)',
+  //     icon: 'contacts'
+  //   },
+  //   { title: 'Map', url: '/app/tabs/(map:map)', icon: 'map' },
+  //   {
+  //     title: 'About',
+  //     url: '/app/tabs/(about:about)',
+  //     icon: 'information-circle'
+  //   }
+  // ];
+
+  // tigersPages = [
+  //   {
+  //     title: 'Schedule',
+  //     url: '/app/tabs/(schedule:schedule)',
+  //     icon: 'calendar'
+  //   },
+  //   {
+  //     title: 'Shipments',
+  //     url: '/app/tabs/(speakers:speakers)',
+  //     icon: 'contacts'
+  //   },
+  //   {
+  //     title: 'Reports',
+  //     url: '/app/tabs/(reports:reports)',
+  //     icon: 'contacts'
+  //   },
+  //   { title: 'Events', url: '/app/tabs/(map:map)', icon: 'map' },
+  //   {
+  //     title: 'Events Subscription',
+  //     url: '/app/tabs/(about:about)',
+  //     icon: 'information-circle'
+  //   }
+  // ];
   loggedIn = false;
 
   constructor(
@@ -64,7 +94,8 @@ export class AppComponent implements OnInit {
     private userData: UserData,
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar
+    private statusBar: StatusBar,
+    public modalCtrl: ModalController
   ) {
     this.initializeApp();
   }
@@ -129,12 +160,20 @@ export class AppComponent implements OnInit {
 
   logout() {
     this.userData.logout().then(() => {
-      return this.navigate('/app/tabs/(schedule:schedule)');
+      return this.navigate('/login'); // ('/app/tabs/(schedule:schedule)');
     });
   }
 
   openTutorial() {
     this.menu.enable(false);
     this.router.navigateByUrl('/tutorial');
+  }
+
+  async presentAboutModal() {
+    const modal = await this.modalCtrl.create({
+      component: AboutModal
+    });
+
+    modal.present();
   }
 }

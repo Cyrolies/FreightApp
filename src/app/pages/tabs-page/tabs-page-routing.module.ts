@@ -7,9 +7,10 @@ import { AboutPage } from '../about/about';
 import { MapPage } from '../map/map';
 import { SchedulePage } from '../schedule/schedule';
 import { SessionDetailPage } from '../session-detail/session-detail';
-import { SpeakerDetailPage } from '../speaker-detail/speaker-detail';
-import { SpeakerListPage } from '../speaker-list/speaker-list';
+import { ShipmentDetailPage } from '../shipment-detail/shipment-detail';
+import { ShipmentListPage } from '../shipment-list/shipment-list';
 import { ReportsPage } from '../reports/reports';
+import { SubscriptionsPage } from '../subscriptions/subscriptions';
 
 
 
@@ -32,7 +33,7 @@ const routes: Routes = [
       // tab two
       {
         path: 'speakers',
-        component: SpeakerListPage,
+        component: ShipmentListPage,
         outlet: 'speakers'
       },
       {
@@ -42,7 +43,7 @@ const routes: Routes = [
       },
       {
         path: 'speaker-details/:speakerId',
-        component: SpeakerDetailPage,
+        component: ShipmentDetailPage,
         outlet: 'speakers'
       },
       // tab three
@@ -57,10 +58,17 @@ const routes: Routes = [
         component: AboutPage,
         outlet: 'about'
       },
+      // tab five
       {
         path: 'reports',
         component: ReportsPage,
         outlet: 'reports'
+      },
+      // tab six
+      {
+        path: 'subscriptions',
+        component: SubscriptionsPage,
+        outlet: 'subscriptions'
       }
     ]
   }

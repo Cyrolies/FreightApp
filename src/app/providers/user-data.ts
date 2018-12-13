@@ -1,3 +1,4 @@
+import { Profile, ApplicationUser } from './freight-api.service';
 import { Injectable } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
@@ -10,6 +11,7 @@ export class UserData {
   _favorites: string[] = [];
   HAS_LOGGED_IN = 'hasLoggedIn';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
+  userProfiles: Profile[] = [];
 
   constructor(
     public events: Events,
@@ -31,9 +33,12 @@ export class UserData {
     }
   }
 
-  login(username: string): Promise<any> {
+  login(username: string, user: ApplicationUser): Promise<any> {
     return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
       this.setUsername(username);
+
+      this.userProfiles = user.Profiles;
+
       return this.events.publish('user:login');
     });
   }

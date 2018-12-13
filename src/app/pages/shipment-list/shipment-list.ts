@@ -1,24 +1,25 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, NavController } from '@ionic/angular';
 
 import { ConferenceData } from '../../providers/conference-data';
 
 @Component({
-  selector: 'page-speaker-list',
-  templateUrl: 'speaker-list.html',
-  styleUrls: ['./speaker-list.scss'],
+  selector: 'page-shipment-list',
+  templateUrl: 'shipment-list.html',
+  styleUrls: ['./shipment-list.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class SpeakerListPage {
+export class ShipmentListPage {
   speakers: any[] = [];
 
   constructor(
     public actionSheetCtrl: ActionSheetController,
     public confData: ConferenceData,
     public inAppBrowser: InAppBrowser,
-    public router: Router
+    public router: Router,
+    public navCtrl: NavController
   ) {}
 
   ionViewDidEnter() {
@@ -101,5 +102,10 @@ export class SpeakerListPage {
     });
 
     await actionSheet.present();
+  }
+
+  goToShipmentDetail(speaker: any) {
+    // Navigation best practices:  https://www.joshmorony.com/using-angular-routing-with-ionic-4/
+    this.navCtrl.navigateForward('shipment-details/' + + speaker.id);
   }
 }

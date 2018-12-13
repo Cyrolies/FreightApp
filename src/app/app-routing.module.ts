@@ -32,6 +32,10 @@ const routes: Routes = [
     loadChildren: './pages/subscriptions/subscriptions.module#SubscriptionsModule'
   },
   {
+    path: 'reports',
+    loadChildren: './pages/reports/reports.module#ReportsModule'
+  },
+  {
     path: 'login',
     loadChildren: './pages/login/login.module#LoginModule'
   },
@@ -46,10 +50,6 @@ const routes: Routes = [
   // {
   //   path: 'account',
   //   loadChildren: './pages/account/account.module#AccountModule'
-  // },
-  // {
-  //   path: 'reports',
-  //   loadChildren: './pages/reports/reports.module#ReportsModule'
   // },
   // {
   //   path: 'signup',

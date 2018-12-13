@@ -35,6 +35,11 @@ export class AppComponent implements OnInit {
       title: 'Subscribe',
       url: '/subscriptions',
       icon: 'mail'
+    },
+    {
+      title: 'Reports',
+      url: '/reports',
+      icon: 'stats'
     }
   ];
 

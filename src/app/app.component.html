@@ -35,6 +35,16 @@
             </ion-item>
 
           </ion-menu-toggle>
+
+          <ion-menu-toggle auto-hide="false">
+              <ion-item button (click)="presentAboutModal()">
+                <ion-icon slot="start" name="information-circle"></ion-icon>
+                <ion-label>
+                  About
+                </ion-label>
+              </ion-item>
+  
+            </ion-menu-toggle>
         </ion-list>
 
         <ion-list *ngIf="loggedIn">

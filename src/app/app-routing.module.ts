@@ -30,6 +30,10 @@ const routes: Routes = [
   {
     path: 'support',
     loadChildren: './pages/support/support.module#SupportModule'
+  },
+  {
+    path: 'about',
+    loadChildren: './pages/about/about.module#AboutModule'
   }
   // {
   //   path: 'account',

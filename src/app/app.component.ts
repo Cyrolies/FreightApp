@@ -1,8 +1,9 @@
+import { AboutModal } from './pages/about-modal/about-modal';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Events, MenuController, Platform } from '@ionic/angular';
+import { Events, MenuController, Platform, ModalController } from '@ionic/angular';
 
 import { UserData } from './providers/user-data';
 
@@ -78,7 +79,8 @@ export class AppComponent implements OnInit {
     private userData: UserData,
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar
+    private statusBar: StatusBar,
+    public modalCtrl: ModalController
   ) {
     this.initializeApp();
   }
@@ -150,5 +152,13 @@ export class AppComponent implements OnInit {
   openTutorial() {
     this.menu.enable(false);
     this.router.navigateByUrl('/tutorial');
+  }
+
+  async presentAboutModal() {
+    const modal = await this.modalCtrl.create({
+      component: AboutModal
+    });
+
+    modal.present();
   }
 }

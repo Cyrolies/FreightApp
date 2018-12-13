@@ -1,3 +1,4 @@
+import { AboutModalModule } from './pages/about-modal/about-modal.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -17,7 +18,8 @@ import { AppHttpInterceptor } from './providers/app-http-interceptor.service';
     AppRoutingModule,
     HttpClientModule,
     IonicModule.forRoot(),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    AboutModalModule,
   ],
   declarations: [
     AppComponent

@@ -4,12 +4,12 @@ import { ConferenceData } from '../../providers/conference-data';
 
 
 @Component({
-  selector: 'page-speaker-detail',
-  templateUrl: 'speaker-detail.html',
-  styleUrls: ['./speaker-detail.scss'],
+  selector: 'page-shipment-detail',
+  templateUrl: 'shipment-detail.html',
+  styleUrls: ['./shipment-detail.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class SpeakerDetailPage {
+export class ShipmentDetailPage {
   speaker: any;
 
   constructor(
@@ -20,7 +20,7 @@ export class SpeakerDetailPage {
 
   ionViewWillEnter() {
     this.dataProvider.load().subscribe((data: any) => {
-      const speakerId = this.route.snapshot.paramMap.get('speakerId');
+      const speakerId = this.route.snapshot.paramMap.get('id');
       if (data && data.speakers) {
         for (const speaker of data.speakers) {
           if (speaker && speaker.id === speakerId) {

@@ -9,8 +9,8 @@ import { AboutModule } from '../about/about.module';
 import { MapModule } from '../map/map.module';
 import { ScheduleModule } from '../schedule/schedule.module';
 import { SessionDetailModule } from '../session-detail/session-detail.module';
-import { SpeakerDetailModule } from '../speaker-detail/speaker-detail.module';
-import { SpeakerListModule } from '../speaker-list/speaker-list.module';
+import { ShipmentDetailModule } from '../shipment-detail/shipment-detail.module';
+import { ShipmentListModule } from '../shipment-list/shipment-list.module';
 import { ReportsModule } from '../reports/reports.module';
 import { SubscriptionsModule } from '../subscriptions/subscriptions.module';
 
@@ -23,8 +23,8 @@ import { SubscriptionsModule } from '../subscriptions/subscriptions.module';
     MapModule,
     ScheduleModule,
     SessionDetailModule,
-    SpeakerDetailModule,
-    SpeakerListModule,
+    ShipmentDetailModule,
+    ShipmentListModule,
     SubscriptionsModule,
     TabsPageRoutingModule
   ],

@@ -2,6 +2,7 @@ import { UserData } from './user-data';
 import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse, HttpErrorResponse} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
+import { throwError } from 'rxjs';
 
 import 'rxjs/add/operator/do';
 import { catchError } from '../../../node_modules/rxjs/operators';
@@ -56,7 +57,8 @@ export class AppHttpInterceptor implements HttpInterceptor {
                 }
             }
 
-            return Observable.throw(error); // Rethrow.
+            return throwError(error); // Rethrow.
+            // return Observable.throw(error);
         }));
     }
 }

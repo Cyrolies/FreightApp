@@ -19,7 +19,9 @@ import { AppHttpInterceptor } from './providers/app-http-interceptor.service';
     IonicModule.forRoot(),
     IonicStorageModule.forRoot()
   ],
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent
+  ],
   providers: [
     InAppBrowser,
     SplashScreen,

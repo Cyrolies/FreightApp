@@ -1,13 +1,13 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button text="Speakers"></ion-back-button>
+      <ion-back-button text="Shipments"></ion-back-button>
     </ion-buttons>
     <ion-title>{{speaker?.name}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding class="speaker-detail">
+<ion-content padding class="shipment-detail">
   <div text-center *ngIf="speaker">
     <img [src]="speaker.profilePic" [alt]="speaker.name">
     <br>

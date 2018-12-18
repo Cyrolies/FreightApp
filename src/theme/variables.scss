@@ -32,9 +32,10 @@
 // colors so you can add, rename and remove colors as needed.
 // The "primary" color is the only required color in the map.
 
-// $colors: (
-//   primary:    #488aff,
-//   secondary:  #32db64,
+$colors: (
+  primary:    #2a4b75,
+  secondary:  #ec682c,
+  tertiary: #F2F3F4
 //   danger:     #f53d3d,
 //   light:      #f4f4f4,
 //   dark:       #222,
@@ -43,13 +44,13 @@
 //   google:     #dc4a38,
 //   vimeo:      #23b6ea,
 //   facebook:   #3b5998
-// );
+);
 
 
 :root {
   --ion-color-primary:         #2a4b75;
-  --ion-color-secondary:       #0cd1e8;
-  --ion-color-tertiary:        #7044ff;
+  --ion-color-secondary:       #ec682c;
+  --ion-color-tertiary:        #F2F3F4;
   --ion-color-success:         #10dc60;
   --ion-color-warning:         #ffce00;
   --ion-color-danger:          #f04141;
@@ -68,8 +69,6 @@
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here
-
-
 
 // App Material Design Variables
 // --------------------------------------------------

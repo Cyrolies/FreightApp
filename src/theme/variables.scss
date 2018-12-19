@@ -32,10 +32,12 @@
 // colors so you can add, rename and remove colors as needed.
 // The "primary" color is the only required color in the map.
 
-$colors: (
-  primary:    #2a4b75,
-  secondary:  #ec682c,
-  tertiary: #F2F3F4
+// WernerS: The $colors sass variable is deprecated in ionic 4
+//            in favour of using css4 variables (as modified in ':root' below).
+// $colors: (
+//   primary:    #2a4b75,
+//   secondary:  #ec682c,
+//   tertiary: #F2F3F4
 //   danger:     #f53d3d,
 //   light:      #f4f4f4,
 //   dark:       #222,
@@ -44,13 +46,12 @@ $colors: (
 //   google:     #dc4a38,
 //   vimeo:      #23b6ea,
 //   facebook:   #3b5998
-);
-
+// );
 
 :root {
   --ion-color-primary:         #2a4b75;
   --ion-color-secondary:       #ec682c;
-  --ion-color-tertiary:        #F2F3F4;
+  --ion-color-tertiary:        #7044ff;
   --ion-color-success:         #10dc60;
   --ion-color-warning:         #ffce00;
   --ion-color-danger:          #f04141;
@@ -65,6 +66,13 @@ $colors: (
   --ion-color-facebook:        #3b5998;
 }
 
+// ion-card-content {
+//   background-color: #F2F3F4;
+// }
+
+// ion-card-header {
+//   background-color:  var(--ion-color-primary);
+// }
 
 // App iOS Variables
 // --------------------------------------------------

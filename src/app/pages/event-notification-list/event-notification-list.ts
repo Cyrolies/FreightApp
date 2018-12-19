@@ -33,7 +33,7 @@ export class EventNotificationListPage {
   }
 
   eventDateComparer(a: ShipmentEvent, b: ShipmentEvent) {
-    if (a.CreateDateTime < b.CreateDateTime){
+    if (a.CreateDateTime < b.CreateDateTime) {
       return -1;
     } else if (a.CreateDateTime > b.CreateDateTime) {
       return 1;

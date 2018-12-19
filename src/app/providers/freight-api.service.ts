@@ -5,7 +5,9 @@ import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { plainToClass, Expose, Exclude, Type } from 'class-transformer';
 import { IsNotEmpty, IsEnum } from 'class-validator';
+import * as pbi from 'adal-angular';
 import { stringify } from '../../../node_modules/@angular/core/src/util';
+
 
 export class CargoWiseFilter {
   constructor(readonly Name: string, readonly DatabaseColumnName: string, readonly Value: string) {}
@@ -665,11 +667,59 @@ class FailAuthResult extends AuthResult {
   }
 }
 
+@Exclude()
+export class PowerBISettings
+	{
+    @Expose()
+    public UserID: string;
+    @Expose()
+    public ReportID: string;
+    @Expose()
+    public RoleName: string;
+    @Expose()
+    public WorkspaceID: string;
+    @Expose()
+    public StationCode: string;
+  }
 
+  @Exclude()
+  export class EmbedConfig
+	{
+    @Expose()
+    public Password :string;
+    @Expose()
+    public Id :string;
+    @Expose()
+    public EmbedUrl :string;
+    @Expose()
+    public MinutesToExpiration : number;
+    @Expose()
+    public IsEffectiveIdentityRolesRequired :boolean;
+    @Expose()
+    public IsEffectiveIdentityRequired :boolean;
+    @Expose()
+    public EnableRLS :boolean;
+    @Expose()
+    public Username :string;
+    @Expose()
+    public Roles :string;
+    
+    @Expose()
+    public ErrorMessage :string;
 
-
-
-
+    @Expose()
+    @Type(() => EmbedToken)
+    public EmbedToken: EmbedToken;
+	
+	}
+  
+  @Exclude()
+  export class EmbedToken
+	{
+    @Expose()
+    public token :string;
+   
+  }
 
 @Injectable({
   providedIn: 'root'
@@ -810,5 +860,22 @@ export class FreightApiService {
       }
 
     }));
+  }
+
+  public GetPowerBiReport (PowerBISettings: PowerBISettings): Observable<EmbedConfig> {
+
+    console.log('FreightApiService: retrieve powerbi report.');
+
+    const endpoint = environment.freightApiUrl + 'FreightShipping/GetBIReport';
+
+    const body = {
+      PowerBISettings: PowerBISettings
+    };
+
+    return this.http
+      .post(endpoint, body)
+      .pipe(map((res: object) => {
+        return plainToClass(EmbedConfig, res);
+      })); // Return isSuccessful.
   }
 }

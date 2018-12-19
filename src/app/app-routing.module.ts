@@ -46,6 +46,18 @@ const routes: Routes = [
   {
     path: 'about',
     loadChildren: './pages/about/about.module#AboutModule'
+  },
+  {
+    path: 'reports/freightspend',
+    loadChildren: './pages/reports/freightspend/freightspend.module#FreightSpendModule'
+  },
+  {
+    path: 'reports/freightshipment',
+    loadChildren: './pages/reports/freightshipment/freightshipment.module#FreightShipmentModule'
+  },
+  {
+    path: 'reports/freightmilestone',
+    loadChildren: './pages/reports/freightmilestone/freightmilestone.module#FreightMilestoneModule'
   }
   // {
   //   path: 'account',

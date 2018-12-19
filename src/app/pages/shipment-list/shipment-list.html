@@ -12,54 +12,59 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="backImg">
+<ion-content >
   <ion-list class="backImg">
     <ion-grid fixed>
       <ion-row align-items-stretch>
-        <ion-col size="12" size-md="6" *ngFor="let speaker of speakers">
-          <ion-card class="speaker-card">
-            <ion-card-header>
-                <ion-item detail="false" lines="none" button (click)="goToShipmentDetail(speaker)">
-              <!-- <ion-item detail="false" lines="none" button [href]="'app/tabs/(speakers:speaker-details/'+ speaker.id"> -->
-                  <ion-avatar slot="start">
-                  <img [src]="speaker.profilePic" alt="Speaker profile pic">
-                </ion-avatar>
-                {{speaker.name}}
-              </ion-item>
+        <ion-col size="12" size-md="6" *ngFor="let freightmilestone of freightmilestones">
+          <ion-card class="shipment-card" (click)="goToShipmentDetail(freightmilestone)" >
+              
+              <ion-card-header>
+                  <ion-row align-items-stretch>
+                      <ion-col text-left size="auto">
+                          <ion-item>
+                          {{freightmilestone.ShipmentRef}}
+                          </ion-item>
+                      </ion-col>
+                      <ion-col text-right size="auto">
+                          <ion-item>
+                            Mode:{{freightmilestone.TransportMode}}
+                              </ion-item>
+                      </ion-col>
+                      
+                    </ion-row> 
             </ion-card-header>
-
+         
+          
             <ion-card-content>
-              <ion-list>
-                <ion-item *ngFor="let session of speaker.sessions" button [href]="'app/tabs/(speakers:session/'+session.id">
-                  <h3>{{session.name}}</h3>
-                </ion-item>
-
-                <ion-item button (click)="goToSpeakerDetail(speaker)" [href]="'app/tabs/(speakers:speaker-details/'+ speaker.id">
-                  <h3>About {{speaker.name}}</h3>
-                </ion-item>
-              </ion-list>
+               
+                <ion-row class="shipment-card-row">
+                    <ion-col text-left size="auto">
+                        <ion-item>
+                        Consignee:{{freightmilestone.Consignee}}
+                        </ion-item>
+                    </ion-col>
+                    <ion-col text-center size="auto">
+                        <ion-item>
+                        Consignor: {{freightmilestone.Shipper}}
+                        </ion-item>
+                    </ion-col>
+                  </ion-row> 
+                  <ion-row class="shipment-card-row">
+                      <ion-col text-left size="auto">
+                        <ion-item>
+                        POL:{{freightmilestone.PortOfLoading}}
+                        </ion-item>
+                      </ion-col>
+                      <ion-col text-center size="auto">
+                        <ion-item>
+                        POD: {{freightmilestone.PortOfDischarge}}  
+                        </ion-item>
+                      </ion-col>
+                  </ion-row> 
+                  
             </ion-card-content>
-
-            <!-- <ion-row no-padding justify-content-center>
-              <ion-col text-left size="4">
-                <ion-button fill="clear" size="small" color="primary" (click)="goToSpeakerTwitter(speaker)">
-                  <ion-icon name="logo-twitter" slot="start"></ion-icon>
-                  Tweet
-                </ion-button>
-              </ion-col>
-              <ion-col text-center size="4">
-                <ion-button fill="clear" size="small" color="primary" (click)="openSpeakerShare(speaker)">
-                  <ion-icon name='share-alt' slot="start"></ion-icon>
-                  Share
-                </ion-button>
-              </ion-col>
-              <ion-col text-right size="4">
-                <ion-button fill="clear" size="small" color="primary" (click)="openContact(speaker)">
-                  <ion-icon name='chatboxes' slot="start"></ion-icon>
-                  Contact
-                </ion-button>
-              </ion-col>
-            </ion-row> -->
+         
           </ion-card>
         </ion-col>
       </ion-row>

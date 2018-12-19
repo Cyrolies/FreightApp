@@ -668,8 +668,7 @@ class FailAuthResult extends AuthResult {
 }
 
 @Exclude()
-export class PowerBISettings
-	{
+export class PowerBISettings {
     @Expose()
     public UserID: string;
     @Expose()
@@ -683,43 +682,38 @@ export class PowerBISettings
   }
 
   @Exclude()
-  export class EmbedConfig
-	{
+  export class EmbedToken {
     @Expose()
-    public Password :string;
-    @Expose()
-    public Id :string;
-    @Expose()
-    public EmbedUrl :string;
-    @Expose()
-    public MinutesToExpiration : number;
-    @Expose()
-    public IsEffectiveIdentityRolesRequired :boolean;
-    @Expose()
-    public IsEffectiveIdentityRequired :boolean;
-    @Expose()
-    public EnableRLS :boolean;
-    @Expose()
-    public Username :string;
-    @Expose()
-    public Roles :string;
-    
-    @Expose()
-    public ErrorMessage :string;
+    public token: string;
+  }
 
+  @Exclude()
+  export class EmbedConfig {
+    @Expose()
+    public Password: string;
+    @Expose()
+    public Id: string;
+    @Expose()
+    public EmbedUrl: string;
+    @Expose()
+    public MinutesToExpiration: number;
+    @Expose()
+    public IsEffectiveIdentityRolesRequired: boolean;
+    @Expose()
+    public IsEffectiveIdentityRequired: boolean;
+    @Expose()
+    public EnableRLS: boolean;
+    @Expose()
+    public Username: string;
+    @Expose()
+    public Roles: string;
+    @Expose()
+    public ErrorMessage: string;
     @Expose()
     @Type(() => EmbedToken)
     public EmbedToken: EmbedToken;
-	
-	}
-  
-  @Exclude()
-  export class EmbedToken
-	{
-    @Expose()
-    public token :string;
-   
   }
+    
 
 @Injectable({
   providedIn: 'root'
@@ -779,7 +773,7 @@ export class FreightApiService {
     orderNo: string,
     fromDate: Date,
     toDate: Date,
-    includeOpenShipments: boolean): Observable<Shipment[]> {
+    includeOpenShipments: boolean): Observable<FreightMilestone[]> {
 
     console.log('FreightApiService: Get shipments.');
 
@@ -798,13 +792,13 @@ export class FreightApiService {
 
     return this.http
     .get(endpoint, {params})
-    .pipe(map((shipments: object[]) => {
+    .pipe(map((result: object[]) =>  {
 
-      return plainToClass(Shipment, shipments);
+      return plainToClass(FreightMilestone, result['Items']);
     }));
   }
 
-  public GetShipment(shipmentNo: string): Observable<any> {
+  public GetShipment(shipmentNo: string): Observable<Shipment> {
 
     console.log('FreightApiService: Get [single] shipment.');
 
@@ -815,8 +809,10 @@ export class FreightApiService {
 
     return this.http
     .get(endpoint, {params})
-    .pipe(map(response => response));
-  }
+    .pipe(map((res: object) => {
+      return plainToClass(Shipment, res);
+    })); // Return isSuccessful.
+}
 
   public SubscribeToShipmentEvents (topics: EventTopic[]): Observable<boolean> {
 
@@ -862,7 +858,7 @@ export class FreightApiService {
     }));
   }
 
-  public GetPowerBiReport (PowerBISettings: PowerBISettings): Observable<EmbedConfig> {
+   public GetPowerBiReport (PowerBISettings: PowerBISettings): Observable<EmbedConfig> {
 
     console.log('FreightApiService: retrieve powerbi report.');
 

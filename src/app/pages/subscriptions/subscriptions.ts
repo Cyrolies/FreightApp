@@ -1,4 +1,3 @@
-import { ShipmentEvent, Shipment } from './../../providers/freight-api.service';
 import { HttpClient } from '@angular/common/http';
 import { FreightApiService, EventTopic } from '../../providers/freight-api.service';
 import { Component, ViewEncapsulation } from '@angular/core';

@@ -5,7 +5,7 @@ import { ShipmentDetailPage } from './shipment-detail';
 
 const routes: Routes = [
   {
-    path: ':id',
+    path: ':ShipmentRef',
     component: ShipmentDetailPage
   }
 ];

@@ -1,9 +1,9 @@
+import { FreightApiService, FreightMilestone } from '../../providers/freight-api.service';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { ActionSheetController, NavController } from '@ionic/angular';
-
-import { ConferenceData } from '../../providers/conference-data';
+import { HttpClient } from '@angular/common/http';
+import { ToastController, LoadingController, NavController, ActionSheetController, NavParams, Events } from '@ionic/angular';
 
 @Component({
   selector: 'page-shipment-list',
@@ -12,100 +12,117 @@ import { ConferenceData } from '../../providers/conference-data';
   encapsulation: ViewEncapsulation.None
 })
 export class ShipmentListPage {
-  speakers: any[] = [];
-
+  freightmilestones: FreightMilestone[] = new Array<FreightMilestone>();
+  
   constructor(
     public actionSheetCtrl: ActionSheetController,
-    public confData: ConferenceData,
     public inAppBrowser: InAppBrowser,
+    public loading: LoadingController,
+    public http: HttpClient,
+    public freightApiService: FreightApiService,
+    public toastCtrl: ToastController,
     public router: Router,
     public navCtrl: NavController
   ) {}
 
-  ionViewDidEnter() {
-    this.confData.getSpeakers().subscribe((speakers: any[]) => {
-      this.speakers = speakers;
+  async ionViewDidEnter() {
+
+    const spinner = await this.loading.create();
+
+    spinner.present().then(() => {
+      this.freightApiService.GetShipments('SIMFISSEA', '', '', new Date('2013-01-01'), new Date('2018-12-12'), true).subscribe((result: FreightMilestone[]) => {
+
+        this.freightmilestones =  result;
+
+        spinner.dismiss();
+
+      }, error =>  spinner.dismiss());
     });
   }
 
-  goToSessionDetail(session: any) {
-    this.router.navigateByUrl(`app/tabs/(speakers:session/${session.id})`);
-  }
 
-  goToSpeakerDetail(speaker: any) {
-    this.router.navigateByUrl(
-      `app/tabs/(speakers:speaker-details/${speaker.id})`
-    );
-  }
+    // this.confData.getSpeakers().subscribe((speakers: any[]) => {
+    //   this.speakers = speakers;
+    // });
+   
 
-  goToSpeakerTwitter(speaker: any) {
-    this.inAppBrowser.create(
-      `https://twitter.com/${speaker.twitter}`,
-      '_blank'
-    );
-  }
+  // goToSessionDetail(session: any) {
+  //   this.router.navigateByUrl(`app/tabs/(speakers:session/${session.id})`);
+  // }
 
-  async openSpeakerShare(speaker: any) {
-    const actionSheet = await this.actionSheetCtrl.create({
-      header: 'Share ' + speaker.name,
-      buttons: [
-        {
-          text: 'Copy Link',
-          handler: () => {
-            console.log(
-              'Copy link clicked on https://twitter.com/' + speaker.twitter
-            );
-            if (
-              (window as any)['cordova'] &&
-              (window as any)['cordova'].plugins.clipboard
-            ) {
-              (window as any)['cordova'].plugins.clipboard.copy(
-                'https://twitter.com/' + speaker.twitter
-              );
-            }
-          }
-        },
-        {
-          text: 'Share via ...'
-        },
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        }
-      ]
-    });
+  // goToSpeakerDetail(speaker: any) {
+  //   this.router.navigateByUrl(
+  //     `app/tabs/(speakers:speaker-details/${speaker.id})`
+  //   );
+  // }
 
-    await actionSheet.present();
-  }
+  // goToSpeakerTwitter(speaker: any) {
+  //   this.inAppBrowser.create(
+  //     `https://twitter.com/${speaker.twitter}`,
+  //     '_blank'
+  //   );
+  // }
 
-  async openContact(speaker: any) {
-    const mode = 'ios'; // this.config.get('mode');
+  // async openSpeakerShare(speaker: any) {
+  //   const actionSheet = await this.actionSheetCtrl.create({
+  //     header: 'Share ' + speaker.name,
+  //     buttons: [
+  //       {
+  //         text: 'Copy Link',
+  //         handler: () => {
+  //           console.log(
+  //             'Copy link clicked on https://twitter.com/' + speaker.twitter
+  //           );
+  //           if (
+  //             (window as any)['cordova'] &&
+  //             (window as any)['cordova'].plugins.clipboard
+  //           ) {
+  //             (window as any)['cordova'].plugins.clipboard.copy(
+  //               'https://twitter.com/' + speaker.twitter
+  //             );
+  //           }
+  //         }
+  //       },
+  //       {
+  //         text: 'Share via ...'
+  //       },
+  //       {
+  //         text: 'Cancel',
+  //         role: 'cancel'
+  //       }
+  //     ]
+  //   });
 
-    const actionSheet = await this.actionSheetCtrl.create({
-      header: 'Contact ' + speaker.name,
-      buttons: [
-        {
-          text: `Email ( ${speaker.email} )`,
-          icon: mode !== 'ios' ? 'mail' : null,
-          handler: () => {
-            window.open('mailto:' + speaker.email);
-          }
-        },
-        {
-          text: `Call ( ${speaker.phone} )`,
-          icon: mode !== 'ios' ? 'call' : null,
-          handler: () => {
-            window.open('tel:' + speaker.phone);
-          }
-        }
-      ]
-    });
+  //   await actionSheet.present();
+  // }
 
-    await actionSheet.present();
-  }
+  // async openContact(speaker: any) {
+  //   const mode = 'ios'; // this.config.get('mode');
 
-  goToShipmentDetail(speaker: any) {
-    // Navigation best practices:  https://www.joshmorony.com/using-angular-routing-with-ionic-4/
-    this.navCtrl.navigateForward('shipment-details/' + + speaker.id);
+  //   const actionSheet = await this.actionSheetCtrl.create({
+  //     header: 'Contact ' + speaker.name,
+  //     buttons: [
+  //       {
+  //         text: `Email ( ${speaker.email} )`,
+  //         icon: mode !== 'ios' ? 'mail' : null,
+  //         handler: () => {
+  //           window.open('mailto:' + speaker.email);
+  //         }
+  //       },
+  //       {
+  //         text: `Call ( ${speaker.phone} )`,
+  //         icon: mode !== 'ios' ? 'call' : null,
+  //         handler: () => {
+  //           window.open('tel:' + speaker.phone);
+  //         }
+  //       }
+  //     ]
+  //   });
+
+  //   await actionSheet.present();
+  // }
+
+  goToShipmentDetail(FreightMilestone: any) {
+     this.navCtrl.navigateForward('shipment-details/' + FreightMilestone.ShipmentRef);
   }
 }

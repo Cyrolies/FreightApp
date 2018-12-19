@@ -1,6 +1,9 @@
+import { FreightApiService, Shipment } from '../../providers/freight-api.service';
 import { Component, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ConferenceData } from '../../providers/conference-data';
+import { ActivatedRoute } from '@angular/router';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { HttpClient } from '@angular/common/http';
+import { ToastController, LoadingController, NavController, ActionSheetController, NavParams, Events } from '@ionic/angular';
 
 
 @Component({
@@ -10,30 +13,32 @@ import { ConferenceData } from '../../providers/conference-data';
   encapsulation: ViewEncapsulation.None
 })
 export class ShipmentDetailPage {
-  speaker: any;
+  shipment: Shipment;
 
   constructor(
-    private dataProvider: ConferenceData,
-    private router: Router,
-    private route: ActivatedRoute
+    public actionSheetCtrl: ActionSheetController,
+    public inAppBrowser: InAppBrowser,
+    public loading: LoadingController,
+    public http: HttpClient,
+    public freightApiService: FreightApiService,
+    public toastCtrl: ToastController,
+    public route: ActivatedRoute,
+    public navCtrl: NavController
   ) {}
 
-  ionViewWillEnter() {
-    this.dataProvider.load().subscribe((data: any) => {
-      const speakerId = this.route.snapshot.paramMap.get('id');
-      if (data && data.speakers) {
-        for (const speaker of data.speakers) {
-          if (speaker && speaker.id === speakerId) {
-            this.speaker = speaker;
-            break;
-          }
-        }
-      }
+  async ionViewDidEnter() {
+
+    const spinner = await this.loading.create();
+
+    spinner.present().then(() => {
+      this.freightApiService.GetShipment(this.route.snapshot.paramMap.get('ShipmentRef')).subscribe((result: Shipment) => {
+
+        this.shipment =  result;
+
+        spinner.dismiss();
+
+      }, error =>  spinner.dismiss());
     });
-
   }
 
-  goToSessionDetail(session: any) {
-    this.router.navigateByUrl(`app/tabs/(schedule:session/${session.id})`);
-  }
 }

@@ -10,7 +10,7 @@ import { ActionSheetController, NavController } from '@ionic/angular';
   encapsulation: ViewEncapsulation.None
 })
 export class ShipmentSearchPage {
-  speakers: any[] = [];
+ // speakers: any[] = [];
 
   constructor(
     public actionSheetCtrl: ActionSheetController,

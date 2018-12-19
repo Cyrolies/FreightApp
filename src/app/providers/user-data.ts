@@ -12,6 +12,7 @@ export class UserData {
   HAS_LOGGED_IN = 'hasLoggedIn';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
   userProfiles: Profile[] = [];
+  selectedProfile: Profile = undefined;
 
   constructor(
     public events: Events,

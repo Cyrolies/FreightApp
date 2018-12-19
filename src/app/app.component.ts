@@ -27,7 +27,12 @@ export class AppComponent implements OnInit {
       icon: 'boat'
     },
     {
-      title: 'Event Notifications',
+      title: 'Reports',
+      url: '/reports',
+      icon: 'stats'
+    },
+    {
+      title: 'Notifications',
       url: '/event-notifications',
       icon: 'notifications'
     },
@@ -35,11 +40,6 @@ export class AppComponent implements OnInit {
       title: 'Subscribe',
       url: '/subscriptions',
       icon: 'mail'
-    },
-    {
-      title: 'Reports',
-      url: '/reports',
-      icon: 'stats'
     }
   ];
 

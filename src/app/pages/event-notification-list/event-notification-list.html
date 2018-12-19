@@ -3,12 +3,12 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Event Notifications</ion-title>
+    <ion-title>Notifications</ion-title>
     <ion-buttons slot="end">
-        <ion-button >
+        <!-- <ion-button >
           <ion-icon slot="icon-only" name="options"></ion-icon>
-        </ion-button>
-      </ion-buttons>
+        </ion-button> -->
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -16,32 +16,75 @@
   <ion-list class="backImg">
     <ion-grid fixed>
       <ion-row align-items-stretch>
-        <ion-col size="12" size-md="6" *ngFor="let speaker of speakers">
-          <ion-card class="speaker-card">
-            <ion-card-header>
-                <ion-item detail="false" lines="none" button (click)="goToShipmentDetail(speaker)">
-              <!-- <ion-item detail="false" lines="none" button [href]="'app/tabs/(speakers:speaker-details/'+ speaker.id"> -->
-                  <ion-avatar slot="start">
-                  <img [src]="speaker.profilePic" alt="Speaker profile pic">
-                </ion-avatar>
-                {{speaker.name}}
+
+        <ion-col size="12" size-md="6" *ngFor="let notification of notifications">
+          <ion-card class="rounded">
+            <ion-card-header color="primary">
+              <ion-item detail="false" lines="none">
+                  <ion-text style="padding-right: 5px!important" color="secondary">EVENT CODE</ion-text> 
+                  <ion-text color="light"> {{notification.EventCode}}</ion-text>                  
               </ion-item>
             </ion-card-header>
 
-            <ion-card-content>
-              <ion-list>
-                <ion-item *ngFor="let session of speaker.sessions" button [href]="'app/tabs/(speakers:session/'+session.id">
-                  <h3>{{session.name}}</h3>
-                </ion-item>
+            <ion-card-content >
+              <ion-grid>
 
-                <ion-item button (click)="goToSpeakerDetail(speaker)" [href]="'app/tabs/(speakers:speaker-details/'+ speaker.id">
-                  <h3>About {{speaker.name}}</h3>
-                </ion-item>
-              </ion-list>
+                <ion-row>
+                  <ion-col col-6>
+                         
+                    <ion-item no-padding>
+                        <ion-label position="stacked" color="primary">Shipment No</ion-label>
+                        <ion-input [ngModel]="notification.ShipmentNo" readonly=true></ion-input>
+                    </ion-item>
+                  </ion-col>
+
+                  <ion-col col-6>
+                    <ion-item no-padding>
+                        <ion-label position="stacked" color="primary">Description</ion-label>
+                        <ion-input [ngModel]="notification.EventDescription" readonly=true></ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+
+                <ion-row>
+                  <ion-col col-6>
+                    <ion-item no-padding>
+                        <ion-label position="stacked" color="primary">Consignee Code</ion-label>
+                        <ion-input [ngModel]="notification.ConsigneeCode" readonly=true></ion-input>
+                    </ion-item>
+                  </ion-col>
+
+                  <ion-col col-6>
+                    <ion-item no-padding>
+                        <ion-label position="stacked" color="primary">Consignor Code</ion-label>
+                        <ion-input [ngModel]="notification.ConsignorCode" readonly=true></ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+
+                <ion-row>
+                  <ion-col col-6>
+                    <ion-item no-padding>
+                        <ion-label position="stacked" color="primary">Estimated Date</ion-label>
+                        <ion-input [ngModel]="notification.EstimatedDate | date" readonly=true></ion-input>
+                    </ion-item>
+                  </ion-col>
+
+                  <ion-col col-6>
+                    <ion-item no-padding>
+                        <ion-label position="stacked" color="primary">Actual Date</ion-label>
+                        <ion-input [ngModel]="notification.ActualDate | date" readonly=true></ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+
             </ion-card-content>
 
           </ion-card>
+
         </ion-col>
+
       </ion-row>
     </ion-grid>
   </ion-list>

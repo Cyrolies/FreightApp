@@ -12,7 +12,9 @@ export class UserData {
   HAS_LOGGED_IN = 'hasLoggedIn';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
   userProfiles: Profile[] = [];
-  selectedProfile: Profile = undefined;
+  public selectedProfile: Profile = undefined;
+  public userId: string;
+  public username: string;
 
   constructor(
     public events: Events,
@@ -39,6 +41,9 @@ export class UserData {
       this.setUsername(username);
 
       this.userProfiles = user.Profiles;
+      this.userId = user.ProfileId.toString();
+      this.username = user.FirstName;
+       
 
       return this.events.publish('user:login');
     });

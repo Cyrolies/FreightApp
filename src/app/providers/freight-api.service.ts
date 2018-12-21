@@ -32,6 +32,14 @@ export class EventTopic {
 }
 
 @Exclude()
+export class Reference {
+  @Expose()
+  Value: string;
+  @Expose()
+  Key: string;
+ }
+
+@Exclude()
 export class Organization {
   @Expose()
   OH_PK: string;
@@ -503,6 +511,8 @@ export class TransportLeg {
 @Exclude()
 export class Shipment {
   @Expose()
+  ShipmentNo: string;
+  @Expose()
   @Type(() => Organization)
   Client: Organization;
   @Expose()
@@ -619,8 +629,12 @@ export class Shipment {
   @Expose()
   @Type(() => Order)
   orders: Order[];
-  // customValues: CustomValue[];
-
+  @Expose()
+  @Type(() => Organization)
+  organizations: Organization[];
+  @Expose()
+  @Type(() => Reference)
+  references: Reference[];
 }
 
 @Exclude()
@@ -858,15 +872,13 @@ export class FreightApiService {
     }));
   }
 
-   public GetPowerBiReport (PowerBISettings: PowerBISettings): Observable<EmbedConfig> {
+   public GetPowerBiReport (powerBISettings: PowerBISettings): Observable<EmbedConfig> {
 
     console.log('FreightApiService: retrieve powerbi report.');
 
     const endpoint = environment.freightApiUrl + 'FreightShipping/GetBIReport';
 
-    const body = {
-      PowerBISettings: PowerBISettings
-    };
+    const body = powerBISettings;
 
     return this.http
       .post(endpoint, body)

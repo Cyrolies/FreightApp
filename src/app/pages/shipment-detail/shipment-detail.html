@@ -3,51 +3,88 @@
     <ion-buttons slot="start">
       <ion-back-button textcolor="white" text="Shipments"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{shipment.transportMode}}</ion-title>
+    <ion-title>Shipment Detail</ion-title>
+    <ion-buttons slot="end">
+      <ion-button >
+        <ion-icon slot="icon-only" name="options"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding class="shipment-detail">
-      <ion-card *ngIf="shipment" >
-      <ion-tabs>
-          <ion-tab [route]="Detail">Detail</ion-tab>
-          <ion-tab [route]="Orders">Orders</ion-tab>
-          <ion-tab [route]="Routes">Routes</ion-tab>
-          <ion-tab [route]="Packing">Packing</ion-tab>
-      </ion-tabs>
-      <ion-card-content>
-          <div *ngIf="currentTab == 'Detail'">
-              <h4>Ina's Mac and Cheese</h4>
-              <p>
-                  Here's what one recipe reviewer had to say: "This mac and cheese is all grown-up. It was tasty, cheesy and easy to make. Have made it a few times in the last 2 months and it is a hit each time."
-              </p>
-  
-          </div>
-  
-          <div *ngIf="currentTab == 'Orders'">
-              <h4>Google Go</h4>
-              <p>
-                  Google Go makes discovering, exploring, and sharing the best of the web easy and fast. Get answers quickly and reliably with Google Go, even on slow connections and smartphones with low space. At 5MB in size, it’s speedy to download and get started.
-              </p>
-  
-          </div>
-  
-          <div *ngIf="currentTab == 'Routes'">
-              <h4>Take Lots Of Photos</h4>
-              <p>
-                  You may only see these places & meet these people once in your lifetime. Remember them forever with plenty of photos. Don’t worry about looking like a “tourist”. Are you traveling to look cool? No one cares. Great photos are the ultimate souvenir.
-  
-              </p>
-          </div>
-          <div *ngIf="currentTab == 'Packing'">
-              <h4>Take Lots Of Photos</h4>
-              <p>
-                  You may only see these places & meet these people once in your lifetime. Remember them forever with plenty of photos. Don’t worry about looking like a “tourist”. Are you traveling to look cool? No one cares. Great photos are the ultimate souvenir.
-  
-              </p>
-          </div>
-      </ion-card-content>
-     
-    </ion-card>
-  
+<ion-content >
+  <ion-tabs selectedIndex="1">
+
+    <ion-tab class="shipment-tab" label="Detail" >
+        <ion-list>
+            <ion-grid fixed>
+              <ion-row align-items-stretch>
+                <ion-col size="12" size-md="6">
+                   
+                  <ion-card *ngIf="shipment" >
+                      
+                    <ion-card-header>
+                          <ion-row align-items-stretch>
+                              <ion-col text-left size="auto">
+                                  <ion-item>
+                                  {{shipment.references[0]?.value}}
+                                  </ion-item>
+                              </ion-col>
+                              <ion-col text-right size="auto">
+                                  <ion-item>
+                                    <!-- Mode:{{shipment.transportMode}} -->
+                                      </ion-item>
+                              </ion-col>
+                              
+                            </ion-row> 
+                    </ion-card-header>
+                 
+                  
+                    <ion-card-content>
+                       
+                        <ion-row >
+                            <ion-col text-left size="auto">
+                                <ion-item>
+                                Consignee:{{shipment.Consignee?.name}} 
+                                </ion-item>
+                            </ion-col>
+                            <ion-col text-center size="auto">
+                                <ion-item>
+                                Consignor: {{shipment.Shipper?.name}}
+                                </ion-item>
+                            </ion-col>
+                          </ion-row> 
+                          <ion-row>
+                              <ion-col text-left size="auto">
+                                <ion-item>
+                                POL:{{shipment.PortOfLoading}}
+                                </ion-item>
+                              </ion-col>
+                              <ion-col text-center size="auto">
+                                <ion-item>
+                                POD: {{shipment.PortOfDischarge}}  
+                                </ion-item>
+                              </ion-col>
+                          </ion-row> 
+                          
+                    </ion-card-content>
+                 
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-list>
+    </ion-tab>
+    <ion-tab label="Orders">
+      ord<!-- Tab 2 content -->
+    </ion-tab>
+    <ion-tab label="Routing">
+      psck<!-- Tab 3 content -->
+    </ion-tab>
+    <ion-tab label="Packing">
+        psck<!-- Tab 3 content -->
+    </ion-tab>
+    
+  </ion-tabs>
 </ion-content>
+

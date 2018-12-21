@@ -29,8 +29,8 @@ export class FreightShipmentPage {
     spinner.present().then(() => {
 
     const powerBISettings = new PowerBISettings() ;
-    powerBISettings.UserID = '417';
-    powerBISettings.RoleName = 'Mobile_Freight_ViewGlobalCode';
+    powerBISettings.UserID = 'SIMFISSEA';
+    powerBISettings.RoleName = 'FreightDashboard_Mobile_RLS';
     powerBISettings.ReportID = '164339c4-59d3-4f79-a31b-e4235807369f';
     powerBISettings.WorkspaceID = '0605ad47-8f86-435d-b6d8-63dc5842ee07';
 

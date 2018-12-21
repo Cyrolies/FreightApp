@@ -7,6 +7,17 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="backImg">
+
+  <div style="display: block; padding-top: 20px;">
+    <canvas baseChart
+                [data]="chartData"
+                [labels]="chartLabels"
+                [chartType]="chartType"
+                [options] = "chartOptions"
+                [colors] ="chartColors"
+                (chartHover)="chartHovered($event)"
+                (chartClick)="chartClicked($event)"></canvas>
+  </div>
 
 </ion-content>

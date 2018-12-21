@@ -48,6 +48,15 @@
 //   facebook:   #3b5998
 // );
 
+.ion-color-mybackground { // Use color="mybackground" in html
+  --ion-color-base: #F2F3F4;
+  --ion-color-base-rgb: 	242, 243, 244;
+  --ion-color-contrast: #000000;
+  --ion-color-contrast-rgb: 255,255,255;
+  --ion-color-shade: #F2F3F4;
+  --ion-color-tint: #F2F3F4;
+}
+
 :root {
   --ion-color-primary:         #2a4b75;
   --ion-color-secondary:       #ec682c;
@@ -64,6 +73,8 @@
   --ion-color-google:          #dc4a38;
   --ion-color-vimeo:           #23b6ea;
   --ion-color-facebook:        #3b5998;
+
+  --ion-color-mybackground:    #F2F3F4;
 }
 
 // ion-card-content {

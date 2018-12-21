@@ -31,9 +31,9 @@ export class FreightSpendPage {
   spinner.present().then(() => {
 
     const powerBISettings = new PowerBISettings() ;
-    powerBISettings.UserID = '417';
-    powerBISettings.RoleName = 'Freight_Mobile_MonthlySummary_All';
-    powerBISettings.ReportID = '164339c4-59d3-4f79-a31b-e4235807369f';
+    powerBISettings.UserID = 'SIMFISSEA';
+    powerBISettings.RoleName = 'Freight Spend Dashboard RLS';
+    powerBISettings.ReportID = '6207ba27-b218-43f5-87b1-479598475a19';
     powerBISettings.WorkspaceID = '0605ad47-8f86-435d-b6d8-63dc5842ee07';
 
     this.freightApiService.GetPowerBiReport(powerBISettings).subscribe((result: EmbedConfig) => {

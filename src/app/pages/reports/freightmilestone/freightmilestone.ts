@@ -1,10 +1,10 @@
+import { UserData } from './../../../providers/user-data';
 import { PowerBISettings, EmbedConfig } from './../../../providers/freight-api.service';
 import * as pbi from 'powerbi-client';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FreightApiService, EventTopic } from '../../../providers/freight-api.service';
 import { ToastController, LoadingController, NavController, NavParams, Events } from '@ionic/angular';
-import { UserData } from '../../../providers/user-data';
 
 @Component({
   selector: 'page-about',
@@ -29,11 +29,11 @@ export class FreightMilestonePage {
  
    const spinner = await this.loading.create();
     spinner.present().then(() => {
-
+    const usId = this.userData.selectedProfile;
     const powerBISettings = new PowerBISettings() ;
-    powerBISettings.UserID = '417';
-    powerBISettings.RoleName = 'Freight_Mobile_MonthlySummary_All';
-    powerBISettings.ReportID = '164339c4-59d3-4f79-a31b-e4235807369f';
+    powerBISettings.UserID = 'SIMFISSEA'; // usId.toString();
+    powerBISettings.RoleName = 'Freight Milestones Dashboard RLS';
+    powerBISettings.ReportID = 'f38b008e-5b6d-4520-8821-bcde389c1807';
     powerBISettings.WorkspaceID = '0605ad47-8f86-435d-b6d8-63dc5842ee07';
 
     this.freightApiService.GetPowerBiReport(powerBISettings).subscribe((result: EmbedConfig) => {

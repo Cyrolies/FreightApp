@@ -18,7 +18,8 @@
   <div style="display: block; padding-top: 20px; width: 80%; margin:auto">
     <!-- Specifying width/height = 100% creates quadratic canvas,
     to prevent unnecessary padding on sides of pie. -->
-    <canvas baseChart width="100%" height="100%"
+    <canvas *ngIf = "this.totalShipmentsCount"
+          baseChart width="100%" height="100%"
                 [data]="chartData"
                 [labels]="chartLabels"
                 [chartType]="chartType"
@@ -26,5 +27,13 @@
                 [colors] ="chartColors">
     </canvas>
   </div>
+  
+  <ion-grid>
+      <ion-row justify-content-center align-items-center>
+          <ion-text color="mybackground" *ngIf = "this.dataLoaded && !this.totalShipmentsCount">
+              This profile has no open shipments.
+            </ion-text>
+      </ion-row>
+  </ion-grid>
 
 </ion-content>

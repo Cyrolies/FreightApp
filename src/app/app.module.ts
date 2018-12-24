@@ -1,3 +1,4 @@
+import { ProfileSelectModalModule } from './pages/profile-select-modal/profile-select-modal.module';
 import { AboutModalModule } from './pages/about-modal/about-modal.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -20,6 +21,7 @@ import { AppHttpInterceptor } from './providers/app-http-interceptor.service';
     IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
     AboutModalModule,
+    ProfileSelectModalModule
   ],
   declarations: [
     AppComponent

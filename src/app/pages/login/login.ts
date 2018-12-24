@@ -1,3 +1,4 @@
+import { ProfileSelectModal } from './../profile-select-modal/profile-select-modal';
 import { AuthResult } from './../../providers/freight-api.service';
 import { environment } from './../../../environments/environment';
 import { Component, ViewEncapsulation } from '@angular/core';
@@ -7,7 +8,7 @@ import { Router } from '@angular/router';
 import { UserData } from '../../providers/user-data';
 
 import { UserOptions } from '../../interfaces/user-options';
-import { MenuController, LoadingController, ToastController } from '../../../../node_modules/@ionic/angular';
+import { MenuController, LoadingController, ToastController, ModalController } from '../../../../node_modules/@ionic/angular';
 import { FreightApiService, ApplicationUser } from '../../providers/freight-api.service';
 
 
@@ -28,7 +29,8 @@ export class LoginPage {
     public router: Router,
     public menu: MenuController,
     public loading: LoadingController,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
+    public modalCtrl: ModalController
   ) { }
 
   ionViewWillEnter() {
@@ -57,7 +59,9 @@ export class LoginPage {
             this.onLoginFailed();
           } else {
             this.userData.login(this.login.username, result.User);
-            this.router.navigateByUrl('/subscriptions'); // this.router.navigateByUrl('/app/tabs/(schedule:schedule)');
+
+            this.presentProfileSelectModal();
+            
           }
 
           spinner.dismiss();
@@ -87,5 +91,13 @@ export class LoginPage {
     });
 
     await toast.present();
+  }
+
+  async presentProfileSelectModal() {
+    const modal = await this.modalCtrl.create({
+      component: ProfileSelectModal
+    });
+
+    modal.present();
   }
 }

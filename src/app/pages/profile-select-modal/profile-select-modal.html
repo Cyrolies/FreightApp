@@ -1,0 +1,24 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Select Profile</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <ion-item *ngFor="let profile of this.userData.userProfiles" (click)="onProfileSelected(profile)">
+        <ion-text>{{ profile.CustomerName }}</ion-text>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
+  
+       
+<ion-footer>
+<ion-toolbar color="primary">
+    <ion-button expand="full" fill="clear" color="light" (click)="closeModal()">
+      Back
+    </ion-button>
+</ion-toolbar>
+</ion-footer>

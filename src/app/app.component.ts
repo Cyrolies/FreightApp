@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Events, MenuController, Platform, ModalController } from '@ionic/angular';
 
 import { UserData } from './providers/user-data';
+import { ProfileSelectModal } from './pages/profile-select-modal/profile-select-modal';
 
 @Component({
   selector: 'app-root',
@@ -172,6 +173,14 @@ export class AppComponent implements OnInit {
   async presentAboutModal() {
     const modal = await this.modalCtrl.create({
       component: AboutModal
+    });
+
+    modal.present();
+  }
+
+  async presentProfileSelectModal() {
+    const modal = await this.modalCtrl.create({
+      component: ProfileSelectModal
     });
 
     modal.present();

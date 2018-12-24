@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
-import { AboutModal } from './about-modal';
+import { ProfileSelectModal } from './profile-select-modal';
 
 @NgModule({
   imports: [
@@ -11,9 +11,9 @@ import { AboutModal } from './about-modal';
     FormsModule,
     IonicModule,
   ],
-  declarations: [AboutModal],
+  declarations: [ProfileSelectModal],
   entryComponents: [],
-  bootstrap: [AboutModal],
-  exports: [AboutModal] // ?
+  bootstrap: [ProfileSelectModal],
+  exports: [ProfileSelectModal] // ?
 })
-export class AboutModalModule {}
+export class ProfileSelectModalModule {}

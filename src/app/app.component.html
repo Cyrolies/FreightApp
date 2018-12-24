@@ -62,6 +62,15 @@
           </ion-menu-toggle> -->
 
           <ion-menu-toggle auto-hide="false">
+              <ion-item button (click)="presentProfileSelectModal()">
+                <ion-icon slot="start" name="business"></ion-icon>
+                <ion-label>
+                  Change Profile
+                </ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+
+          <ion-menu-toggle auto-hide="false">
             <ion-item button (click)="navigate('/support')">
               <ion-icon slot="start" name="help"></ion-icon>
               <ion-label>
@@ -126,6 +135,7 @@
           </ion-menu-toggle>
         </ion-list> -->
       </ion-content>
+
     </ion-menu>
 
     <ion-router-outlet main></ion-router-outlet>

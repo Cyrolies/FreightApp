@@ -1,7 +1,7 @@
 import { map } from 'rxjs/operators';
 import { LoadingController } from '@ionic/angular';
-import { FreightApiService, FreightMilestone } from './../../providers/freight-api.service';
-import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
+import { FreightApiService, FreightMilestone, Profile } from './../../providers/freight-api.service';
+import { Component, ViewEncapsulation, ViewChild, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import 'chartjs-plugin-labels';
@@ -16,7 +16,7 @@ import { BaseChartDirective } from 'ng2-charts';
   styleUrls: ['./home.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class HomePage {
+export class HomePage implements OnInit, OnDestroy {
 
   constructor(
     public router: Router,
@@ -33,7 +33,8 @@ export class HomePage {
       primary: rootStyle.getPropertyValue('--ion-color-primary'),
       secondary: rootStyle.getPropertyValue('--ion-color-secondary'),
       mybackground: rootStyle.getPropertyValue('--ion-color-mybackground'),
-      white: '#ffffff'
+      white: '#ffffff',
+      black: '#000000' 
     };
 
     // TODO: Add transparency
@@ -47,7 +48,12 @@ export class HomePage {
     this.chartOptions.plugins.labels.fontColor = [this.colors.primary, this.colors.white];
   }
 
-  // Doughnut
+  public totalShipmentsCount: number;
+  public dataLoaded = false;
+  private profileSubscription: any;
+  private selectedProfile: Profile;
+
+  // Pie Chart:
 
   @ViewChild(BaseChartDirective)
   public chart: BaseChartDirective;
@@ -117,37 +123,43 @@ export class HomePage {
 
           // add padding when position is `outside`
           // default is 2
-          outsidePadding: 2,
+          // (This is the padding between the end of the graph and the end of the canvas.)
+          outsidePadding: 15,
 
           // add margin of text when position is `outside` or `border`
           // default is 2
-          textMargin: 12
+          // (This is the margin between the end of the graph and the start of the label text.)
+          textMargin: 5 // TODO: Check that there is enough left/right margin on canvas to support this text margin.
         }
       }
-    };
+  };
 
-  // events
-  public chartClicked(e: any): void {
-    console.log(e);
+  ngOnInit() {
+    this.profileSubscription = this.userData.selectedProfile$
+       .subscribe(selectedProfile => {
+        this.selectedProfile = selectedProfile;
+        this.ionViewWillEnter();
+       });
   }
-
-  public chartHovered(e: any): void {
-    console.log(e);
+  ngOnDestroy() {
+    // prevent memory leak when component is destroyed
+    this.profileSubscription.unsubscribe();
   }
 
   async ionViewWillEnter() {
 
-    const testCargoWiseCode = 'SIMFISSEA';
+    const cargoWiseCode = this.selectedProfile.CargoWiseCode; // 'SIMFISSEA';
     const shipmentNo = '';
     const orderNo = '';
     const openShipments = true;
     const fromDate = moment().subtract(6, 'months').toDate();
     const toDate = moment().toDate();
 
+    this.dataLoaded = false;
     const spinner = await this.loading.create();
     spinner.present().then(() => {
        this.freightService
-       .GetShipments(testCargoWiseCode, 
+       .GetShipments(cargoWiseCode, 
           shipmentNo,
           orderNo,
           fromDate,
@@ -155,7 +167,9 @@ export class HomePage {
           openShipments
         ).subscribe((shipments: FreightMilestone[]) => {
         
-        const totalShipmentsCount = shipments.length;
+        this.dataLoaded = true;
+
+        this.totalShipmentsCount = shipments.length;
         let lateCount = 0;
 
         shipments.forEach(shipment => {
@@ -168,10 +182,18 @@ export class HomePage {
           }
         });      
 
-        const openShipmentsCount = totalShipmentsCount - lateCount;
+        const openShipmentsCount = this.totalShipmentsCount - lateCount;
 
-        this.chartData = [Math.round(openShipmentsCount / totalShipmentsCount * 100), 
-          Math.round(lateCount / totalShipmentsCount * 100)];
+        this.chartData = [
+          Math.round(openShipmentsCount / this.totalShipmentsCount * 100), 
+          Math.round(lateCount / this.totalShipmentsCount * 100)
+        ];
+
+        // this.chartData.forEach((val, index, arr) => {
+        //   if (Number.isNaN(val)) {
+        //     arr[index] = 0;
+        //   }
+        // });
 
         // If smallest slice has width less tha 12%, show labels outside chart.
         if (Math.min(this.chartData[0], this.chartData[1]) < 12) {

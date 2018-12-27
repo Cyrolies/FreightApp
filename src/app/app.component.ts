@@ -41,6 +41,11 @@ export class AppComponent implements OnInit {
       title: 'Subscribe',
       url: '/subscriptions',
       icon: 'mail'
+    },
+    {
+      title: 'Test Map',
+      url: '/test-map',
+      icon: 'map'
     }
   ];
 

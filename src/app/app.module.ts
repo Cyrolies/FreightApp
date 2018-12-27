@@ -1,3 +1,5 @@
+/// <reference path="../../node_modules/bingmaps/types/MicrosoftMaps/Microsoft.Maps.All.d.ts" />
+
 import { ProfileSelectModalModule } from './pages/profile-select-modal/profile-select-modal.module';
 import { AboutModalModule } from './pages/about-modal/about-modal.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -12,6 +14,8 @@ import { IonicStorageModule } from '@ionic/storage';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppHttpInterceptor } from './providers/app-http-interceptor.service';
+import { BingMapsService } from './providers/bing-maps-service';
+import { HttpModule } from '@angular/http';
 
 @NgModule({
   imports: [
@@ -21,7 +25,8 @@ import { AppHttpInterceptor } from './providers/app-http-interceptor.service';
     IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
     AboutModalModule,
-    ProfileSelectModalModule
+    ProfileSelectModalModule,
+    HttpModule
   ],
   declarations: [
     AppComponent
@@ -34,7 +39,8 @@ import { AppHttpInterceptor } from './providers/app-http-interceptor.service';
       provide: HTTP_INTERCEPTORS,
       useClass: AppHttpInterceptor,
       multi: true
-    }],
+    },
+    BingMapsService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -137,8 +137,8 @@ export class HomePage implements OnInit, OnDestroy {
   ngOnInit() {
     this.profileSubscription = this.userData.selectedProfile$
        .subscribe(selectedProfile => {
-        this.selectedProfile = selectedProfile;
-        this.ionViewWillEnter();
+          this.selectedProfile = selectedProfile;
+          this.ionViewWillEnter();
        });
   }
   ngOnDestroy() {

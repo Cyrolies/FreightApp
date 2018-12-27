@@ -24,6 +24,10 @@ const routes: Routes = [
     loadChildren: './pages/shipment-detail/shipment-detail.module#ShipmentDetailModule'
   },
   {
+    path: 'test-map',
+    loadChildren: './pages/map/map.module#MapModule'
+  },
+  {
     path: 'event-notifications',
     loadChildren: './pages/event-notification-list/event-notification-list.module#EventNotificationListModule'
   },

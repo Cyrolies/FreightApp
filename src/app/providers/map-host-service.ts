@@ -118,6 +118,15 @@ export class MapHostService {
     }
   }
 
+  drawLine(points: Microsoft.Maps.Location[]) {
+    const line = new Microsoft.Maps.Polyline(points, {
+      strokeColor: 'blue',
+      strokeThickness: 1,
+    });
+
+    this.map.entities.push(line);  
+  }
+
   // togglePins() {
   //   this.logger.info('toggle pins');
 

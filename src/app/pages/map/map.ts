@@ -1,9 +1,11 @@
+import { FreightApiService, ModeType, TransportLegResult, Position, Geography } from './../../providers/freight-api.service';
 import { Component, ElementRef, ViewChild, ViewEncapsulation, OnDestroy, OnInit } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { Platform, LoadingController } from '@ionic/angular';
 
 import { MapHostService } from '../../providers/map-host-service';
 import { BehaviorSubject } from 'rxjs';
+import * as moment from 'moment';
 
 
 @Component({
@@ -17,10 +19,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class MapPage implements OnInit, OnDestroy {
 
-  fromPort: Microsoft.Maps.Location;
-  toPort: Microsoft.Maps.Location;
-  currentFreightLocation: Microsoft.Maps.Location;
-
+  // Configuration: ------------------------------------
   readonly pinIconDimensions = { // TODO: Provide multiple icons for different screen sizes.
     x: 25,
     y: 32
@@ -30,6 +29,18 @@ export class MapPage implements OnInit, OnDestroy {
     y: 32
   };
 
+  readonly doDrawLineForCompleteLeg = true;
+  
+  // -------------------------------------------------
+
+
+  transportMode: ModeType;
+  fromPort: Microsoft.Maps.Location;
+  toPort: Microsoft.Maps.Location;
+  currentFreightLocation: Microsoft.Maps.Location;
+  actualArrival: Date;  
+
+
   @ViewChild('map') mapElement: ElementRef;
 
   private _mapHostInitialisedSource = new BehaviorSubject<boolean>(false);
@@ -37,7 +48,9 @@ export class MapPage implements OnInit, OnDestroy {
 
   constructor(
     public platform: Platform,
-    private mapHostService: MapHostService
+    private mapHostService: MapHostService,
+    private freightApiService: FreightApiService,
+    public loading: LoadingController
   ) { }
   
   ngOnInit() {
@@ -58,7 +71,127 @@ export class MapPage implements OnInit, OnDestroy {
     }
   }
 
-  ionViewDidEnter() {
+  async ionViewDidEnter() {
+ 
+    // this.fromPort = new Microsoft.Maps.Location(22, 114);
+
+    // this.toPort = new Microsoft.Maps.Location(51, 5);
+
+    // this.currentFreightLocation =  new Microsoft.Maps.Location(-33.9561, 18.4825);
+
+
+    this.actualArrival = moment().subtract(-1, 'days').toDate();
+
+      // Sea shipment test
+    this.transportMode = ModeType.SEA;
+    const shipmentNumber = 'S00975554';
+    const legImoNumber = '9300439';
+    const voyageNumber = '';
+    const legSequence = 2;
+    const fromPortCode = 'USTIW';
+    const toPortCode = 'USSEA';
+
+    // Air shipment test
+    // this.transportMode = ModeType.AIR;
+    // const shipmentNumber = 'S01004325';
+    // const legImoNumber = '';
+    // const voyageNumber = 'SA123';
+    // const legSequence = 1;
+    // const fromPortCode = 'USSEA';
+    // const toPortCode = 'NLAMS';
+
+  
+    // Get vessel position:
+
+    const spinner = await this.loading.create();
+    await spinner.present();
+
+    try {
+
+      if (this.legIsComplete(this.actualArrival)) {
+        // Already arrived  
+
+        this.currentFreightLocation = null;
+
+      } else {
+
+        if (this.transportMode === ModeType.SEA) {
+        
+          // const imoNumber = await this.getImoNumber(shipmentNumber, legSequence); 
+
+          const vesselPosition = await this.freightApiService.GetShipGeoLoc(legImoNumber).toPromise();
+  
+          if (vesselPosition &&
+            !this.invalidCoordinates(+vesselPosition.LAT, +vesselPosition.LON)) {
+            
+            this.currentFreightLocation = new Microsoft.Maps.Location(vesselPosition.LAT, vesselPosition.LON);
+
+          } else {
+            // Position data is not available for some reason.
+            // TODO: Display error message?
+
+            this.currentFreightLocation = null;
+
+          }          
+  
+        } else if (this.transportMode === ModeType.AIR) {
+  
+          const vesselPosition = await this.freightApiService.GetAirlineGeoLoc(voyageNumber).toPromise();
+  
+          if (vesselPosition && vesselPosition.geography && 
+            !this.invalidCoordinates(vesselPosition.geography.latitude, vesselPosition.geography.longitude)) {
+            
+            this.currentFreightLocation = new Microsoft.Maps.Location(vesselPosition.geography.latitude, vesselPosition.geography.longitude);
+
+          } else {
+            // Position data is not available for some reason.
+            // TODO: Display error message?
+
+            this.currentFreightLocation = null;
+
+          }          
+  
+  
+        } else {
+          
+          throw new Error(`${this.transportMode} is not a recognised transport mode.`);
+        }
+
+      }
+
+      // Get geography of ports:
+
+      const portDetails = await this.freightApiService.GetPortDetails([fromPortCode, toPortCode]).toPromise();
+
+      const fromPortDetail = portDetails.filter(p => p.Code === fromPortCode).pop();
+      const toPortDetail = portDetails.filter(p => p.Code === toPortCode).pop();
+
+      this.fromPort = new Microsoft.Maps.Location(fromPortDetail.Latitude, fromPortDetail.Longitude);
+      this.toPort = new Microsoft.Maps.Location(toPortDetail.Latitude, toPortDetail.Longitude);
+
+    } catch (err) {
+
+      console.log(err);
+
+      return;
+    
+    }
+    
+    // const imoNumber = '9300439';
+    // const flightNumber = 'SA410'; // == SAA410
+
+    // let position;
+    // this.freightApiService.GetShipGeoLoc(imoNumber)
+    // .subscribe(res => {
+    //   position = res;
+    // });
+
+    // this.freightApiService.GetAirlineGeoLoc(flightNumber)
+    // .subscribe(res => {
+    //   position = res;
+    // });
+
+
 
     // Wait for map to be ready:
     if (this._mapHostInitialisedSource.value === false) {
@@ -75,6 +208,7 @@ export class MapPage implements OnInit, OnDestroy {
           // Map is ready to use! Can now use Microsoft.Maps Api.
           console.log('Map is ready!');
 
+          spinner.dismiss();
           this.onMapReady();
 
         }
@@ -82,51 +216,36 @@ export class MapPage implements OnInit, OnDestroy {
       );
     } else {
 
+      spinner.dismiss();
       this.onMapReady();
     }
+  }
 
+   async getImoNumber(shipmentNumber: string, sequenceOfThisLeg: number): Promise<string> {
 
-    // this.confData.getMap().subscribe((mapData: any) => {
-    //   const mapEle = this.mapElement.nativeElement;
+    const legResults = await this.freightApiService.GetIMONumbers(shipmentNumber).toPromise();
 
-    //   const map = new google.maps.Map(mapEle, {
-    //     center: mapData.find((d: any) => d.center),
-    //     zoom: 16
-    //   });
-
-    //   mapData.forEach((markerData: any) => {
-    //     const infoWindow = new google.maps.InfoWindow({
-    //       content: `<h5>${markerData.name}</h5>`
-    //     });
-
-    //     const marker = new google.maps.Marker({
-    //       position: markerData,
-    //       map,
-    //       title: markerData.name
-    //     });
-
-    //     marker.addListener('click', () => {
-    //       infoWindow.open(map, marker);
-    //     });
-    //   });
-
-    //   google.maps.event.addListenerOnce(map, 'idle', () => {
-    //     mapEle.classList.add('show-map');
-    //   });
-
-    // });
-
+    return legResults
+      .filter(l => +l.Sequence === sequenceOfThisLeg)
+      .pop()
+      .IMONumber;
   }
 
   onMapReady() {
 
-    this.fromPort = new Microsoft.Maps.Location(22, 114);
-
-    this.toPort = new Microsoft.Maps.Location(51, 5);
-
-    this.currentFreightLocation =  new Microsoft.Maps.Location(-33.9561, 18.4825);
-
     this.mapHostService.clearAllPushpins();
+
+    // Draw current location first, so that it will overlay POD/POL if necessary.
+    if (this.currentFreightLocation) { 
+      
+      this.mapHostService.addIconPushpin(
+        this.currentFreightLocation,
+        'Current Location',
+        this.transportMode === ModeType.AIR ? 'assets/img/Pin-Blue-Air.png' : 'assets/img/Pin-Blue-Sea.png',
+        new Microsoft.Maps.Point(Math.ceil(this.pinIconDimensions.x / 2), this.pinIconDimensions.y)
+      );
+
+    }
 
     this.mapHostService.addIconPushpin(
       this.fromPort,
@@ -142,14 +261,33 @@ export class MapPage implements OnInit, OnDestroy {
       new Microsoft.Maps.Point(Math.ceil(this.circleIconDimensions.x / 2), this.circleIconDimensions.y)
     );
 
-    this.mapHostService.addIconPushpin(
-      this.currentFreightLocation,
-      'Current Location',
-      'assets/img/Pin-Blue-Sea.png',
-      new Microsoft.Maps.Point(Math.ceil(this.pinIconDimensions.x / 2), this.pinIconDimensions.y)
-    );
+    if (this.currentFreightLocation) {
 
-    this.mapHostService.setViewToIncludeLocations([this.fromPort, this.toPort, this.currentFreightLocation]);
+      this.mapHostService.setViewToIncludeLocations([this.fromPort, this.toPort, this.currentFreightLocation]);   
     
+    } else {
+
+      this.mapHostService.setViewToIncludeLocations([this.fromPort, this.toPort]);
+
+    }
+
+    if (this.legIsComplete(this.actualArrival) && this.doDrawLineForCompleteLeg) {
+
+      this.mapHostService.drawLine([this.fromPort, this.toPort]);
+
+    }     
+  }
+
+  legIsComplete(actualArrival: Date) {
+
+    return actualArrival &&  (actualArrival < new Date());
+
+  }
+
+  invalidCoordinates(latitude: number, longitude: number) {
+
+    // Coordinates should not be exactly zero.
+    return (Math.abs(latitude) < Number.EPSILON && Math.abs(longitude) < Number.EPSILON);
+
   }
 }

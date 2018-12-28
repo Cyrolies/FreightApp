@@ -1,4 +1,5 @@
-import { FreightApiService, ModeType, TransportLegResult, Position, Geography } from './../../providers/freight-api.service';
+import { MyNavService } from './../../providers/my-nav.service';
+import { FreightApiService, ModeType, TransportLegResult, Position, Geography, TransportLeg } from './../../providers/freight-api.service';
 import { Component, ElementRef, ViewChild, ViewEncapsulation, OnDestroy, OnInit } from '@angular/core';
 
 import { Platform, LoadingController } from '@ionic/angular';
@@ -33,12 +34,17 @@ export class MapPage implements OnInit, OnDestroy {
   
   // -------------------------------------------------
 
+  transportLeg: TransportLeg;
+  // transportMode: ModeType;
+  // actualArrival: Date;  
 
-  transportMode: ModeType;
+
   fromPort: Microsoft.Maps.Location;
   toPort: Microsoft.Maps.Location;
   currentFreightLocation: Microsoft.Maps.Location;
-  actualArrival: Date;  
+  // this.fromPort = new Microsoft.Maps.Location(22, 114);
+  // this.toPort = new Microsoft.Maps.Location(51, 5);
+  // this.currentFreightLocation =  new Microsoft.Maps.Location(-33.9561, 18.4825);
 
 
   @ViewChild('map') mapElement: ElementRef;
@@ -50,7 +56,8 @@ export class MapPage implements OnInit, OnDestroy {
     public platform: Platform,
     private mapHostService: MapHostService,
     private freightApiService: FreightApiService,
-    public loading: LoadingController
+    public loading: LoadingController,
+    public navService: MyNavService
   ) { }
   
   ngOnInit() {
@@ -72,33 +79,34 @@ export class MapPage implements OnInit, OnDestroy {
   }
 
   async ionViewDidEnter() {
- 
-    // this.fromPort = new Microsoft.Maps.Location(22, 114);
 
-    // this.toPort = new Microsoft.Maps.Location(51, 5);
+    this.transportLeg = this.navService.pop();
 
-    // this.currentFreightLocation =  new Microsoft.Maps.Location(-33.9561, 18.4825);
+    if (!this.transportLeg) {
 
+      // TODO: display error.
+      return;
+    }
 
-    this.actualArrival = moment().subtract(-1, 'days').toDate();
+    // Sea shipment test-----------------------------------------
+      // this.transportLeg.transportMode = ModeType.SEA;
+      // this.transportLeg.VesselLloydsIMO = '9300439';
+      // this.transportLeg.voyageNumber = '';
+      // this.transportLeg.portOfLoading = 'USTIW';
+      // this.transportLeg.portOfDischarge = 'USSEA';
+      // this.transportLeg.actualArrival = moment().subtract(1, 'days').toDate();
+      // const shipmentNumber = 'S00975554';
+      // const legSequence = 2;
 
-      // Sea shipment test
-    this.transportMode = ModeType.SEA;
-    const shipmentNumber = 'S00975554';
-    const legImoNumber = '9300439';
-    const voyageNumber = '';
-    const legSequence = 2;
-    const fromPortCode = 'USTIW';
-    const toPortCode = 'USSEA';
-
-    // Air shipment test
-    // this.transportMode = ModeType.AIR;
-    // const shipmentNumber = 'S01004325';
-    // const legImoNumber = '';
-    // const voyageNumber = 'SA123';
-    // const legSequence = 1;
-    // const fromPortCode = 'USSEA';
-    // const toPortCode = 'NLAMS';
+    // Air shipment test-----------------------------------------
+      // this.transportLeg.transportMode = ModeType.AIR;
+      // this.transportLeg.VesselLloydsIMO = '';
+      // this.transportLeg.voyageNumber = 'SA123';
+      // this.transportLeg.portOfLoading = 'USSEA';
+      // this.transportLeg.portOfDischarge = 'NLAMS';
+      // this.transportLeg.actualArrival = moment().subtract(1, 'days').toDate();
+      // const shipmentNumber = 'S01004325';
+      // const legSequence = 1;
 
   
     // Get vessel position:
@@ -108,18 +116,18 @@ export class MapPage implements OnInit, OnDestroy {
 
     try {
 
-      if (this.legIsComplete(this.actualArrival)) {
+      if (this.legIsComplete()) {
         // Already arrived  
 
         this.currentFreightLocation = null;
 
       } else {
 
-        if (this.transportMode === ModeType.SEA) {
+        if (this.transportLeg.transportMode === ModeType.SEA) {
         
           // const imoNumber = await this.getImoNumber(shipmentNumber, legSequence); 
 
-          const vesselPosition = await this.freightApiService.GetShipGeoLoc(legImoNumber).toPromise();
+          const vesselPosition = await this.freightApiService.GetShipGeoLoc(this.transportLeg.VesselLloydsIMO).toPromise();
   
           if (vesselPosition &&
             !this.invalidCoordinates(+vesselPosition.LAT, +vesselPosition.LON)) {
@@ -134,9 +142,9 @@ export class MapPage implements OnInit, OnDestroy {
 
           }          
   
-        } else if (this.transportMode === ModeType.AIR) {
+        } else if (this.transportLeg.transportMode === ModeType.AIR) {
   
-          const vesselPosition = await this.freightApiService.GetAirlineGeoLoc(voyageNumber).toPromise();
+          const vesselPosition = await this.freightApiService.GetAirlineGeoLoc(this.transportLeg.voyageNumber).toPromise();
   
           if (vesselPosition && vesselPosition.geography && 
             !this.invalidCoordinates(vesselPosition.geography.latitude, vesselPosition.geography.longitude)) {
@@ -154,17 +162,17 @@ export class MapPage implements OnInit, OnDestroy {
   
         } else {
           
-          throw new Error(`${this.transportMode} is not a recognised transport mode.`);
+          throw new Error(`${this.transportLeg.transportMode} is not a recognised transport mode.`);
         }
 
       }
 
       // Get geography of ports:
 
-      const portDetails = await this.freightApiService.GetPortDetails([fromPortCode, toPortCode]).toPromise();
+      const portDetails = await this.freightApiService.GetPortDetails([this.transportLeg.portOfLoading, this.transportLeg.portOfDischarge]).toPromise();
 
-      const fromPortDetail = portDetails.filter(p => p.Code === fromPortCode).pop();
-      const toPortDetail = portDetails.filter(p => p.Code === toPortCode).pop();
+      const fromPortDetail = portDetails.filter(p => p.Code === this.transportLeg.portOfLoading).pop();
+      const toPortDetail = portDetails.filter(p => p.Code === this.transportLeg.portOfDischarge).pop();
 
       this.fromPort = new Microsoft.Maps.Location(fromPortDetail.Latitude, fromPortDetail.Longitude);
       this.toPort = new Microsoft.Maps.Location(toPortDetail.Latitude, toPortDetail.Longitude);
@@ -241,7 +249,7 @@ export class MapPage implements OnInit, OnDestroy {
       this.mapHostService.addIconPushpin(
         this.currentFreightLocation,
         'Current Location',
-        this.transportMode === ModeType.AIR ? 'assets/img/Pin-Blue-Air.png' : 'assets/img/Pin-Blue-Sea.png',
+        this.transportLeg.transportMode === ModeType.AIR ? 'assets/img/Pin-Blue-Air.png' : 'assets/img/Pin-Blue-Sea.png',
         new Microsoft.Maps.Point(Math.ceil(this.pinIconDimensions.x / 2), this.pinIconDimensions.y)
       );
 
@@ -271,17 +279,18 @@ export class MapPage implements OnInit, OnDestroy {
 
     }
 
-    if (this.legIsComplete(this.actualArrival) && this.doDrawLineForCompleteLeg) {
+    if (this.legIsComplete() && this.doDrawLineForCompleteLeg) {
 
       this.mapHostService.drawLine([this.fromPort, this.toPort]);
 
     }     
   }
 
-  legIsComplete(actualArrival: Date) {
+  legIsComplete(actualArrival?: Date) {
 
-    return actualArrival &&  (actualArrival < new Date());
+    const arrivalDate = actualArrival ? actualArrival : this.transportLeg.actualArrival;
 
+    return arrivalDate && (arrivalDate < new Date());
   }
 
   invalidCoordinates(latitude: number, longitude: number) {

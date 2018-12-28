@@ -1,3 +1,4 @@
+import { MyNavService } from './providers/my-nav.service';
 import { AboutModal } from './pages/about-modal/about-modal';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
@@ -7,6 +8,8 @@ import { Events, MenuController, Platform, ModalController } from '@ionic/angula
 
 import { UserData } from './providers/user-data';
 import { ProfileSelectModal } from './pages/profile-select-modal/profile-select-modal';
+
+import * as moment from 'moment'; // TODO: remove;
 
 @Component({
   selector: 'app-root',
@@ -45,7 +48,23 @@ export class AppComponent implements OnInit {
     {
       title: 'Test Map',
       url: '/test-map',
-      icon: 'map'
+      icon: 'map',
+      data:     { // Some data from S00975554
+        '$id': '20',
+        'estimatedArrival': '2018-11-16T15:29:00',
+        'estimatedDeparture': '2018-11-15T15:29:00',
+        'actualArrival': moment().subtract(1, 'days').toDate(), // null,
+        'actualDeparture': null,
+        'portOfDischarge': 'USSEA',
+        'portOfLoading': 'USTIW',
+        'voyageNumber': '0185E',
+        'vesselName': 'EVER SIGMA',
+        'transportMode': 0,
+        'legType': 2,
+        'carrier': null,
+        'customValues': null,
+        'VesselLloydsIMO': '9300439'
+      }
     }
   ];
 
@@ -101,7 +120,8 @@ export class AppComponent implements OnInit {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
+    private navService: MyNavService
   ) {
     this.initializeApp();
   }
@@ -160,7 +180,12 @@ export class AppComponent implements OnInit {
     });
   }
 
-  navigate(url: string) {
+  navigate(url: string, data?: any) {
+
+    if (data) {
+      this.navService.push(data);
+    }
+
     return this.router.navigateByUrl(url);
   }
 

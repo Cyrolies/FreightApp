@@ -2,7 +2,7 @@ import { MyNavService } from './../../providers/my-nav.service';
 import { FreightApiService, ModeType, TransportLegResult, Position, Geography, TransportLeg } from './../../providers/freight-api.service';
 import { Component, ElementRef, ViewChild, ViewEncapsulation, OnDestroy, OnInit } from '@angular/core';
 
-import { Platform, LoadingController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
 
 import { MapHostService } from '../../providers/map-host-service';
 import { BehaviorSubject } from 'rxjs';
@@ -35,16 +35,11 @@ export class MapPage implements OnInit, OnDestroy {
   // -------------------------------------------------
 
   transportLeg: TransportLeg;
-  // transportMode: ModeType;
-  // actualArrival: Date;  
 
 
   fromPort: Microsoft.Maps.Location;
   toPort: Microsoft.Maps.Location;
   currentFreightLocation: Microsoft.Maps.Location;
-  // this.fromPort = new Microsoft.Maps.Location(22, 114);
-  // this.toPort = new Microsoft.Maps.Location(51, 5);
-  // this.currentFreightLocation =  new Microsoft.Maps.Location(-33.9561, 18.4825);
 
 
   @ViewChild('map') mapElement: ElementRef;
@@ -53,7 +48,6 @@ export class MapPage implements OnInit, OnDestroy {
   mapHostInitialised$ = this._mapHostInitialisedSource.asObservable(); // Observable stream; subscribers will automatically receive updated values.
 
   constructor(
-    public platform: Platform,
     private mapHostService: MapHostService,
     private freightApiService: FreightApiService,
     public loading: LoadingController,

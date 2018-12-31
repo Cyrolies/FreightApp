@@ -1,3 +1,4 @@
+import { NetworkService } from './providers/network.service';
 import { MyNavService } from './providers/my-nav.service';
 import { AboutModal } from './pages/about-modal/about-modal';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
@@ -10,6 +11,7 @@ import { UserData } from './providers/user-data';
 import { ProfileSelectModal } from './pages/profile-select-modal/profile-select-modal';
 
 import * as moment from 'moment'; // TODO: remove;
+import { GlobalService } from './providers/global.service';
 
 @Component({
   selector: 'app-root',
@@ -121,7 +123,9 @@ export class AppComponent implements OnInit {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     public modalCtrl: ModalController,
-    private navService: MyNavService
+    private navService: MyNavService,
+    private network: NetworkService,
+    private global: GlobalService
   ) {
     this.initializeApp();
   }
@@ -133,8 +137,12 @@ export class AppComponent implements OnInit {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
+      this.statusBar.styleDefault();    
       this.splashScreen.hide();
+
+      this.network.initializeNetworkEvents();
+
+      this.global.isDevice = this.platform.is('cordova');
     });
   }
 

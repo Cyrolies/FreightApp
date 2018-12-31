@@ -9,9 +9,6 @@ import { Http, Headers } from '@angular/http';
 import { BingMapsService } from './bing-maps-service';
 
 import 'rxjs/add/operator/toPromise';
-import { BehaviorSubject } from 'rxjs';
-
-declare var navigator;
 
 @Injectable()
 export class MapHostService {
@@ -20,9 +17,6 @@ export class MapHostService {
   private mapElement: HTMLElement;
   private map: Microsoft.Maps.Map;
   private tracksLayer: Microsoft.Maps.Layer;
-
-  private tracksLayerActive = true;
-  private lastLocation;
 
   constructor(
     private http: Http,

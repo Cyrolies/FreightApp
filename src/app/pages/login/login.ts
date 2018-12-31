@@ -1,6 +1,6 @@
+import { NetworkService } from './../../providers/network.service';
 import { ProfileSelectModal } from './../profile-select-modal/profile-select-modal';
 import { AuthResult } from './../../providers/freight-api.service';
-import { environment } from './../../../environments/environment';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,6 +10,7 @@ import { UserData } from '../../providers/user-data';
 import { UserOptions } from '../../interfaces/user-options';
 import { MenuController, LoadingController, ToastController, ModalController } from '../../../../node_modules/@ionic/angular';
 import { FreightApiService, ApplicationUser } from '../../providers/freight-api.service';
+import { GlobalService } from '../../providers/global.service';
 
 
 
@@ -30,7 +31,9 @@ export class LoginPage {
     public menu: MenuController,
     public loading: LoadingController,
     public toastCtrl: ToastController,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
+    private network: NetworkService,
+    private global: GlobalService
   ) { }
 
   ionViewWillEnter() {
@@ -48,29 +51,41 @@ export class LoginPage {
 
       const spinner = await this.loading.create();
 
-      // Attempt log in:
-      spinner.present().then(() => {
+      await spinner.present();
+
+        // If running on device, first check if has internet connectivity:
+        if (this.global.isDevice && !this.isUserOnline()) {
+
+          spinner.dismiss();
+
+          return;
+        }
+                
+        // Attempt log in:
         this.freightApiService
         .Authenticate(this.login.username, this.login.password)
         .subscribe((result: AuthResult) => {
 
+          spinner.dismiss();
+
           if (!result.IsAuthSuccessful) {
             // Invalid login
             this.onLoginFailed();
+
           } else {
+
             this.userData.login(this.login.username, result.User);
 
-            this.presentProfileSelectModal();
-            
+            this.presentProfileSelectModal();            
           }
 
+        }, (error) =>  {
+
           spinner.dismiss();
 
-        }, (error) =>  {
           this.onLoginFailed();
-          spinner.dismiss();
+
         });
-      });
     }
   }
 
@@ -79,18 +94,9 @@ export class LoginPage {
   }
 
   onLoginFailed() {
-    this.presentfailedLoginToast();
-  }
 
-  async presentfailedLoginToast() {
-    const toast = await this.toastCtrl.create({
-      message: 'Login failed.', // Todo: Differentiate between invalid username/password and server error.
-      duration: 5000,
-      position: 'bottom',
-      showCloseButton: false
-    });
+    this.presentToast('Login failed.');
 
-    await toast.present();
   }
 
   async presentProfileSelectModal() {
@@ -100,4 +106,31 @@ export class LoginPage {
 
     modal.present();
   }
+
+  isUserOnline(): boolean {
+
+    const isOnline = this.network.isOnline();
+
+    if (isOnline) {
+
+      return true;
+
+    } else {
+
+      this.presentToast('No connection could be found. Please check your WiFi or Mobile conneciton.');
+           
+      return false;
+    } 
+  }
+
+  async presentToast(toastMessage: string) {
+
+    const toast = await this.toastCtrl.create(
+      this.global.getToastConfiguration(toastMessage)
+    );
+    
+    await toast.present();
+  }
+
 }
+

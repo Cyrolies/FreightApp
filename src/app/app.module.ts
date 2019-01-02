@@ -17,6 +17,7 @@ import { AppHttpInterceptor } from './providers/app-http-interceptor.service';
 import { BingMapsService } from './providers/bing-maps-service';
 import { HttpModule } from '@angular/http';
 import { Network } from '@ionic-native/network/ngx';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { Network } from '@ionic-native/network/ngx';
       multi: true
     },
     BingMapsService,
-    Network
+    Network,
+    ScreenOrientation
   ],
   bootstrap: [AppComponent]
 })

@@ -1,7 +1,7 @@
 import { NetworkService } from './../../providers/network.service';
 import { ProfileSelectModal } from './../profile-select-modal/profile-select-modal';
 import { AuthResult } from './../../providers/freight-api.service';
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, AfterViewInit, ViewChild, OnInit, ElementRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -11,7 +11,7 @@ import { UserOptions } from '../../interfaces/user-options';
 import { MenuController, LoadingController, ToastController, ModalController } from '../../../../node_modules/@ionic/angular';
 import { FreightApiService, ApplicationUser } from '../../providers/freight-api.service';
 import { GlobalService } from '../../providers/global.service';
-
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 
 @Component({
@@ -20,9 +20,17 @@ import { GlobalService } from '../../providers/global.service';
   styleUrls: ['./login.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
   login: UserOptions = { username: '', password: '' };
   submitted = false;
+
+  @ViewChild('logo')
+  logo: ElementRef;
+
+  @ViewChild('loginbutton', {read: ElementRef}) 
+  loginButton: ElementRef;
+
+  doHideLogoButton = false;
 
   constructor(
     public freightApiService: FreightApiService,
@@ -33,19 +41,56 @@ export class LoginPage {
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
     private network: NetworkService,
-    private global: GlobalService
+    private global: GlobalService,
+    private screenOrientation: ScreenOrientation
   ) { }
+
+
+  ngOnInit() {
+
+    this.screenOrientation.onChange().subscribe(
+      () => {
+          console.log('Orientation Changed');
+
+          this.doHideLogoButton = false;
+          setTimeout(() => {
+            this.handleLogoCollision(this.logo, this.loginButton);
+          }, 200);
+      }
+    );
+  }
+
+  handleLogoCollision(logo: ElementRef, loginButton: ElementRef) {
+    const logoTop = logo.nativeElement.getBoundingClientRect().top;
+    const loginButtonBottom = loginButton.nativeElement.getBoundingClientRect().bottom;
+
+    if (logoTop < loginButtonBottom) {
+      this.doHideLogoButton = true;
+    } else {
+      this.doHideLogoButton = false;
+    }
+  }
 
   ionViewWillEnter() {
     this.menu.enable(false);
   }
+
+  ionViewDidEnter() {
+    this.handleLogoCollision(this.logo, this.loginButton);
+  }
+
   ionViewDidLeave() {
     // enable the root left menu when leaving the tutorial page
     this.menu.enable(true);
   }
 
   async onLogin(form: NgForm) {
+
     this.submitted = true;
+
+    setTimeout(() => {
+      this.handleLogoCollision(this.logo, this.loginButton);
+    }, 200);
 
     if (form.valid) {
 

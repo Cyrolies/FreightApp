@@ -27,7 +27,7 @@
             Navigate
           </ion-list-header>
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item button (click)="navigate(p.url)">
+            <ion-item button (click)="navigate(p.url, p['data'])">
               <ion-icon slot="start" [name]="p.icon"></ion-icon>
               <ion-label>
                 {{p.title}}
@@ -60,6 +60,15 @@
               </ion-label>
             </ion-item>
           </ion-menu-toggle> -->
+
+          <ion-menu-toggle auto-hide="false">
+              <ion-item button (click)="presentProfileSelectModal()">
+                <ion-icon slot="start" name="business"></ion-icon>
+                <ion-label>
+                  Change Profile
+                </ion-label>
+              </ion-item>
+            </ion-menu-toggle>
 
           <ion-menu-toggle auto-hide="false">
             <ion-item button (click)="navigate('/support')">
@@ -126,6 +135,7 @@
           </ion-menu-toggle>
         </ion-list> -->
       </ion-content>
+
     </ion-menu>
 
     <ion-router-outlet main></ion-router-outlet>

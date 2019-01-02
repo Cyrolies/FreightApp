@@ -1,15 +1,17 @@
+import { NetworkService } from './../../providers/network.service';
+import { ProfileSelectModal } from './../profile-select-modal/profile-select-modal';
 import { AuthResult } from './../../providers/freight-api.service';
-import { environment } from './../../../environments/environment';
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, AfterViewInit, ViewChild, OnInit, ElementRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { UserData } from '../../providers/user-data';
 
 import { UserOptions } from '../../interfaces/user-options';
-import { MenuController, LoadingController, ToastController } from '../../../../node_modules/@ionic/angular';
+import { MenuController, LoadingController, ToastController, ModalController } from '../../../../node_modules/@ionic/angular';
 import { FreightApiService, ApplicationUser } from '../../providers/freight-api.service';
-
+import { GlobalService } from '../../providers/global.service';
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 
 
 @Component({
@@ -18,9 +20,17 @@ import { FreightApiService, ApplicationUser } from '../../providers/freight-api.
   styleUrls: ['./login.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
   login: UserOptions = { username: '', password: '' };
   submitted = false;
+
+  @ViewChild('logo')
+  logo: ElementRef;
+
+  @ViewChild('loginbutton', {read: ElementRef}) 
+  loginButton: ElementRef;
+
+  doHideLogoButton = false;
 
   constructor(
     public freightApiService: FreightApiService,
@@ -28,45 +38,99 @@ export class LoginPage {
     public router: Router,
     public menu: MenuController,
     public loading: LoadingController,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
+    public modalCtrl: ModalController,
+    private network: NetworkService,
+    private global: GlobalService,
+    private screenOrientation: ScreenOrientation
   ) { }
+
+
+  ngOnInit() {
+
+    this.screenOrientation.onChange().subscribe(
+      () => {
+          console.log('Orientation Changed');
+
+          this.doHideLogoButton = false;
+          setTimeout(() => {
+            this.handleLogoCollision(this.logo, this.loginButton);
+          }, 200);
+      }
+    );
+  }
+
+  handleLogoCollision(logo: ElementRef, loginButton: ElementRef) {
+    const logoTop = logo.nativeElement.getBoundingClientRect().top;
+    const loginButtonBottom = loginButton.nativeElement.getBoundingClientRect().bottom;
+
+    if (logoTop < loginButtonBottom) {
+      this.doHideLogoButton = true;
+    } else {
+      this.doHideLogoButton = false;
+    }
+  }
 
   ionViewWillEnter() {
     this.menu.enable(false);
   }
+
+  ionViewDidEnter() {
+    this.handleLogoCollision(this.logo, this.loginButton);
+  }
+
   ionViewDidLeave() {
     // enable the root left menu when leaving the tutorial page
     this.menu.enable(true);
   }
 
   async onLogin(form: NgForm) {
+
     this.submitted = true;
+
+    setTimeout(() => {
+      this.handleLogoCollision(this.logo, this.loginButton);
+    }, 200);
 
     if (form.valid) {
 
       const spinner = await this.loading.create();
 
-      // Attempt log in:
-      spinner.present().then(() => {
+      await spinner.present();
+
+        // If running on device, first check if has internet connectivity:
+        if (this.global.isDevice && !this.isUserOnline()) {
+
+          spinner.dismiss();
+
+          return;
+        }
+                
+        // Attempt log in:
         this.freightApiService
         .Authenticate(this.login.username, this.login.password)
         .subscribe((result: AuthResult) => {
 
+          spinner.dismiss();
+
           if (!result.IsAuthSuccessful) {
             // Invalid login
             this.onLoginFailed();
+
           } else {
+
             this.userData.login(this.login.username, result.User);
-            this.router.navigateByUrl('/subscriptions'); // this.router.navigateByUrl('/app/tabs/(schedule:schedule)');
+
+            this.presentProfileSelectModal();            
           }
 
+        }, (error) =>  {
+
           spinner.dismiss();
 
-        }, (error) =>  {
           this.onLoginFailed();
-          spinner.dismiss();
+
         });
-      });
     }
   }
 
@@ -75,17 +139,43 @@ export class LoginPage {
   }
 
   onLoginFailed() {
-    this.presentfailedLoginToast();
+
+    this.presentToast('Login failed.');
+
   }
 
-  async presentfailedLoginToast() {
-    const toast = await this.toastCtrl.create({
-      message: 'Login failed.', // Todo: Differentiate between invalid username/password and server error.
-      duration: 5000,
-      position: 'bottom',
-      showCloseButton: false
+  async presentProfileSelectModal() {
+    const modal = await this.modalCtrl.create({
+      component: ProfileSelectModal
     });
 
+    modal.present();
+  }
+
+  isUserOnline(): boolean {
+
+    const isOnline = this.network.isOnline();
+
+    if (isOnline) {
+
+      return true;
+
+    } else {
+
+      this.presentToast('No connection could be found. Please check your WiFi or Mobile conneciton.');
+           
+      return false;
+    } 
+  }
+
+  async presentToast(toastMessage: string) {
+
+    const toast = await this.toastCtrl.create(
+      this.global.getToastConfiguration(toastMessage)
+    );
+    
     await toast.present();
   }
+
 }
+

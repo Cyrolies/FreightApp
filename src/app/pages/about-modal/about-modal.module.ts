@@ -4,14 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { AboutModal } from './about-modal';
-// import { AboutModalRoutingModule } from './about-modal-routing.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    // AboutModalRoutingModule
   ],
   declarations: [AboutModal],
   entryComponents: [],

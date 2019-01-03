@@ -14,7 +14,7 @@ import { forEach } from '@angular/router/src/utils/collection';
   encapsulation: ViewEncapsulation.None
 })
 export class ShipmentDetailPage {
-  shipment: Shipment;
+  public shipment: Shipment;
   @ViewChild('Tabs') tabRef: Tabs;
   constructor(
     public actionSheetCtrl: ActionSheetController,
@@ -44,7 +44,10 @@ export class ShipmentDetailPage {
            if (orgConsignor.length > 0) {
              this.shipment.Shipper = orgConsignor[0];
            }
-           
+           this.shipment.milestones = result.milestones;
+           this.shipment.orders = result.orders;
+           this.shipment.transportLegs = result.transportLegs;
+           this.shipment.containers = result.containers;
          }
         spinner.dismiss();
 

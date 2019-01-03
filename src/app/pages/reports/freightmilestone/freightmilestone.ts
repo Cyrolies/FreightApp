@@ -29,7 +29,7 @@ export class FreightMilestonePage {
  
    const spinner = await this.loading.create();
     spinner.present().then(() => {
-    const usId = this.userData.selectedProfile;
+    // const usId = this.userData.selectedProfile;
     const powerBISettings = new PowerBISettings() ;
     powerBISettings.UserID = 'SIMFISSEA'; // usId.toString();
     powerBISettings.RoleName = 'Freight Milestones Dashboard RLS';

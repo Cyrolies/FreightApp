@@ -2,6 +2,7 @@ import { Profile, ApplicationUser } from './freight-api.service';
 import { Injectable } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Injectable({
@@ -12,7 +13,14 @@ export class UserData {
   HAS_LOGGED_IN = 'hasLoggedIn';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
   userProfiles: Profile[] = [];
-  selectedProfile: Profile = undefined;
+
+  // public selectedProfile$: 
+  private _selectedProfileSource = new BehaviorSubject<Profile>(null);
+  public selectedProfile$ = this._selectedProfileSource.asObservable(); // Observable stream; subscribers will automatically receive updated values.
+
+ 
+  public userId: string;
+  public username: string;
 
   constructor(
     public events: Events,
@@ -39,6 +47,9 @@ export class UserData {
       this.setUsername(username);
 
       this.userProfiles = user.Profiles;
+      this.userId = user.ProfileId.toString();
+      this.username = user.FirstName;
+       
 
       return this.events.publish('user:login');
     });
@@ -79,5 +90,9 @@ export class UserData {
     return this.storage.get(this.HAS_SEEN_TUTORIAL).then((value) => {
       return value;
     });
+  }
+
+  changeProfile(profile: Profile) {
+    this._selectedProfileSource.next(profile);
   }
 }

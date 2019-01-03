@@ -1,3 +1,5 @@
+import { NetworkService } from './providers/network.service';
+import { MyNavService } from './providers/my-nav.service';
 import { AboutModal } from './pages/about-modal/about-modal';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
@@ -6,6 +8,10 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Events, MenuController, Platform, ModalController } from '@ionic/angular';
 
 import { UserData } from './providers/user-data';
+import { ProfileSelectModal } from './pages/profile-select-modal/profile-select-modal';
+
+import * as moment from 'moment'; // TODO: remove;
+import { GlobalService } from './providers/global.service';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +29,7 @@ export class AppComponent implements OnInit {
     },
     {
       title: 'Shipments',
-      url: '/shipment-search',
+      url: '/shipments',
       icon: 'boat'
     },
     {
@@ -40,6 +46,27 @@ export class AppComponent implements OnInit {
       title: 'Subscribe',
       url: '/subscriptions',
       icon: 'mail'
+    },
+    {
+      title: 'Test Map',
+      url: '/test-map',
+      icon: 'map',
+      data:     { // Some data from S00975554
+        '$id': '20',
+        'estimatedArrival': '2018-11-16T15:29:00',
+        'estimatedDeparture': '2018-11-15T15:29:00',
+        'actualArrival': moment().subtract(1, 'days').toDate(), // null,
+        'actualDeparture': null,
+        'portOfDischarge': 'USSEA',
+        'portOfLoading': 'USTIW',
+        'voyageNumber': '0185E',
+        'vesselName': 'EVER SIGMA',
+        'transportMode': 0,
+        'legType': 2,
+        'carrier': null,
+        'customValues': null,
+        'VesselLloydsIMO': '9300439'
+      }
     }
   ];
 
@@ -95,7 +122,10 @@ export class AppComponent implements OnInit {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
+    private navService: MyNavService,
+    private network: NetworkService,
+    private global: GlobalService
   ) {
     this.initializeApp();
   }
@@ -107,8 +137,12 @@ export class AppComponent implements OnInit {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
+      this.statusBar.styleDefault();    
       this.splashScreen.hide();
+
+      this.network.initializeNetworkEvents();
+
+      this.global.isDevice = this.platform.is('cordova');
     });
   }
 
@@ -154,7 +188,12 @@ export class AppComponent implements OnInit {
     });
   }
 
-  navigate(url: string) {
+  navigate(url: string, data?: any) {
+
+    if (data) {
+      this.navService.push(data);
+    }
+
     return this.router.navigateByUrl(url);
   }
 
@@ -172,6 +211,14 @@ export class AppComponent implements OnInit {
   async presentAboutModal() {
     const modal = await this.modalCtrl.create({
       component: AboutModal
+    });
+
+    modal.present();
+  }
+
+  async presentProfileSelectModal() {
+    const modal = await this.modalCtrl.create({
+      component: ProfileSelectModal
     });
 
     modal.present();

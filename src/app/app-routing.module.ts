@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login', // '/tutorial'
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
@@ -22,6 +22,10 @@ const routes: Routes = [
   {
     path: 'shipment-details',
     loadChildren: './pages/shipment-detail/shipment-detail.module#ShipmentDetailModule'
+  },
+  {
+    path: 'test-map',
+    loadChildren: './pages/map/map.module#MapModule'
   },
   {
     path: 'event-notifications',

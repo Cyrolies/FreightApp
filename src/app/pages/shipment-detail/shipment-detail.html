@@ -3,51 +3,287 @@
     <ion-buttons slot="start">
       <ion-back-button textcolor="white" text="Shipments"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{shipment.transportMode}}</ion-title>
+    <ion-title>Shipment Detail</ion-title>
+    <ion-buttons slot="end">
+      <ion-button >
+        <ion-icon slot="icon-only" name="options"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding class="shipment-detail">
-      <ion-card *ngIf="shipment" >
-      <ion-tabs>
-          <ion-tab [route]="Detail">Detail</ion-tab>
-          <ion-tab [route]="Orders">Orders</ion-tab>
-          <ion-tab [route]="Routes">Routes</ion-tab>
-          <ion-tab [route]="Packing">Packing</ion-tab>
-      </ion-tabs>
-      <ion-card-content>
-          <div *ngIf="currentTab == 'Detail'">
-              <h4>Ina's Mac and Cheese</h4>
-              <p>
-                  Here's what one recipe reviewer had to say: "This mac and cheese is all grown-up. It was tasty, cheesy and easy to make. Have made it a few times in the last 2 months and it is a hit each time."
-              </p>
+<ion-content scroll="true" >
+  <ion-tabs selectedIndex="1">
+
+    <ion-tab class="shipment-tab" label="Detail" >
+                       
+        <ion-list>
+          <ion-grid fixed>
+            <ion-row align-items-stretch>
+              <ion-col size="12" size-md="6">
+                 <!--Shipment Detail Card-->
+        <ion-card class="ion-card" *ngIf="shipment" >
+            <ion-card-header class="ion-card-header">
+              <ion-row align-items-stretch>
+                <ion-col text-left size="auto">
+                  <ion-item>
+                    {{shipment.references[0]?.value}}
+                  </ion-item>
+                </ion-col>
+                <ion-col text-right size="auto">
+                  <ion-item>
+                  <!-- Mode:{{shipment.transportMode}} -->
+                  </ion-item>
+                </ion-col>
+              </ion-row> 
+            </ion-card-header>
+            <ion-card-content class="ion-card-content">
+              <ion-row >
+                <ion-col text-left size="auto">
+                  <ion-item class="ion-item">
+                    Consignee:{{shipment.Consignee?.name}} 
+                  </ion-item>
+                </ion-col>
+                <ion-col text-center size="auto">
+                  <ion-item class="ion-item">
+                    Consignor: {{shipment.Shipper?.name}}
+                  </ion-item>
+                </ion-col>
+              </ion-row> 
+              <ion-row>
+                <ion-col text-left size="auto">
+                  <ion-item class="ion-item">
+                    POL:{{shipment.PortOfLoading}}
+                  </ion-item>
+                </ion-col>
+                <ion-col text-center size="auto">
+                  <ion-item class="ion-item">
+                    POD: {{shipment.PortOfDischarge}}  
+                  </ion-item>
+                </ion-col>
+              </ion-row> 
+            </ion-card-content>
+          </ion-card>
   
-          </div>
-  
-          <div *ngIf="currentTab == 'Orders'">
-              <h4>Google Go</h4>
-              <p>
-                  Google Go makes discovering, exploring, and sharing the best of the web easy and fast. Get answers quickly and reliably with Google Go, even on slow connections and smartphones with low space. At 5MB in size, it’s speedy to download and get started.
-              </p>
-  
-          </div>
-  
-          <div *ngIf="currentTab == 'Routes'">
-              <h4>Take Lots Of Photos</h4>
-              <p>
-                  You may only see these places & meet these people once in your lifetime. Remember them forever with plenty of photos. Don’t worry about looking like a “tourist”. Are you traveling to look cool? No one cares. Great photos are the ultimate souvenir.
-  
-              </p>
-          </div>
-          <div *ngIf="currentTab == 'Packing'">
-              <h4>Take Lots Of Photos</h4>
-              <p>
-                  You may only see these places & meet these people once in your lifetime. Remember them forever with plenty of photos. Don’t worry about looking like a “tourist”. Are you traveling to look cool? No one cares. Great photos are the ultimate souvenir.
-  
-              </p>
-          </div>
-      </ion-card-content>
-     
-    </ion-card>
-  
+              <!--Milestones-->
+                <ion-card class="ion-card" >
+                  <ion-card-header class="ion-card-header">
+                    <ion-row align-items-stretch>
+                      <ion-col text-left size="auto">
+                        <ion-item >
+                          Milestones
+                        </ion-item>
+                      </ion-col>
+                    </ion-row> 
+                  </ion-card-header>
+             
+                  <ion-card-content class="ion-card-content"  *ngFor="let milestone of shipment.milestones">
+                    <ion-row>
+                      <ion-col text-left size="auto">
+                        <ion-item class="ion-item">
+                          Code:{{milestone.EventCode}} 
+                        </ion-item>
+                      </ion-col>
+                      <ion-col text-center size="auto">
+                        <ion-item class="ion-item">
+                          Description: {{milestone.Description}}
+                        </ion-item>
+                      </ion-col>
+                    </ion-row> 
+                    <ion-row>
+                      <ion-col text-left size="auto">
+                        <ion-item class="ion-item">
+                          Actual Date:{{milestone.ActualDate}}
+                        </ion-item>
+                      </ion-col>
+                      <ion-col text-center size="auto">
+                        <ion-item class="ion-item">
+                          Estimated Date: {{milestone.EstimatedDate}}  
+                        </ion-item>
+                      </ion-col>
+                    </ion-row> 
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-list>
+    </ion-tab>
+    <ion-tab label="Orders">
+      <!-- Orders -->
+      <ion-list>
+          <ion-grid fixed>
+            <ion-row align-items-stretch>
+              <ion-col size="12" size-md="6">
+                 <!--Shipment Orders-->
+                <ion-card  class="ion-card">
+                  <ion-card-header class="ion-card-header">
+                    <ion-row align-items-stretch>
+                      <ion-col text-left size="auto">
+                        <ion-item>
+                          Orders
+                        </ion-item>
+                      </ion-col>
+                    </ion-row> 
+                  </ion-card-header>
+             
+                  <ion-card-content  *ngFor="let order of shipment.orders">
+                    <ion-row>
+                      <ion-col text-left size="auto">
+                        <ion-item class="ion-item">
+                         Order Number:{{order.OrderNumber}}-{{order.OrderNumberSplit}}  
+                        </ion-item>
+                      </ion-col>
+                      <ion-col text-center size="auto">
+                        <ion-item class="ion-item">
+                         Goods Description: {{order.GoodsDescription}} 
+                        </ion-item>
+                      </ion-col>
+                    </ion-row> 
+                    <ion-row>
+                      <ion-col text-left size="auto">
+                        <ion-item class="ion-item">
+                         Order Date:{{order.OrderDate}}
+                        </ion-item>
+                      </ion-col>
+                      <ion-col text-center size="auto">
+                        <ion-item class="ion-item">
+                        Actual Arrival: {{order.ActualArrival}}   -->
+                        </ion-item>
+                      </ion-col>
+                    </ion-row> 
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-list>
+    </ion-tab>
+    <ion-tab label="Routing">
+      <!-- Transport Legs -->
+      <ion-list>
+          <ion-grid fixed>
+            <ion-row align-items-stretch>
+              <ion-col size="12" size-md="6">
+                 <!--Shipment Orders-->
+                <ion-card  class="ion-card">
+                  <ion-card-header class="ion-card-header">
+                    <ion-row align-items-stretch>
+                      <ion-col text-left size="auto">
+                        <ion-item>
+                          Routing
+                        </ion-item>
+                      </ion-col>
+                    </ion-row> 
+                  </ion-card-header>
+             
+                  <ion-card-content class="ion-card-content" *ngFor="let leg of shipment.transportLegs">
+                    <ion-row>
+                      <ion-col text-left size="auto">
+                        <ion-item class="ion-item">
+                         Port Of Loading:{{leg.portOfLoading}}  
+                        </ion-item>
+                      </ion-col>
+                      <ion-col text-center size="auto">
+                        <ion-item class="ion-item">
+                         Port Of Discharge: {{leg.portOfDischarge}} 
+                        </ion-item>
+                      </ion-col>
+                    </ion-row> 
+                    <ion-row>
+                      <ion-col text-left size="auto">
+                        <ion-item class="ion-item">
+                         Actual Arrival:{{leg.actualArrival}}
+                        </ion-item>
+                      </ion-col>
+                      <ion-col text-center size="auto">
+                        <ion-item class="ion-item">
+                         Estimated Arrival: {{leg.estimatedArrival}}
+                        </ion-item>
+                      </ion-col>
+                    </ion-row> 
+                    <ion-row>
+                      <ion-col text-left size="auto">
+                          <ion-item class="ion-item">
+                           Actual Departure:{{leg.actualDeparture}}
+                          </ion-item>
+                        </ion-col>
+                        <ion-col text-center size="auto">
+                          <ion-item class="ion-item">
+                           Estimated Departure: {{leg.estimatedDeparture}}   
+                          </ion-item>
+                        </ion-col>
+                    </ion-row> 
+                    <ion-row>
+                        <ion-col text-left size="auto">
+                            <ion-item class="ion-item">
+                             Vessel :{{leg.vesselName}}
+                            </ion-item>
+                          </ion-col>
+                          <ion-col text-center size="auto">
+                            <ion-item class="ion-item">
+                             IMO: {{leg.VesselLloydsIMO}}   
+                            </ion-item>
+                          </ion-col>
+                      </ion-row>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-list>
+    </ion-tab>
+    <ion-tab label="Packing">
+        <!-- Containers -->
+      <ion-list>
+          <ion-grid fixed>
+            <ion-row align-items-stretch>
+              <ion-col size="12" size-md="6">
+                 <!--Shipment Containers-->
+                <ion-card  class="ion-card">
+                  <ion-card-header class="ion-card-header">
+                    <ion-row align-items-stretch>
+                      <ion-col text-left size="auto">
+                        <ion-item>
+                          Packing
+                        </ion-item>
+                      </ion-col>
+                    </ion-row> 
+                  </ion-card-header>
+             
+                  <ion-card-content class="ion-card-content" *ngFor="let container of shipment.containers">
+                    <ion-row>
+                      <ion-col text-left size="auto">
+                        <ion-item class="ion-item">
+                         Container Number:{{container.containerNumber}}  
+                        </ion-item>
+                      </ion-col>
+                      <ion-col text-center size="auto">
+                        <ion-item class="ion-item">
+                         Container Type: {{container.containerType}} 
+                        </ion-item>
+                      </ion-col>
+                    </ion-row> 
+                    <ion-row>
+                      <ion-col text-left size="auto">
+                        <ion-item class="ion-item">
+                         Description:{{container.containerDescription}}
+                        </ion-item>
+                      </ion-col>
+                      <ion-col text-center size="auto">
+                        <ion-item class="ion-item">
+                         Seal Number: {{container.sealNumber}}
+                        </ion-item>
+                      </ion-col>
+                    </ion-row> 
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-list>
+    </ion-tab>
+    
+  </ion-tabs>
 </ion-content>
+

@@ -32,6 +32,14 @@ export class EventTopic {
 }
 
 @Exclude()
+export class Reference {
+  @Expose()
+  Value: string;
+  @Expose()
+  Key: string;
+ }
+
+@Exclude()
 export class Organization {
   @Expose()
   OH_PK: string;
@@ -503,6 +511,8 @@ export class TransportLeg {
 @Exclude()
 export class Shipment {
   @Expose()
+  ShipmentNo: string;
+  @Expose()
   @Type(() => Organization)
   Client: Organization;
   @Expose()
@@ -619,8 +629,12 @@ export class Shipment {
   @Expose()
   @Type(() => Order)
   orders: Order[];
-  // customValues: CustomValue[];
-
+  @Expose()
+  @Type(() => Organization)
+  organizations: Organization[];
+  @Expose()
+  @Type(() => Reference)
+  references: Reference[];
 }
 
 @Exclude()
@@ -712,8 +726,77 @@ export class PowerBISettings {
     @Expose()
     @Type(() => EmbedToken)
     public EmbedToken: EmbedToken;
-  }
-    
+}
+  
+
+// Position of sea vessel (Response from MarineTraffice/VesselFinder):
+@Exclude()
+export class Position {
+  @Expose()
+  LAT: string;
+  @Expose()
+  LON: string;
+}
+
+@Exclude()
+export class Geography {
+  @Expose()
+  latitude: number;
+
+  @Expose()
+  longitude: number;
+
+  @Expose()
+  altitude: number;
+
+  @Expose()
+  direction: number;
+}
+
+// Position of aircraft (Response from AviationEdge / FlightAware):
+@Exclude()
+export class AircraftPosition {
+  @Expose()
+  @Type(() => Geography)
+  geography: Geography;
+}
+
+// Class returned by GetIMONumbers (differs from TransportLeg type referenced in the Shipment type):
+@Exclude()
+export class TransportLegResult {
+  @Expose()
+  ShipmentNumber: string;
+  @Expose()
+  IMONumber: string;
+  @Expose()
+  VesselName: string;
+  @Expose()
+  Sequence: string;
+  @Expose()
+  Type: string;
+  @Expose()
+  @Type(() => Date)
+  ATA: Date;
+  @Expose()
+  @Type(() => Date)
+  ATD: Date;
+}
+
+@Exclude()
+export class PortDetail {
+    @Expose()
+    Id: number;
+    @Expose()
+    Name: string;
+    @Expose()
+    Latitude: string;
+    @Expose()
+    Longitude: string;
+    @Expose()
+    Country: string;
+    @Expose()
+    Code: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -811,7 +894,7 @@ export class FreightApiService {
     .get(endpoint, {params})
     .pipe(map((res: object) => {
       return plainToClass(Shipment, res);
-    })); // Return isSuccessful.
+    }));  
 }
 
   public SubscribeToShipmentEvents (topics: EventTopic[]): Observable<boolean> {
@@ -858,20 +941,84 @@ export class FreightApiService {
     }));
   }
 
-   public GetPowerBiReport (PowerBISettings: PowerBISettings): Observable<EmbedConfig> {
+   public GetPowerBiReport (powerBISettings: PowerBISettings): Observable<EmbedConfig> {
 
     console.log('FreightApiService: retrieve powerbi report.');
 
     const endpoint = environment.freightApiUrl + 'FreightShipping/GetBIReport';
 
-    const body = {
-      PowerBISettings: PowerBISettings
-    };
+    const body = powerBISettings;
 
     return this.http
       .post(endpoint, body)
       .pipe(map((res: object) => {
         return plainToClass(EmbedConfig, res);
-      })); // Return isSuccessful.
+      }));
   }
+
+  public GetShipGeoLoc(imoNo: string): Observable<Position> {
+
+    console.log('FreightApiService: Get ship location.');
+
+    const endpoint = environment.freightApiUrl + 'FreightShipping/GetShipGeoLoc';
+
+    const params = new HttpParams()
+      .set('imoNo', imoNo);
+
+    return this.http
+    .get(endpoint, {params})
+    .pipe(map((res: object[]) => {
+      return plainToClass(Position, res[0]);
+    }));
+  }
+
+  public GetAirlineGeoLoc(iataNo: string): Observable<AircraftPosition> {
+
+    console.log('FreightApiService: Get aircraft location.');
+
+    const endpoint = environment.freightApiUrl + 'FreightShipping/GetAirlineGeoLoc';
+
+    const params = new HttpParams()
+      .set('Iata', iataNo);
+
+    return this.http
+    .get(endpoint, {params})
+    .pipe(map((res: object) => {
+      return plainToClass(AircraftPosition, res);
+    }));
+  }
+
+  public GetIMONumbers(shipmentNo: string): Observable<TransportLegResult[]> {
+    // Only allow a single shipment number for now.
+
+    console.log('FreightApiService: Get IMO numbers for shipment.');
+
+    const endpoint = environment.freightApiUrl + 'FreightShipping/GetIMONumbers';
+
+    const params = new HttpParams()
+      .set('ShipmentpNumbers', shipmentNo);
+
+    return this.http
+    .get(endpoint, {params})
+    .pipe(map((res: object[]) => {
+      return plainToClass(TransportLegResult, res);
+    }));
+  }
+
+  public GetPortDetails(portCodes: string[]): Observable<PortDetail[]> {
+
+    console.log('FreightApiService: Get port details for specified port codes.');
+
+    const endpoint = environment.freightApiUrl + 'FreightShipping/GetPortDetails';
+
+    const params = new HttpParams()
+      .set('portCodes', portCodes.join(','));
+
+    return this.http
+    .get(endpoint, {params})
+    .pipe(map((res: object[]) => {
+      return plainToClass(PortDetail, res);
+    }));
+  }
+
 }

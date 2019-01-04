@@ -14,8 +14,14 @@ export class ProfileSelectModal {
     public router: Router,
     public userData: UserData) { }
 
-  closeModal() {
-    this.modalController.dismiss();
+  goBack() {
+    this.userData.logout().then(() => {
+      this.closeModal();
+    });
+  }
+
+  closeModal() {       
+    this.modalController.dismiss();   
   }
 
   onProfileSelected(profile: Profile) {

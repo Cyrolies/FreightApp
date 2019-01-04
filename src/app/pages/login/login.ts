@@ -156,7 +156,9 @@ export class LoginPage implements OnInit {
 
   async presentProfileSelectModal() {
     const modal = await this.modalCtrl.create({
-      component: ProfileSelectModal
+      component: ProfileSelectModal,
+      backdropDismiss: false,
+      keyboardClose: true
     });
 
     modal.present();

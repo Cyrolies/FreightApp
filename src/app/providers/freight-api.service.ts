@@ -635,6 +635,12 @@ export class Shipment {
   @Expose()
   @Type(() => Reference)
   references: Reference[];
+  @Expose()
+  ShipmentNumber: string;
+  @Expose()
+  ReferenceAll: string;
+  
+  
 }
 
 @Exclude()

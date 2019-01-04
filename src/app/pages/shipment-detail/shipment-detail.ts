@@ -6,7 +6,6 @@ import { HttpClient } from '@angular/common/http';
 import { ToastController, LoadingController, NavController, ActionSheetController, NavParams, Events, Tabs } from '@ionic/angular';
 import { forEach } from '@angular/router/src/utils/collection';
 
-
 @Component({
   selector: 'page-shipment-detail',
   templateUrl: 'shipment-detail.html',
@@ -15,7 +14,7 @@ import { forEach } from '@angular/router/src/utils/collection';
 })
 export class ShipmentDetailPage {
   public shipment: Shipment;
-  @ViewChild('Tabs') tabRef: Tabs;
+  @ViewChild(Tabs) tabRef: Tabs;
   constructor(
     public actionSheetCtrl: ActionSheetController,
     public inAppBrowser: InAppBrowser,
@@ -28,6 +27,10 @@ export class ShipmentDetailPage {
   ) {}
 
   async ionViewDidEnter() {
+
+    if (this.tabRef) {
+      this.tabRef.select(0);
+    }
 
     const spinner = await this.loading.create();
 
@@ -52,14 +55,17 @@ export class ShipmentDetailPage {
           //  Get references
           if (this.shipment.references != null) {
               this.shipment.ShipmentNumber = this.shipment.references[0].Value;
-          }
+          }       
+
          }
         spinner.dismiss();
 
       }, error =>  spinner.dismiss());
     });
-
-   // this.tabRef.select(0);
   }
 
+
+
 }
+
+

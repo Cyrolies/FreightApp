@@ -13,7 +13,7 @@ import { ToastController, LoadingController, NavController, ActionSheetControlle
 })
 export class ShipmentListPage {
   freightmilestones: FreightMilestone[] = new Array<FreightMilestone>();
-  
+  public hideFilters = true;
   constructor(
     public actionSheetCtrl: ActionSheetController,
     public inAppBrowser: InAppBrowser,

@@ -1,3 +1,4 @@
+import { MyComponentsModule } from './../../my-components/my-components.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
@@ -9,6 +10,7 @@ import { ShipmentListPageRoutingModule } from './shipment-list-routing.module';
   imports: [
     CommonModule,
     IonicModule,
+    MyComponentsModule,
     ShipmentListPageRoutingModule
   ],
   declarations: [ShipmentListPage],

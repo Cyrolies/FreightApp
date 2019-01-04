@@ -1,3 +1,4 @@
+import { environment } from './../environments/environment.prod';
 import { NetworkService } from './providers/network.service';
 import { MyNavService } from './providers/my-nav.service';
 import { AboutModal } from './pages/about-modal/about-modal';
@@ -29,7 +30,7 @@ export class AppComponent implements OnInit {
     },
     {
       title: 'Shipments',
-      url: '/shipments',
+      url: '/shipment-search',
       icon: 'boat'
     },
     {
@@ -145,6 +146,9 @@ export class AppComponent implements OnInit {
       this.network.initializeNetworkEvents();
 
       this.global.isDevice = this.platform.is('cordova');
+
+      this.isMenuDisabled = false || !environment.production;
+      this.isSplitViewDisabled = false || !environment.production;
     });
   }
 

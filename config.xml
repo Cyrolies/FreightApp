@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.ionicframework.conferenceapp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Tigers SmartHub:Connect</name>
+    <name>TigersSHC</name>
     <description>Tigers SmartHub:Connect</description>
     <author email="werner.stoltsz@go2tigers.com" href="http://go2tigers.com/">Tigers Team</author>
     <content src="index.html" />

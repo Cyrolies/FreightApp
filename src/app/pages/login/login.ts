@@ -72,7 +72,7 @@ export class LoginPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.menu.enable(false);
+    // this.menu.enable(false);
   }
 
   ionViewDidEnter() {
@@ -81,7 +81,7 @@ export class LoginPage implements OnInit {
 
   ionViewDidLeave() {
     // enable the root left menu when leaving the tutorial page
-    this.menu.enable(true);
+    // this.menu.enable(true);
   }
 
   async onLogin(form: NgForm) {

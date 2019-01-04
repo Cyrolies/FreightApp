@@ -1,10 +1,10 @@
 <ion-app>
-  <ion-split-pane>
+  <ion-split-pane contentId="main-content" [disabled]="isSplitViewDisabled">
 
-    <ion-menu>
+    <ion-menu side="start" [disabled]="isMenuDisabled">
       <ion-header>
         <ion-toolbar color="primary">
-          <ion-icon slot="start" name="calendar" ></ion-icon>
+          <!-- <ion-icon slot="start" name="calendar" ></ion-icon> -->
         </ion-toolbar>
       </ion-header>
       <ion-content>
@@ -138,7 +138,7 @@
 
     </ion-menu>
 
-    <ion-router-outlet main></ion-router-outlet>
+    <ion-router-outlet id="main-content" main></ion-router-outlet>
 
   </ion-split-pane>
 

@@ -8,47 +8,52 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content  class="backImg">
- 
+<ion-content class="backImg">
 
-  <form  #loginForm="ngForm" novalidate>
-    <ion-list>
-      <ion-item>
-        <ion-label position="floating" color="primary">Username</ion-label>
-        <ion-input [(ngModel)]="login.username" name="username" type="text" #username="ngModel" spellcheck="false" autocapitalize="off"
-          required>
-        </ion-input>
-      </ion-item>
+  <ion-grid fixed class="whiteGrid">
+    <ion-row>
+      <ion-col>
 
-      <ion-text color="danger">
-        <p [hidden]="username.valid || submitted == false" padding-left>
-          Username is required
-        </p>
-      </ion-text>
+          <form  #loginForm="ngForm" novalidate>
+                <ion-item>
+                  <ion-label position="fixed" color="primary">Username</ion-label>
+                  <ion-input [(ngModel)]="login.username" name="username" type="text" #username="ngModel" 
+                    spellcheck="false" autocapitalize="off" required>
+                  </ion-input>
+                </ion-item>
+          
+                <ion-item>
+                <ion-text color="danger">
+                  <p [hidden]="username.valid || submitted == false">
+                    Username is required
+                  </p>
+                </ion-text>
+              </ion-item>
+          
+                <ion-item>
+                  <ion-label position="fixed" color="primary">Password</ion-label>
+                  <ion-input [(ngModel)]="login.password" name="password" type="password" #password="ngModel" required>
+                  </ion-input>
+                </ion-item>
+          
+                <ion-text color="danger">
+                  <p [hidden]="password.valid || submitted == false" padding-left>
+                    Password is required
+                  </p>
+                </ion-text>              
+            </form>
 
-      <ion-item>
-        <ion-label position="floating" color="primary">Password</ion-label>
-        <ion-input [(ngModel)]="login.password" name="password" type="password" #password="ngModel" required>
-        </ion-input>
-      </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-      <ion-text color="danger">
-        <p [hidden]="password.valid || submitted == false" padding-left>
-          Password is required
-        </p>
-      </ion-text>
-    </ion-list>
-
-    <ion-row #loginbutton responsive-sm>
+  <ion-row #loginbutton responsive-sm>
       <ion-col>
         <ion-button class="secondary-button" (click)="onLogin(loginForm)" expand="block">Login</ion-button>
       </ion-col>
-     <!-- <ion-col>
-        <ion-button (click)="onSignup()" color="light" expand="block">Signup</ion-button>
-      </ion-col>-->
-    </ion-row>
-    
-  </form>
+  </ion-row>
+
+
   
   <div #logo [hidden]="doHideLogoButton" class="div-centered">
       <img class="img-centered" src="assets/img/TigersWhiteLogo.png" >

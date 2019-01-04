@@ -4,10 +4,9 @@ page-login {
   {
     background-image: url('../../../assets/img/Ocean.png');
   }
-  
- 
-  .list {
-    margin-bottom: 0;
-  
+
+  ion-grid .whiteGrid {
+    background: white !important;
   }
+  
 }

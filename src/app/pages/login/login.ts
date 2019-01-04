@@ -74,6 +74,12 @@ export class LoginPage implements OnInit {
 
   ionViewWillEnter() {
     // this.menu.enable(false);
+
+    this.userData.getUsername().then((username) => {
+      if (username) {
+        this.login.username = username;
+      } 
+    });
   }
 
   ionViewDidEnter() {

@@ -10,7 +10,7 @@
 
 <ion-content class="backImg">
 
-  <ion-grid fixed class="whiteGrid">
+  <ion-grid class="formGrid">
     <ion-row>
       <ion-col>
 
@@ -22,13 +22,11 @@
                   </ion-input>
                 </ion-item>
           
-                <ion-item>
                 <ion-text color="danger">
-                  <p [hidden]="username.valid || submitted == false">
+                  <p [hidden]="username.valid || submitted == false" padding-left>
                     Username is required
                   </p>
                 </ion-text>
-              </ion-item>
           
                 <ion-item>
                   <ion-label position="fixed" color="primary">Password</ion-label>

@@ -5,8 +5,9 @@ page-login {
     background-image: url('../../../assets/img/Ocean.png');
   }
 
-  ion-grid .whiteGrid {
+  .formGrid {
     background: white !important;
+    margin:0 !important;
   }
   
 }

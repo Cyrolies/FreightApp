@@ -48,6 +48,11 @@ export class ShipmentDetailPage {
            this.shipment.orders = result.orders;
            this.shipment.transportLegs = result.transportLegs;
            this.shipment.containers = result.containers;
+           this.shipment.ShipmentNo = this.route.snapshot.paramMap.get('ShipmentRef');
+          //  Get references
+          if (this.shipment.references != null) {
+              this.shipment.ShipmentNumber = this.shipment.references[0].Value;
+          }
          }
         spinner.dismiss();
 

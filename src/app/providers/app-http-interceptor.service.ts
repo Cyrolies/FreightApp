@@ -42,7 +42,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
                 const res = <HttpErrorResponse>error;
                 console.log(`HTTP status: ${res.status}.`);
 
-                if (res.status === 401 || res.status === 403) {
+                if (res.status === 401 || res.status === 403) { // 401: Unauthenticated; 403: Unauthorized.
 
                     this.userData.isLoggedIn().then(currentlyLoggedIn => {
                         if (currentlyLoggedIn) {

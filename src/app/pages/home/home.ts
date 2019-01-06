@@ -205,7 +205,10 @@ export class HomePage implements OnInit, OnDestroy {
 
         spinner.dismiss();
 
-       }, error =>  spinner.dismiss());
+       }, (error) => {
+        spinner.dismiss();
+       });
+
      });
   }
 

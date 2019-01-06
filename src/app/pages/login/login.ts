@@ -12,6 +12,7 @@ import { MenuController, LoadingController, ToastController, ModalController } f
 import { FreightApiService, ApplicationUser } from '../../providers/freight-api.service';
 import { GlobalService } from '../../providers/global.service';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -73,6 +74,12 @@ export class LoginPage implements OnInit {
 
   ionViewWillEnter() {
     // this.menu.enable(false);
+
+    this.userData.getUsername().then((username) => {
+      if (username) {
+        this.login.username = username;
+      } 
+    });
   }
 
   ionViewDidEnter() {
@@ -126,6 +133,13 @@ export class LoginPage implements OnInit {
 
         }, (error) =>  {
 
+          if ((error instanceof HttpErrorResponse) && ((<HttpErrorResponse>error).status === 401)) {            
+            this.presentToast('Invalid username or password.');
+
+          } else {
+            this.presentToast('Login failed.');
+          }
+
           spinner.dismiss();
 
           this.onLoginFailed();
@@ -138,15 +152,13 @@ export class LoginPage implements OnInit {
     this.router.navigateByUrl('/signup');
   }
 
-  onLoginFailed() {
-
-    this.presentToast('Login failed.');
-
-  }
+  onLoginFailed() { }
 
   async presentProfileSelectModal() {
     const modal = await this.modalCtrl.create({
-      component: ProfileSelectModal
+      component: ProfileSelectModal,
+      backdropDismiss: false,
+      keyboardClose: true
     });
 
     modal.present();

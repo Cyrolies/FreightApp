@@ -20,13 +20,17 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-.secondary-button{
+.secondary-button {
   --border-color: var(--ion-color-secondary) !important;
   --border-width: 1px !important;
   --border-style: solid !important;
   --border-radius: 5px !important;
 
   --background: var(--ion-color-mybackground) !important;
+  color: var(--ion-color-secondary) !important;
+}
+
+ion-menu-button {
   color: var(--ion-color-secondary) !important;
 }
 

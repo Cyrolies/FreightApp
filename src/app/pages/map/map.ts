@@ -252,7 +252,7 @@ export class MapPage implements OnInit, OnDestroy {
     this.mapHostService.addIconPushpin(
       this.fromPort,
       'Port of Loading',
-      'assets/img/Sm-Booked.png',
+      'assets/img/Sm-ADD.png',
       new Microsoft.Maps.Point(Math.ceil(this.circleIconDimensions.x / 2), this.circleIconDimensions.y)
     );
 

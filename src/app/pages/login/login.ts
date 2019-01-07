@@ -121,10 +121,16 @@ export class LoginPage implements OnInit {
           spinner.dismiss();
 
           if (!result.IsAuthSuccessful) {
-            // Invalid login
+            
+            // Invalid login.
             this.onLoginFailed();
 
-          } else {
+          } else if (!(result.User && result.User.Profiles && result.User.Profiles.length)) {
+
+            // No profiles for this user.
+            this.presentToast('You are not linked to any profile. Please log a call.');
+
+          } else {            
 
             this.userData.login(this.login.username, result.User);
 

@@ -47,7 +47,7 @@ export class UserData {
       this.setUsername(username);
 
       this.userProfiles = user.Profiles;
-      this.userId = user.ProfileId.toString();
+      this.userId = (user.ProfileId || '').toString();
       this.username = user.FirstName;
        
 

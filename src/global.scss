@@ -20,6 +20,15 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+h1 { 
+  letter-spacing: 0.3em; 
+}
+
+ion-toggle {
+  --background-checked:  var(--ion-color-secondary) !important;
+  --handle-background-checked: var(--ion-color-secondary) !important;
+}
+
 .secondary-button {
   --border-color: var(--ion-color-secondary) !important;
   --border-width: 1px !important;
@@ -48,6 +57,11 @@ ion-card {
   ion-card-header ion-item {
     font-size: smaller!important;
   }
+
+  ion-card-header ion-avatar {
+    margin: 0.3em !important;
+  }
+
   ion-card-content ion-item {
     --border-width: 0;
     font-size: smaller!important;
@@ -65,6 +79,7 @@ ion-card {
 
   ion-card-content ion-label {
     margin-top: 0!important;
+    font-weight: bold !important;
   }
 
   ion-card-content ion-col {

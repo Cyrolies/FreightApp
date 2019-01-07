@@ -20,6 +20,10 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+h1 { 
+  letter-spacing: 0.3em; 
+}
+
 .secondary-button {
   --border-color: var(--ion-color-secondary) !important;
   --border-width: 1px !important;

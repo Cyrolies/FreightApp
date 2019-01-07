@@ -8,6 +8,25 @@ export class GlobalService {
     
     public isDevice: boolean;
 
+    public readonly availableMilestoneImages: string[] = [
+        'ADD',
+        'ATA',
+        'ATD',
+        'CLR',
+        'DCA',
+        'PCK',
+        'POD'
+    ];
+
+    public isMilestoneImageAvailable(eventCode: string) {
+
+        if (!eventCode) { 
+            return false;
+        }
+
+        return this.availableMilestoneImages.indexOf(eventCode) >= 0;
+    }
+
     public getToastConfiguration(toastMessage: string): ToastOptions {
         
         const toastConfig = {
@@ -19,6 +38,8 @@ export class GlobalService {
 
         return <ToastOptions> toastConfig;                
     }
+
+
             
     constructor() {
     }

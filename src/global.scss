@@ -52,6 +52,11 @@ ion-card {
   ion-card-header ion-item {
     font-size: smaller!important;
   }
+
+  ion-card-header ion-avatar {
+    margin: 0.3em !important;
+  }
+
   ion-card-content ion-item {
     --border-width: 0;
     font-size: smaller!important;
@@ -69,6 +74,7 @@ ion-card {
 
   ion-card-content ion-label {
     margin-top: 0!important;
+    font-weight: bold !important;
   }
 
   ion-card-content ion-col {

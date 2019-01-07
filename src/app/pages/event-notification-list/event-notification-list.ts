@@ -25,7 +25,7 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
     public navCtrl: NavController,
     private loading: LoadingController,
     private toastCtrl: ToastController,
-    private global: GlobalService
+    public global: GlobalService
   ) {}
 
   ngOnInit() {
@@ -68,7 +68,7 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
       this.notifications = [];
       
       console.log(error);
-      this.presentToast('Failed to fetch notifications from server.');
+      this.presentToast('Failed to fetch Notifications from Server.');
     });
   }
 

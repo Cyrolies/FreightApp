@@ -80,6 +80,19 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
         this.notifications = result;
         this.notifications.sort(this.eventDateComparer).reverse();
 
+        // Extend Notification object with image properties to be consumed by html:
+        this.notifications.forEach((notification) => {
+
+          const eventCode = notification.EventCode.trim().toUpperCase();
+          const isLate = notification.ActualDate > notification.EstimatedDate;    
+          
+          notification['isImageAvailable'] = this.global.isMilestoneImageAvailable(eventCode);
+          notification['imageUrl'] = notification['isImageAvailable'] 
+            ? this.global.getMilestoneImageUrl(eventCode, isLate) 
+            : '';
+        });
+
+
         spinner.dismiss();
     }, (error) => {
 

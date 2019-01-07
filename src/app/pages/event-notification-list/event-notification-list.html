@@ -23,8 +23,8 @@
               <ion-item detail="false" lines="none">
                   <ion-text style="padding-right: 5px!important" color="secondary">EVENT CODE</ion-text> 
                   <ion-text color="light"> {{notification.EventCode}}</ion-text>
-                  <ion-avatar slot="end" *ngIf="global.isMilestoneImageAvailable(notification.EventCode.trim().toUpperCase())">
-                      <img [src]="'assets/img/' + notification.EventCode.trim().toUpperCase() + 'Orange.png'">
+                  <ion-avatar slot="end" *ngIf="notification['isImageAvailable']">
+                      <img [src]="notification['imageUrl']">
                   </ion-avatar>
               </ion-item>
             </ion-card-header>

@@ -24,7 +24,36 @@ export class GlobalService {
             return false;
         }
 
-        return this.availableMilestoneImages.indexOf(eventCode) >= 0;
+        return this.availableMilestoneImages.indexOf(
+            this.getMilestoneImageKey(eventCode)) >= 0;
+    }
+
+    public getMilestoneImageKey(eventCode: string) { // TODO: Review mapping of codes to images, and to displayed codes.
+        
+        switch (eventCode) {
+            case 'DEP':
+                return 'ATD';
+            case 'IRP':
+                return 'PCK';
+            case 'ARV':
+                return 'POD';
+            case 'DCF':
+                return 'ATA';
+            default:
+                return eventCode;
+        }
+    }
+
+    public getMilestoneImageUrl(eventCode: string, isEventLate: boolean): string {
+        if (!this.isMilestoneImageAvailable(eventCode)) {
+            return null;
+        }
+
+        const imageKey = this.getMilestoneImageKey(eventCode);
+
+        const suffix = isEventLate ? 'Orange' : '';
+
+        return `assets/img/${imageKey}${suffix}.png`;
     }
 
     public getToastConfiguration(toastMessage: string): ToastOptions {

@@ -58,14 +58,14 @@
 &nbsp;
 <ion-content scrollbar-x="true" scrollbar-y="true">
    
-  <ion-tabs selectedIndex="1">
+  <ion-tabs>
 
     <ion-tab class="shipment-tab" label="Milestones" >
                        
         <ion-list>
           <ion-grid fixed>
             <ion-row align-items-stretch>
-              <ion-col size="12" size-md="6" *ngFor="let milestone of shipment.milestones">
+              <ion-col size="12" size-md="6" *ngFor="let milestone of (shipment? shipment.milestones : [])">
                 
               <!--Milestones-->
                 <ion-card class="rounded" >
@@ -121,7 +121,7 @@
       <ion-list>
           <ion-grid fixed>
             <ion-row align-items-stretch>
-              <ion-col size="12" size-md="6"  *ngFor="let order of shipment.orders">
+              <ion-col size="12" size-md="6"  *ngFor="let order of (shipment? shipment.orders : [])">
                  <!--Shipment Orders-->
                  <ion-card class="rounded" >
                     <ion-card-header color="primary">
@@ -179,7 +179,7 @@
             <ion-row align-items-stretch>
               <ion-col size="12" size-md="6">
                  <!--Shipment Orders-->
-                 <ion-card class="rounded" *ngFor="let leg of shipment.transportLegs">
+                 <ion-card class="rounded" *ngFor="let leg of (shipment? shipment.transportLegs : [])">
                     <ion-card-header color="primary">
                       <ion-item detail="false" lines="none">
                           <ion-text style="padding-right: 5px!important" color="secondary">POL</ion-text> 
@@ -261,7 +261,7 @@
             <ion-row align-items-stretch>
               <ion-col size="12" size-md="6">
                  <!--Shipment Containers-->
-                 <ion-card class="rounded" *ngFor="let container of shipment.containers">
+                 <ion-card class="rounded" *ngFor="let container of (shipment? shipment.containers : [])">
                     <ion-card-header color="primary">
                       <ion-item detail="false" lines="none">
                           <ion-text style="padding-right: 5px!important" color="secondary">CONTAINER</ion-text> 

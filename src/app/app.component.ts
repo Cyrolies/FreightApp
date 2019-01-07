@@ -211,7 +211,7 @@ export class AppComponent implements OnInit {
 
   logout() {
     this.userData.logout().then(() => {
-      return this.navigate('/login'); // ('/app/tabs/(schedule:schedule)');
+      return this.navigate('/login');
     });
   }
 

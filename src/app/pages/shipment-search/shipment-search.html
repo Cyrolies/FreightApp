@@ -14,17 +14,38 @@
 
 <ion-content class="backImg">
   <ion-list class="backImg">
-    <ion-grid fixed>
+    <!-- <ion-grid fixed>
       <ion-row align-items-stretch>
         <ion-col size="12" size-md="6">
-            <shipment-filter></shipment-filter>
+            <form #filterForm="ngForm" novalidate>
+                <ion-item>
+                    <ion-label floating>Shipment No.</ion-label>
+                    <ion-input [(ngModel)]="filters.shipmentno" id="shipmentno" type="text"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label floating>Order No.</ion-label>
+                    <ion-input [(ngModel)]="filters.orderno" id="orderno" type="text"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label floating>Date From.</ion-label>
+                    <ion-input [(ngModel)]="filters.datefrom" id="datefrom" type="date"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label floating>Date To.</ion-label>
+                    <ion-input [(ngModel)]="filters.dateto" id="dateto" type="date"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label floating>Open Shipments</ion-label>
+                    <ion-input [(ngModel)]="filters.openshipments" id="openshipment" type="text"></ion-input>
+                </ion-item>
+            </form>
         </ion-col>
       </ion-row>
       <ion-row align-items-stretch>
           <ion-col size="12" size-md="6">
-              <ion-button (click)="listShipments()">Search</ion-button>
+              <ion-button (click)="listShipments(filterForm)" type="submit" >Search</ion-button>
           </ion-col>
         </ion-row>
-    </ion-grid>
+    </ion-grid> -->
   </ion-list>
 </ion-content>

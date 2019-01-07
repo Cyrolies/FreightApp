@@ -7,6 +7,7 @@ import { ToastController, LoadingController, NavController, ActionSheetControlle
 import { forEach } from '@angular/router/src/utils/collection';
 
 
+
 @Component({
   selector: 'page-shipment-detail',
   templateUrl: 'shipment-detail.html',
@@ -32,6 +33,7 @@ export class ShipmentDetailPage {
     const spinner = await this.loading.create();
 
     spinner.present().then(() => {
+      
       this.freightApiService.GetShipment(this.route.snapshot.paramMap.get('ShipmentRef')).subscribe((result: Shipment) => {
 
         this.shipment =  result;

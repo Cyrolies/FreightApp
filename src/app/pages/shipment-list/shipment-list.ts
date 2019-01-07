@@ -4,6 +4,10 @@ import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { HttpClient } from '@angular/common/http';
 import { ToastController, LoadingController, NavController, ActionSheetController, NavParams, Events } from '@ionic/angular';
+import { MyNavService } from './../../providers/my-nav.service';
+import { ShipmentFilters } from '../../interfaces/shipment-filters';
+// import { CargoWiseFilter } from './../../providers/freight-api.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'page-shipment-list',
@@ -13,6 +17,8 @@ import { ToastController, LoadingController, NavController, ActionSheetControlle
 })
 export class ShipmentListPage {
   freightmilestones: FreightMilestone[] = new Array<FreightMilestone>();
+  public filters: ShipmentFilters = { cargowisecode: '', shipmentno: '', orderno: '', datefrom: '', dateto: '', openshipments: true };
+  
   public hideFilters = true;
   constructor(
     public actionSheetCtrl: ActionSheetController,
@@ -22,24 +28,25 @@ export class ShipmentListPage {
     public freightApiService: FreightApiService,
     public toastCtrl: ToastController,
     public router: Router,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    public navService: MyNavService
   ) {}
 
   async ionViewDidEnter() {
+    
+  }
 
+  async listShipments(form: NgForm) {
     const spinner = await this.loading.create();
-
+  
     spinner.present().then(() => {
-      this.freightApiService.GetShipments('SIMFISSEA', '', '', new Date('2013-01-01'), new Date('2018-12-12'), true).subscribe((result: FreightMilestone[]) => {
-
-        this.freightmilestones =  result;
-
-        spinner.dismiss();
-
+      
+    this.freightApiService.GetShipments('SIMFISSEA', this.filters.shipmentno, this.filters.orderno, this.filters.datefrom, this.filters.dateto, this.filters.openshipments).subscribe((result: FreightMilestone[]) => {
+    this.freightmilestones =  result;
+    spinner.dismiss();
       }, error =>  spinner.dismiss());
     });
   }
-
 
     // this.confData.getSpeakers().subscribe((speakers: any[]) => {
     //   this.speakers = speakers;

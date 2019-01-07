@@ -860,20 +860,20 @@ export class FreightApiService {
   public GetShipments(cargoWiseCode: string,
     shipmentNo: string,
     orderNo: string,
-    fromDate: Date,
-    toDate: Date,
+    fromDate: string,
+    toDate: string,
     includeOpenShipments: boolean): Observable<FreightMilestone[]> {
 
     console.log('FreightApiService: Get shipments.');
 
     const endpoint = environment.freightApiUrl + 'FreightShipping/GetShipments';
-
+   
     const filters = new Array<CargoWiseFilter>();
       filters.push(new CargoWiseFilter('cargowisecode', 'cargowisecode', cargoWiseCode));
       filters.push(new CargoWiseFilter('shipmentNumber', 'shipmentNumber', shipmentNo));
       filters.push(new CargoWiseFilter('orderNumber', 'orderNumber', orderNo));
-      filters.push(new CargoWiseFilter('DateFrom', 'DateFrom', fromDate != null ? fromDate.toDateString() : ''));
-      filters.push(new CargoWiseFilter('DateTo', 'DateTo', toDate != null ? toDate.toDateString() : ''));
+      filters.push(new CargoWiseFilter('DateFrom', 'DateFrom', fromDate !== '' ? fromDate['year'].text + '-' + fromDate['month'].text + '-' + fromDate['day'].text : ''));
+      filters.push(new CargoWiseFilter('DateTo', 'DateTo', toDate !== '' ? toDate['year'].text + '-' + toDate['month'].text + '-' + toDate['day'].text : ''));
       filters.push(new CargoWiseFilter('OpenShipments', 'OpenShipments', includeOpenShipments ? '1' : '0'));
 
     const params = new HttpParams()

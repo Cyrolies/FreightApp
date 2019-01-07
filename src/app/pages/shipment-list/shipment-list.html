@@ -17,12 +17,33 @@
       <ion-grid fixed>
           <ion-row align-items-stretch>
             <ion-col size="12" size-md="6">
-                <shipment-filter></shipment-filter>
+                <form #filterForm="ngForm" novalidate>
+                    <ion-item>
+                        <ion-label class="search-filter-label" floating>Shipment No.</ion-label>
+                        <ion-input class="search-filter" [(ngModel)]="filters.shipmentno" name="shipno" type="text"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label class="search-filter-label" floating>Order No.</ion-label>
+                        <ion-input class="search-filter" [(ngModel)]="filters.orderno" name="ordno" type="text"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label class="search-filter-label" floating>Date From.</ion-label>
+                        <ion-datetime class="search-filter" displayFormat="YYYY-MM-DD" [(ngModel)]="filters.datefrom" name="dtfrom"></ion-datetime>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label class="search-filter-label" floating>Date To.</ion-label>
+                        <ion-datetime class="search-filter" displayFormat="YYYY-MM-DD" [(ngModel)]="filters.dateto" name="dtto"></ion-datetime>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label item-width="20%" class="search-filter-label" floating>Open Shipments</ion-label>
+                        <ion-checkbox [(ngModel)]="filters.openshipments" name="openship" ></ion-checkbox>
+                    </ion-item>
+                </form>
             </ion-col>
           </ion-row>
           <ion-row align-items-stretch>
               <ion-col size="12" size-md="6">
-                  <ion-button (click)="listShipments()">Search</ion-button>
+                  <ion-button (click)="listShipments(filterForm)" type="submit" >Search</ion-button>
               </ion-col>
             </ion-row>
         </ion-grid>

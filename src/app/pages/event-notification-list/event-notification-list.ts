@@ -16,6 +16,7 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
   notifications: ShipmentEvent[] = [];
   private profileSubscription: any;
   private selectedProfile: Profile;
+  private userName: string;
 
   constructor(
     public actionSheetCtrl: ActionSheetController,
@@ -41,7 +42,8 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
   }
 
   async ionViewDidEnter() {
-
+   
+    // Validate CW code for selected profile:
     if (!(this.selectedProfile && this.selectedProfile.CargoWiseCode)) {
 
       this.presentToast('Could not determine selected Profile. Please logout and re-login.');
@@ -54,8 +56,26 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
     const spinner = await this.loading.create();
     await spinner.present();
 
-    // Retrieve x-months worth of notifications, according to spec in server config.
-    this.freightService.GetShipmentEvents(this.selectedProfile.CargoWiseCode)
+    // Validate username:
+    try {
+
+      this.userName = await this.userData.getUsername();
+      
+      if (!this.userName) {
+        spinner.dismiss();
+        this.onCannotObtainUserName();
+        return;
+      }
+    } catch {
+      spinner.dismiss();
+      this.onCannotObtainUserName();
+      return;
+    }
+
+    // Fetch data:
+    //  Retrieve x-months worth of notifications, according to spec in server config.
+    
+    this.freightService.GetShipmentEvents(this.selectedProfile.CargoWiseCode, this.userName)
       .subscribe((result: ShipmentEvent[]) => {
         this.notifications = result;
         this.notifications.sort(this.eventDateComparer).reverse();
@@ -70,6 +90,11 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
       console.log(error);
       this.presentToast('Failed to fetch Notifications from Server.');
     });
+  }
+
+  onCannotObtainUserName() {
+    this.presentToast('Could not obtain Username. Please logout and re-login.');
+    this.notifications = [];
   }
 
   eventDateComparer(a: ShipmentEvent, b: ShipmentEvent) {

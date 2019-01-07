@@ -814,14 +814,14 @@ export class FreightApiService {
   /**
    * GetEventSubscriptions
    */
-  public GetEventSubscriptions(): Observable<EventTopic[]> {
+  public GetEventSubscriptions(theUserName: string): Observable<EventTopic[]> {
 
     console.log('FreightApiService: Get event subscriptions.');
 
     const endpoint = environment.freightApiUrl + 'FreightShipping/GetEventSubscriptions';
 
     const params = new HttpParams()
-      .set('userName', environment.defaultUser);
+      .set('userName', theUserName);
 
     return this.http
     .get(endpoint, {params})
@@ -839,7 +839,7 @@ export class FreightApiService {
     //   ));
   }
 
-  public GetShipmentEvents(cargoWiseCode: string): Observable<ShipmentEvent[]> {
+  public GetShipmentEvents(cargoWiseCode: string, theUserName: string): Observable<ShipmentEvent[]> {
 
     console.log('FreightApiService: Get shipment events.');
 
@@ -847,7 +847,7 @@ export class FreightApiService {
 
     const params = new HttpParams()
       .set('cargowisecode', cargoWiseCode)
-      .set('userName', environment.defaultUser);
+      .set('userName', theUserName);
 
     return this.http
     .get(endpoint, {params})
@@ -903,14 +903,14 @@ export class FreightApiService {
     }));  
 }
 
-  public SubscribeToShipmentEvents (topics: EventTopic[]): Observable<boolean> {
+  public SubscribeToShipmentEvents (topics: EventTopic[], theUserName: string): Observable<boolean> {
 
     console.log('FreightApiService: Subscribe to shipment events.');
 
     const endpoint = environment.freightApiUrl + 'FreightShipping/SubscribeToShipmentEvents';
 
     const body = {
-      userName: environment.defaultUser,
+      userName: theUserName,
       eventCodes: topics
         .filter(topic => topic.isSubscribed)
         .map(topic => topic.code)

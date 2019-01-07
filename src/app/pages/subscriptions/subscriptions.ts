@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ToastController, LoadingController, NavController, NavParams, Events } from '@ionic/angular';
 import { environment } from '../../../environments/environment';
 import { UserData } from '../../providers/user-data';
+import { GlobalService } from '../../providers/global.service';
 
 
 @Component({
@@ -16,6 +17,7 @@ import { UserData } from '../../providers/user-data';
 export class SubscriptionsPage {
 
   topics: EventTopic[] = new Array<EventTopic>();
+  private userName: string;
 
   constructor(
     public freightApiService: FreightApiService,
@@ -25,29 +27,52 @@ export class SubscriptionsPage {
     public http: HttpClient,
     private userData: UserData,
     public navCtrl: NavController,
-    private events: Events
+    private events: Events,
+    private global: GlobalService
   ) {}
 
   async ionViewDidEnter() {
 
-    // this.userData.isLoggedIn()
-    //   .then((isLoggedIn: boolean) => {
-    //     if (!isLoggedIn){
-    //       this.events.publish('user:logout');
-    //     }
-    //   });
-
     const spinner = await this.loading.create();
+    await spinner.present();
 
-    spinner.present().then(() => {
-      this.freightApiService.GetEventSubscriptions().subscribe((topics: EventTopic[]) => {
+    // Validate username:
+    try {
 
-        this.topics = topics;
+      this.userName = await this.userData.getUsername();
 
+      if (!this.userName) {
         spinner.dismiss();
+        this.onCannotObtainUserName();
+        return;
+      }
+    } catch {
+      spinner.dismiss();
+      this.onCannotObtainUserName();
+      return;
+    }
 
-      }, error =>  spinner.dismiss());
+    // Fetch data:
+    this.freightApiService.GetEventSubscriptions(this.userName).subscribe((topics: EventTopic[]) => {
+      
+      spinner.dismiss();
+
+      this.topics = topics;
+
+    }, (error) =>  {
+
+      spinner.dismiss();
+
+      this.topics = [];
+
+      console.log(error);
+      this.presentToast('Failed to fetch Subscription Topics from Server.');  
     });
+  }
+
+  onCannotObtainUserName() {
+    this.presentToast('Could not obtain Username. Please logout and re-login.');
+    this.topics = [];
   }
 
   resetFilters() {
@@ -59,75 +84,43 @@ export class SubscriptionsPage {
   }
 
   async save() {
+
     const spinner = await this.loading.create();
+    await spinner.present();
 
-    spinner.present().then(() => {
-      this.freightApiService.SubscribeToShipmentEvents(this.topics).subscribe((isSuccessful: boolean) => {
+    this.freightApiService.SubscribeToShipmentEvents(this.topics, this.userName).subscribe((isSuccessful: boolean) => {
 
-        this.logBoolServerResponse('Save Suscriptions', isSuccessful);
-        spinner.dismiss();
+      spinner.dismiss();
 
-      }, error =>  spinner.dismiss());
+      // this.logBoolServerResponse('Save Suscriptions', isSuccessful);
+      if (!isSuccessful) {
+        this.onSavingFailed();
+      }
+
+    }, (error) => {
+
+      spinner.dismiss();
+
+      this.onSavingFailed();
     });
-
-    // Test various FreightAPI methods:
-    // console.log('Testing FreightApi.GetShipmentEvents...');
-    // const testCargoWiseCode = 'SIMFISSEA';
-    // spinner.present().then(() => {
-    //   this.freightApiService.GetShipmentEvents(testCargoWiseCode).subscribe((shipmentEvents: ShipmentEvent[]) => {
-
-    //     spinner.dismiss();
-
-    //   }, error =>  spinner.dismiss());
-    // });
-
-    // console.log('Testing FreightApi.GetShipments...');
-    // const testShipmentNumber = 'S01004368'; // ShipmentRef
-    // const testOrderNumber = '';
-    // const testDateFrom = new Date('01 Dec 2018'); // Dates compared against shipment create date.
-    // const testDateTo = undefined;
-    // const testOpenShipments = false;
-
-    // spinner.present().then(() => {
-    //   this.freightApiService.GetShipments(testCargoWiseCode,
-    //     testShipmentNumber,
-    //     testOrderNumber,
-    //     testDateFrom,
-    //     testDateTo,
-    //     testOpenShipments).subscribe((shipments: Shipment[]) => {
-
-    //     spinner.dismiss();
-
-    //   }, error =>  spinner.dismiss());
-    // });
-
-    // console.log('Testing FreightApi.GetShipment...');
-    // spinner.present().then(() => {
-    //   this.freightApiService.GetShipment(testShipmentNumber)
-    //   .subscribe((shipment: any) => {
-
-    //     spinner.dismiss();
-
-    //   }, error =>  spinner.dismiss());
-    // });
-
-    // console.log('Testing FreightApi.Authenticate...');
-    // spinner.present().then(() => {
-    //   this.freightApiService.Authenticate(environment.defaultUser, environment.defaultPassword)
-    //   .subscribe((authResult: any) => {
-
-    //     spinner.dismiss();
-
-    //   }, error =>  spinner.dismiss());
-    // });
-
 
   }
 
+  onSavingFailed() {
+    this.presentToast('Failed to save Subscription to Server. Please try again later.');
+  }
+
   logBoolServerResponse(attemptedAction: string, isSuccessful) {
-
     console.log(`Attempted: ${attemptedAction}. Server responded with: ${isSuccessful ? 'success' : 'failed'}.`);
+  }
 
+  async presentToast(toastMessage: string) {
+
+    const toast = await this.toastCtrl.create(
+      this.global.getToastConfiguration(toastMessage)
+    );
+    
+    await toast.present();
   }
 
 }

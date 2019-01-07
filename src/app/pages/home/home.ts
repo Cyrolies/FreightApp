@@ -1,5 +1,5 @@
 import { map } from 'rxjs/operators';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { FreightApiService, FreightMilestone, Profile } from './../../providers/freight-api.service';
 import { Component, ViewEncapsulation, ViewChild, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -9,6 +9,7 @@ import 'chartjs-plugin-labels';
 import { UserData } from '../../providers/user-data';
 import { round } from 'lodash';
 import { BaseChartDirective } from 'ng2-charts';
+import { GlobalService } from '../../providers/global.service';
 
 @Component({
   selector: 'page-home',
@@ -22,7 +23,9 @@ export class HomePage implements OnInit, OnDestroy {
     public router: Router,
     public userData: UserData,
     public freightService: FreightApiService,
-    public loading: LoadingController
+    public loading: LoadingController,
+    private global: GlobalService,
+    private toastCtrl: ToastController
   ) {
 
     const rootStyle = getComputedStyle(document.body);
@@ -148,7 +151,16 @@ export class HomePage implements OnInit, OnDestroy {
 
   async ionViewWillEnter() {
 
-    const cargoWiseCode = this.selectedProfile.CargoWiseCode; // 'SIMFISSEA';
+    if (!(this.selectedProfile && this.selectedProfile.CargoWiseCode)) {
+
+      this.presentToast('Could not determine selected Profile. Please logout and re-login.');
+
+      this.totalShipmentsCount = null;
+
+      return;
+    }
+
+    const cargoWiseCode = this.selectedProfile.CargoWiseCode;
     const shipmentNo = '';
     const orderNo = '';
     const openShipments = true;
@@ -189,16 +201,14 @@ export class HomePage implements OnInit, OnDestroy {
           Math.round(lateCount / this.totalShipmentsCount * 100)
         ];
 
-        // this.chartData.forEach((val, index, arr) => {
-        //   if (Number.isNaN(val)) {
-        //     arr[index] = 0;
-        //   }
-        // });
-
         // If smallest slice has width less tha 12%, show labels outside chart.
         if (Math.min(this.chartData[0], this.chartData[1]) < 12) {
           this.chartOptions.plugins.labels.position = 'outside';
           this.chartOptions.plugins.labels.fontColor = [this.colors.white, this.colors.white];
+
+        } else {
+          this.chartOptions.plugins.labels.position = 'default';
+          this.chartOptions.plugins.labels.fontColor = [this.colors.primary, this.colors.white];
         }
 
         this.reloadChart();
@@ -206,7 +216,14 @@ export class HomePage implements OnInit, OnDestroy {
         spinner.dismiss();
 
        }, (error) => {
+
         spinner.dismiss();
+
+        this.totalShipmentsCount = null;
+        
+        console.log(error);
+        this.presentToast('Failed to fetch shipments from CargoWise. Please try again later.');
+
        });
 
      });
@@ -233,6 +250,15 @@ export class HomePage implements OnInit, OnDestroy {
     const rgbArray: number[] = convert.hex.rgb(hexCode);
 
     return `rgb(${rgbArray[0]},${rgbArray[1]},${rgbArray[2]},${opacity})`;
+  }
+
+  async presentToast(toastMessage: string) {
+
+    const toast = await this.toastCtrl.create(
+      this.global.getToastConfiguration(toastMessage)
+    );
+    
+    await toast.present();
   }
 }
 

@@ -42,9 +42,12 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
 
   async ionViewDidEnter() {
 
-    if (!this.selectedProfile) {
+    if (!(this.selectedProfile && this.selectedProfile.CargoWiseCode)) {
 
-      this.presentToast('Could not determine selected profile.');
+      this.presentToast('Could not determine selected Profile. Please logout and re-login.');
+
+      this.notifications = [];
+
       return;
     }
 

@@ -174,8 +174,8 @@ export class HomePage implements OnInit, OnDestroy {
        .GetShipments(cargoWiseCode, 
           shipmentNo,
           orderNo,
-          fromDate,
-          toDate,
+          fromDate.toISOString(),
+          toDate.toISOString(),
           openShipments
         ).subscribe((shipments: FreightMilestone[]) => {
         

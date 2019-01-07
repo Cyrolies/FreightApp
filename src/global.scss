@@ -24,6 +24,11 @@ h1 {
   letter-spacing: 0.3em; 
 }
 
+ion-toggle {
+  --background-checked:  var(--ion-color-secondary) !important;
+  --handle-background-checked: var(--ion-color-secondary) !important;
+}
+
 .secondary-button {
   --border-color: var(--ion-color-secondary) !important;
   --border-width: 1px !important;

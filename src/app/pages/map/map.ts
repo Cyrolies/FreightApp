@@ -7,6 +7,7 @@ import { LoadingController } from '@ionic/angular';
 import { MapHostService } from '../../providers/map-host-service';
 import { BehaviorSubject } from 'rxjs';
 import * as moment from 'moment';
+import { BingMapsService } from '../../providers/bing-maps-service';
 
 
 @Component({
@@ -36,10 +37,11 @@ export class MapPage implements OnInit, OnDestroy {
 
   transportLeg: TransportLeg;
 
-
   fromPort: Microsoft.Maps.Location;
   toPort: Microsoft.Maps.Location;
   currentFreightLocation: Microsoft.Maps.Location;
+
+  returnToShipment: string;
 
 
   @ViewChild('map') mapElement: ElementRef;
@@ -74,7 +76,9 @@ export class MapPage implements OnInit, OnDestroy {
 
   async ionViewDidEnter() {
 
-    this.transportLeg = this.navService.pop();
+    const params = this.navService.pop();
+    this.returnToShipment = params['returnToShipment'];
+    this.transportLeg = params['transportLeg'];
 
     if (!this.transportLeg) {
 

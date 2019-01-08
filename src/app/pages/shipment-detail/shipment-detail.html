@@ -268,6 +268,10 @@
                                     <ion-input readonly=true>
                                       {{getVesselIdentifier(leg)}}
                                     </ion-input>
+                                    <a (click)=viewTransportLeg(leg)>
+                                      View on map
+                                    </a>
+                                    
                                 </ion-item>
                               </ion-col>
                           </ion-row>

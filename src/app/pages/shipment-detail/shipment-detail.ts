@@ -5,6 +5,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { HttpClient } from '@angular/common/http';
 import { ToastController, LoadingController, NavController, ActionSheetController, NavParams, Events, Tabs } from '@ionic/angular';
 import { forEach } from '@angular/router/src/utils/collection';
+import { MyNavService } from '../../providers/my-nav.service';
 
 @Component({
   selector: 'page-shipment-detail',
@@ -23,7 +24,8 @@ export class ShipmentDetailPage {
     public freightApiService: FreightApiService,
     public toastCtrl: ToastController,
     public route: ActivatedRoute,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    private navService: MyNavService,
   ) {}
 
   async ionViewDidEnter() {
@@ -92,7 +94,16 @@ export class ShipmentDetailPage {
     }
   }
 
+  viewTransportLeg(leg: TransportLeg) {
 
+    this.navService.push({
+      transportLeg: leg,
+      returnToShipment: this.route.snapshot.url.toString()
+    });
+
+    this.navCtrl.navigateForward('map');
+
+  }
 
 }
 

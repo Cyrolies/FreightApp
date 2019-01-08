@@ -1,3 +1,4 @@
+import { TransportLeg } from './providers/freight-api.service';
 import { environment } from './../environments/environment.prod';
 import { NetworkService } from './providers/network.service';
 import { MyNavService } from './providers/my-nav.service';
@@ -30,7 +31,7 @@ export class AppComponent implements OnInit {
     },
     {
       title: 'Shipments',
-      url: '/shipment-search',
+      url: '/shipments',
       icon: 'boat'
     },
     {
@@ -50,24 +51,26 @@ export class AppComponent implements OnInit {
     },
     {
       title: 'Test Map',
-      url: '/test-map',
+      url: '/map',
       icon: 'map',
-      data:     { // Some data from S00975554
-        '$id': '20',
-        'estimatedArrival': '2018-11-16T15:29:00',
-        'estimatedDeparture': '2018-11-15T15:29:00',
-        'actualArrival': moment().subtract(1, 'days').toDate(), // null,
-        'actualDeparture': null,
-        'portOfDischarge': 'USSEA',
-        'portOfLoading': 'USTIW',
-        'voyageNumber': '0185E',
-        'vesselName': 'EVER SIGMA',
-        'transportMode': 0,
-        'legType': 2,
-        'carrier': null,
-        'customValues': null,
-        'VesselLloydsIMO': '9300439'
-      }
+      data: {
+        transportLeg: { // Some data from S00975554
+          '$id': '20',
+          'estimatedArrival': '2018-11-16T15:29:00',
+          'estimatedDeparture': '2018-11-15T15:29:00',
+          'actualArrival': moment().subtract(1, 'days').toDate(), // null,
+          'actualDeparture': null,
+          'portOfDischarge': 'USSEA',
+          'portOfLoading': 'USTIW',
+          'voyageNumber': '0185E',
+          'vesselName': 'EVER SIGMA',
+          'transportMode': 0,
+          'legType': 2,
+          'carrier': null,
+          'customValues': null,
+          'VesselLloydsIMO': '9300439'
+        }        
+      }     
     }
   ];
 

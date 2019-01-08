@@ -13,32 +13,41 @@ export class BingMapsService {
 
   load(): Promise<void> {
     if (this.loadPromise) {
-      return this.loadPromise;
+      return this.loadPromise; 
+      // Will not rerun the BingMaps external script (<script type="text/javascript" async="" defer="" src="http://www.bing.com/api/maps/mapcontrol?branch=release&amp;clientApi=bingmapsfleettracker&amp;callback=bingMapsCallback"></script>)
     }
+
+    const mapsCallback = 'bingMapsCallback';
 
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.async = true;
-    script.defer = true;
-
-    const mapsCallback = 'bingMapsCallback';
+    script.defer = true;  
+    script.id = 'bingMaps';
+    
     script.src = `http://www.bing.com/api/maps/mapcontrol?branch=release&clientApi=bingmapsfleettracker&callback=${ mapsCallback }`;
 
     this.loadPromise = new Promise<void>((resolve: Function, reject: Function) => {
       window[mapsCallback] = () => {
 
-        // Callback => Map resources have now been loaded.
-        
+        // Callback => Map resources have now been loaded.        
         resolve();
       };
       script.onerror = (error: Event) => { 
         
-        // this.logger.error('maps script error' + error);
+        console.log(error);
         
         reject(error);
       };
     });
 
+    // Remove old script, if any (No practical consequence; just keep document clean):
+    const old = document.getElementById(script.id);
+    if (old) {
+      old.parentNode.removeChild(old);
+    }
+    
+    // Run/re-run the BingMaps script (will trigger above 'resolve()' when complete):
     document.body.appendChild(script);
 
     return this.loadPromise;
@@ -49,5 +58,9 @@ export class BingMapsService {
 
       return new Microsoft.Maps.Map(element, options); // Create instance of Map class after required resources have been loaded. 
     });
+  }
+
+  uninitialize() {
+    this.loadPromise = null; // Force the document to re-run the BingMaps script.
   }
 }

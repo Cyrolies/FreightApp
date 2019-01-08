@@ -174,6 +174,8 @@ export class HomePage implements OnInit, OnDestroy {
 
   async loadData() {
 
+    this.dataLoaded = false;
+
     if (!(this.selectedProfile && this.selectedProfile.CargoWiseCode)) {
 
       this.presentToast('Could not determine selected Profile. Please logout and re-login.');
@@ -190,7 +192,6 @@ export class HomePage implements OnInit, OnDestroy {
     const fromDate = moment().subtract(6, 'months').toDate();
     const toDate = moment().toDate();
 
-    this.dataLoaded = false;
     const spinner = await this.loading.create();
     spinner.present().then(() => {
        this.freightService

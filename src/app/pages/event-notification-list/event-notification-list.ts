@@ -14,8 +14,11 @@ import { GlobalService } from '../../providers/global.service';
 })
 export class EventNotificationListPage implements OnInit, OnDestroy {
   notifications: ShipmentEvent[] = [];
+  public dataLoaded = false;
+
   private profileSubscription: any;
   private selectedProfile: Profile;
+  
   private userName: string;
   private pageIsInView = false;
 
@@ -65,6 +68,8 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
   }
 
   async loadData() {
+
+    this.dataLoaded = false;
    
     // Validate CW code for selected profile:
     if (!(this.selectedProfile && this.selectedProfile.CargoWiseCode)) {
@@ -100,6 +105,9 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
     
     this.freightService.GetShipmentEvents(this.selectedProfile.CargoWiseCode, this.userName)
       .subscribe((result: ShipmentEvent[]) => {
+
+        this.dataLoaded = true;
+
         this.notifications = result;
         this.notifications.sort(this.eventDateComparer).reverse();
 

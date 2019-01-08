@@ -91,4 +91,14 @@
       </ion-row>
     </ion-grid>
   </ion-list>
+
+  <ion-grid>
+      <ion-row justify-content-center align-items-center>
+          <ion-text color="mybackground" text-center
+          *ngIf = "this.dataLoaded && (this.notifications || []).length < 1">
+              There are currently no Notifications for this Profile.
+          </ion-text>
+      </ion-row>
+  </ion-grid>
+
 </ion-content>

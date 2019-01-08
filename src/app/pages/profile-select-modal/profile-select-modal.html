@@ -1,12 +1,12 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
         <ion-title>Select Profile</ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-  <ion-list>
+  <ion-list lines="full">
     <ion-item *ngFor="let profile of this.userData.userProfiles" (click)="onProfileSelected(profile)">
         <ion-text>{{ profile.CustomerName }}</ion-text>
     </ion-item>

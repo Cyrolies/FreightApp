@@ -17,6 +17,7 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
   private profileSubscription: any;
   private selectedProfile: Profile;
   private userName: string;
+  private pageIsInView = false;
 
   constructor(
     public actionSheetCtrl: ActionSheetController,
@@ -31,17 +32,39 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.pageIsInView = false;
+
     // Subscribing to selectedProfile$ serves to...
     //  i) give the current selectedProfile
-    //  ii) trigger the specified function (to reload data) whenever the profile changes.
+    //  ii) trigger the specified function (to reload data) whenever the profile changes (IF the page is in view).
     this.profileSubscription = this.userData.selectedProfile$
        .subscribe(selectedProfile => {
           this.selectedProfile = selectedProfile;
-          this.ionViewDidEnter();
+
+          if (this.pageIsInView) {
+            this.loadData();
+          }
+          
       });
   }
+  
+  ngOnDestroy() {
+    // prevent memory leak when component is destroyed
+    this.profileSubscription.unsubscribe();
+  }
 
-  async ionViewDidEnter() {
+  ionViewDidEnter() {
+
+    this.pageIsInView = true;
+
+    this.loadData();
+  }
+
+  ionViewDidLeave() {
+    this.pageIsInView = false;
+  }
+
+  async loadData() {
    
     // Validate CW code for selected profile:
     if (!(this.selectedProfile && this.selectedProfile.CargoWiseCode)) {
@@ -126,11 +149,6 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
     );
     
     await toast.present();
-  }
-
-  ngOnDestroy() {
-    // prevent memory leak when component is destroyed
-    this.profileSubscription.unsubscribe();
   }
 
 }

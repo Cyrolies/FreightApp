@@ -31,8 +31,12 @@ export class ShipmentDetailPage {
   async ionViewDidEnter() {
 
     if (this.tabRef) {
-      this.tabRef.select(0);
+
+      const tabIndex = this.route.snapshot.paramMap.get('tabIndex');
+      this.tabRef.select(tabIndex == null ? 0 : +tabIndex);
     }
+
+    // TODO: Return to saved scroll position (https://github.com/joanroig/Ionic4-restore-scroll-position).
 
     const spinner = await this.loading.create();
 
@@ -98,7 +102,7 @@ export class ShipmentDetailPage {
 
     this.navService.push({
       transportLeg: leg,
-      returnToShipment: this.route.snapshot.url.toString()
+      returnToShipment: this.shipment.ShipmentNo
     });
 
     this.navCtrl.navigateForward('map');

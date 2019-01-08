@@ -43,6 +43,8 @@ export class MapPage implements OnInit, OnDestroy {
 
   returnToShipment: string;
 
+  readonly routingTabIndex = 2;
+
 
   @ViewChild('map') mapElement: ElementRef;
 

@@ -5,8 +5,14 @@ import { ShipmentDetailPage } from './shipment-detail';
 
 const routes: Routes = [
   {
+    path: ':ShipmentRef/:tabIndex',
+    component: ShipmentDetailPage,
+    pathMatch: 'full'
+  },
+  {
     path: ':ShipmentRef',
-    component: ShipmentDetailPage
+    component: ShipmentDetailPage,
+    pathMatch: 'full'
   }
 ];
 

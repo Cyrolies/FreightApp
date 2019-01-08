@@ -52,15 +52,18 @@
             </ion-col>
           </ion-row> 
         </ion-card-content>
-      </ion-card>
+  </ion-card>
 
 </ion-header>
 &nbsp;
-<ion-content scrollbar-x="true" scrollbar-y="true">
+<ion-content> 
    
   <ion-tabs>
 
-    <ion-tab class="shipment-tab" label="Milestones" >
+    <ion-tab class="shipment-tab" label="Milestones">
+
+      <!-- Nest content in ion-content tag to allow scrolling: -->
+      <ion-content>
                        
         <ion-list>
           <ion-grid fixed>
@@ -77,233 +80,260 @@
                   </ion-card-header>
         
                   <ion-card-content>
-                    <ion-row>
-                      <ion-col col-6>
-                        <ion-item>
-                          <ion-label position="stacked" color="primary">Description</ion-label>
-                          <ion-input readonly=true>{{milestone.Description}}</ion-input>
-                         <!-- Description: {{milestone.Description}} -->
-                        </ion-item>
-                      </ion-col>
-                      <ion-col col-6>
-                          <ion-item>
-                            <ion-label position="stacked" color="primary">Sequence</ion-label>
-                            <ion-input readonly=true>{{milestone.Sequence}}</ion-input>
-                            <!-- Estimated Date: {{milestone.EstimatedDate}}   -->
-                          </ion-item>
-                        </ion-col>
-                    </ion-row> 
-                    <ion-row>
-                      <ion-col col-6>
-                        <ion-item>
-                          <ion-label position="stacked" color="primary">Actual Date</ion-label>
-                          <ion-input readonly=true>{{milestone.ActualDate}}</ion-input>
-                         <!-- Actual Date:{{milestone.ActualDate}} -->
-                        </ion-item>
-                      </ion-col>
-                      <ion-col col-6>
-                        <ion-item>
-                          <ion-label position="stacked" color="primary">Estimated Date</ion-label>
-                          <ion-input readonly=true>{{milestone.EstimatedDate}}</ion-input>
-                          <!-- Estimated Date: {{milestone.EstimatedDate}}   -->
-                        </ion-item>
-                      </ion-col>
-                    </ion-row> 
+
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col col-6>
+                              <ion-item no-padding>
+                                <ion-label position="stacked" color="primary">Description</ion-label>
+                                <!-- <ion-input [ngModel]="milestone.Description" readonly=true></ion-input> -->
+                                <ion-input readonly=true>{{milestone.Description}}</ion-input>
+                              </ion-item>
+                            </ion-col>
+                            <ion-col col-6>
+                                <ion-item no-padding>
+                                  <ion-label position="stacked" color="primary">Sequence</ion-label>
+                                  <!-- <ion-input [ngModel]="milestone.Sequence" readonly=true></ion-input> -->
+                                 <ion-input readonly=true text-left>{{milestone.Sequence}}</ion-input>
+                                </ion-item>
+                              </ion-col>
+                        </ion-row> 
+                          <ion-row>
+                            <ion-col col-6>
+                              <ion-item no-padding>
+                                <ion-label position="stacked" color="primary">Actual Date</ion-label>
+                                <!-- <ion-input [ngModel]="milestone.ActualDate" readonly=true></ion-input> -->
+                                <ion-input readonly=true>{{milestone.ActualDate}}</ion-input>
+                              </ion-item>
+                            </ion-col>
+                            <ion-col col-6>
+                              <ion-item no-padding>
+                                <ion-label position="stacked" color="primary">Estimated Date</ion-label>
+                                <!-- <ion-input [ngModel]="milestone.EstimatedDate" readonly=true></ion-input> -->
+                                <ion-input readonly=true>{{milestone.EstimatedDate}}</ion-input>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row> 
+                    </ion-grid>
+
                   </ion-card-content>
                 </ion-card>
               </ion-col>
             </ion-row>
           </ion-grid>
         </ion-list>
+
+      </ion-content>
+
     </ion-tab>
     <ion-tab label="Orders">
       <!-- Orders -->
-      <ion-list>
-          <ion-grid fixed>
-            <ion-row align-items-stretch>
-              <ion-col size="12" size-md="6"  *ngFor="let order of (shipment? shipment.orders : [])">
-                 <!--Shipment Orders-->
-                 <ion-card class="rounded" >
-                    <ion-card-header color="primary">
-                      <ion-item detail="false" lines="none">
-                          <ion-text style="padding-right: 5px!important" color="secondary">ORDER</ion-text> 
-                          <ion-text color="light"> {{order.OrderNumber}}&nbsp;{{order.OrderNumberSplit}}</ion-text>                  
-                      </ion-item>
-                    </ion-card-header>
-          
-                  <ion-card-content >
-                    <ion-row no-padding>
-                      <ion-col col-6>
-                         <ion-item no-padding>
-                            <ion-label position="stacked" color="primary">Goods Description</ion-label>
-                            <ion-input readonly=true>{{order.GoodsDescription}}</ion-input>
-                         </ion-item>
-                      </ion-col>
-                      <ion-col col-6>
-                        <ion-item no-padding>
-                            <ion-label position="stacked" color="primary">Order Date</ion-label>
-                            <ion-input readonly=true>{{order.OrderDate}}</ion-input>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row> 
-                    <ion-row>
-                      <ion-col col-6>
-                        <ion-item>
-                            <ion-label position="stacked" color="primary">Actual Arrival</ion-label>
-                            <ion-input readonly=true>{{order.ActualArrival}}</ion-input>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row> 
-                    <ion-row>
-                      <ion-col col-6>
-                          <ion-grid fixed>
-                              <ion-row align-items-stretch>
-                                <ion-col size="12" size-md="6"  *ngFor="let orderline of order.orderlines">
-                                  {{orderline.GoodsDescription}}
+
+      <ion-content>
+          <ion-list>
+              <ion-grid fixed>
+                <ion-row align-items-stretch>
+                  <ion-col size="12" size-md="6"  *ngFor="let order of (shipment? shipment.orders : [])">
+                     <!--Shipment Orders-->
+                     <ion-card class="rounded" >
+                        <ion-card-header color="primary">
+                          <ion-item detail="false" lines="none">
+                              <ion-text style="padding-right: 5px!important" color="secondary">ORDER</ion-text> 
+                              <ion-text color="light"> {{order.OrderNumber}}&nbsp;{{order.OrderNumberSplit}}</ion-text>                  
+                          </ion-item>
+                        </ion-card-header>
+              
+                      <ion-card-content >
+
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col col-6>
+                                   <ion-item no-padding>
+                                      <ion-label position="stacked" color="primary">Goods Description</ion-label>
+                                      <ion-input readonly=true>{{order.GoodsDescription}}</ion-input>
+                                   </ion-item>
                                 </ion-col>
-                            </ion-row>
-                          </ion-grid>
-                      </ion-col>
-                    </ion-row>
-                  </ion-card-content>
-                </ion-card>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-list>
+                                <ion-col col-6>
+                                  <ion-item no-padding>
+                                      <ion-label position="stacked" color="primary">Order Date</ion-label>
+                                      <ion-input readonly=true>{{order.OrderDate}}</ion-input>
+                                  </ion-item>
+                                </ion-col>
+                              </ion-row> 
+                              <ion-row>
+                                <ion-col col-6>
+                                  <ion-item no-padding>
+                                      <ion-label position="stacked" color="primary">Actual Arrival</ion-label>
+                                      <ion-input readonly=true>{{order.ActualArrival}}</ion-input>
+                                  </ion-item>
+                                </ion-col>
+                              </ion-row> 
+                              <ion-row>
+                                <ion-col col-6>
+                                    <ion-grid fixed>
+                                        <ion-row align-items-stretch>
+                                          <ion-col size="12" size-md="6"  *ngFor="let orderline of order.orderlines">
+                                            {{orderline.GoodsDescription}}
+                                          </ion-col>
+                                      </ion-row>
+                                    </ion-grid>
+                                </ion-col>
+                              </ion-row>
+                        </ion-grid>
+
+                      </ion-card-content>
+                    </ion-card>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+          </ion-list>
+      </ion-content>
+
     </ion-tab>
     <ion-tab label="Routing">
       <!-- Transport Legs -->
-      <ion-list>
-          <ion-grid fixed>
-            <ion-row align-items-stretch>
-              <ion-col size="12" size-md="6">
-                 <!--Shipment Orders-->
-                 <ion-card class="rounded" *ngFor="let leg of (shipment? shipment.transportLegs : [])">
-                    <ion-card-header color="primary">
-                      <ion-item detail="false" lines="none">
-                          <ion-text style="padding-right: 5px!important" color="secondary">POL</ion-text> 
-                          <ion-text color="light"> {{leg.portOfLoading}}</ion-text> 
-                          &nbsp;
-                          <ion-text style="padding-right: 5px!important" color="secondary">POD</ion-text> 
-                          <ion-text color="light"> {{leg.portOfDischarge}}</ion-text>                 
-                      </ion-item>
-                    </ion-card-header>
-          
-                  <ion-card-content >
-                    <ion-row>
-                      <ion-col col-6>
-                        <ion-item>
-                            <ion-label position="stacked" color="primary">POL</ion-label>
-                            <ion-input readonly=true>{{leg.portOfLoading}}</ion-input>
-                        </ion-item>
-                      </ion-col>
-                      <ion-col col-6>
-                        <ion-item >
-                            <ion-label position="stacked" color="primary">POD</ion-label>
-                            <ion-input readonly=true>{{leg.portOfDischarge}}</ion-input>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row> 
-                    <ion-row>
-                      <ion-col col-6>
-                        <ion-item>
-                            <ion-label position="stacked" color="primary">Actual Arrival</ion-label>
-                            <ion-input readonly=true>{{leg.actualArrival}}</ion-input>
-                        </ion-item>
-                      </ion-col>
-                      <ion-col col-6>
-                        <ion-item>
-                            <ion-label position="stacked" color="primary">Estimated Arrival</ion-label>
-                            <ion-input readonly=true>{{leg.estimatedArrival}}</ion-input>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row> 
-                    <ion-row>
-                      <ion-col col-6>
-                          <ion-item>
-                              <ion-label position="stacked" color="primary">Actual Departure</ion-label>
-                              <ion-input readonly=true>{{leg.actualDeparture}}</ion-input>
+
+      <ion-content>
+          <ion-list>
+              <ion-grid fixed>
+                <ion-row align-items-stretch>
+                  <ion-col size="12" size-md="6">
+                     <!--Shipment Orders-->
+                     <ion-card class="rounded" *ngFor="let leg of (shipment? shipment.transportLegs : [])">
+                        <ion-card-header color="primary">
+                          <ion-item detail="false" lines="none">
+                              <ion-text style="padding-right: 5px!important" color="secondary">POL</ion-text> 
+                              <ion-text color="light"> {{leg.portOfLoading}}</ion-text> 
+                              &nbsp;
+                              <ion-text style="padding-right: 5px!important" color="secondary">POD</ion-text> 
+                              <ion-text color="light"> {{leg.portOfDischarge}}</ion-text>                 
                           </ion-item>
-                        </ion-col>
-                        <ion-col col-6>
-                          <ion-item>
-                              <ion-label position="stacked" color="primary">Estimated Departure</ion-label>
-                              <ion-input readonly=true>{{leg.estimatedDeparture}}</ion-input>
-                          </ion-item>
-                        </ion-col>
-                    </ion-row> 
-                    <ion-row>
-                        <ion-col col-6>
+                        </ion-card-header>
+              
+                      <ion-card-content >
+                        <ion-row>
+                          <ion-col col-6>
                             <ion-item>
-                                <ion-label position="stacked" color="primary">Vessel</ion-label>
-                                <ion-input readonly=true>{{leg.vesselName}}</ion-input>
+                                <ion-label position="stacked" color="primary">POL</ion-label>
+                                <ion-input readonly=true>{{leg.portOfLoading}}</ion-input>
+                            </ion-item>
+                          </ion-col>
+                          <ion-col col-6>
+                            <ion-item >
+                                <ion-label position="stacked" color="primary">POD</ion-label>
+                                <ion-input readonly=true>{{leg.portOfDischarge}}</ion-input>
+                            </ion-item>
+                          </ion-col>
+                        </ion-row> 
+                        <ion-row>
+                          <ion-col col-6>
+                            <ion-item>
+                                <ion-label position="stacked" color="primary">Actual Arrival</ion-label>
+                                <ion-input readonly=true>{{leg.actualArrival}}</ion-input>
                             </ion-item>
                           </ion-col>
                           <ion-col col-6>
                             <ion-item>
-                                <ion-label position="stacked" color="primary">IMO</ion-label>
-                                <ion-input readonly=true>{{leg.VesselLloydsIMO}}</ion-input>
+                                <ion-label position="stacked" color="primary">Estimated Arrival</ion-label>
+                                <ion-input readonly=true>{{leg.estimatedArrival}}</ion-input>
                             </ion-item>
                           </ion-col>
-                      </ion-row>
-                  </ion-card-content>
-                </ion-card>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-list>
+                        </ion-row> 
+                        <ion-row>
+                          <ion-col col-6>
+                              <ion-item>
+                                  <ion-label position="stacked" color="primary">Actual Departure</ion-label>
+                                  <ion-input readonly=true>{{leg.actualDeparture}}</ion-input>
+                              </ion-item>
+                            </ion-col>
+                            <ion-col col-6>
+                              <ion-item>
+                                  <ion-label position="stacked" color="primary">Estimated Departure</ion-label>
+                                  <ion-input readonly=true>{{leg.estimatedDeparture}}</ion-input>
+                              </ion-item>
+                            </ion-col>
+                        </ion-row> 
+                        <ion-row>
+                            <ion-col col-6>
+                                <ion-item>
+                                    <ion-label position="stacked" color="primary">Vessel</ion-label>
+                                    <ion-input readonly=true>{{leg.vesselName}}</ion-input>
+                                </ion-item>
+                              </ion-col>
+                              <ion-col col-6 *ngIf="isTransportModeValid(leg.transportMode)">
+                                <ion-item>
+                                    <ion-label position="stacked" color="primary">                                  
+                                      {{getVesselIdentifierType(leg.transportMode)}}
+                                    </ion-label>
+                                    <ion-input readonly=true>
+                                      {{getVesselIdentifier(leg)}}
+                                    </ion-input>
+                                </ion-item>
+                              </ion-col>
+                          </ion-row>
+                      </ion-card-content>
+                    </ion-card>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+          </ion-list>
+      </ion-content>
+
     </ion-tab>
     <ion-tab label="Packing">
         <!-- Containers -->
-      <ion-list>
-          <ion-grid fixed>
-            <ion-row align-items-stretch>
-              <ion-col size="12" size-md="6">
-                 <!--Shipment Containers-->
-                 <ion-card class="rounded" *ngFor="let container of (shipment? shipment.containers : [])">
-                    <ion-card-header color="primary">
-                      <ion-item detail="false" lines="none">
-                          <ion-text style="padding-right: 5px!important" color="secondary">CONTAINER</ion-text> 
-                          <ion-text color="light"> {{container.containerNumber}}</ion-text>                  
-                      </ion-item>
-                    </ion-card-header>
-          
-                  <ion-card-content >
-                    <ion-row>
-                      <ion-col col-6>
-                        <ion-item>
-                            <ion-label position="stacked" color="primary">Container Number</ion-label>
-                            <ion-input readonly=true>{{container.containerNumber}}</ion-input>
-                        </ion-item>
-                      </ion-col>
-                      <ion-col col-6>
-                        <ion-item>
-                            <ion-label position="stacked" color="primary">Container Type</ion-label>
-                            <ion-input readonly=true>{{container.containerType}}</ion-input>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row> 
-                    <ion-row>
-                      <ion-col col-6>
-                        <ion-item>
-                            <ion-label position="stacked" color="primary">Description</ion-label>
-                            <ion-input readonly=true>{{container.containerDescription}}</ion-input>
-                        </ion-item>
-                      </ion-col>
-                      <ion-col col-6>
-                        <ion-item>
-                            <ion-label position="stacked" color="primary">Seal Number</ion-label>
-                            <ion-input readonly=true>{{container.sealNumber}}</ion-input>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row> 
-                  </ion-card-content>
-                </ion-card>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-list>
+
+      <ion-content>
+          <ion-list>
+              <ion-grid fixed>
+                <ion-row align-items-stretch>
+                  <ion-col size="12" size-md="6">
+                     <!--Shipment Containers-->
+                     <ion-card class="rounded" *ngFor="let container of (shipment? shipment.containers : [])">
+                        <ion-card-header color="primary">
+                          <ion-item detail="false" lines="none">
+                              <ion-text style="padding-right: 5px!important" color="secondary">CONTAINER</ion-text> 
+                              <ion-text color="light"> {{container.containerNumber}}</ion-text>                  
+                          </ion-item>
+                        </ion-card-header>
+              
+                      <ion-card-content >
+                        <ion-row>
+                          <ion-col col-6>
+                            <ion-item>
+                                <ion-label position="stacked" color="primary">Container Number</ion-label>
+                                <ion-input readonly=true>{{container.containerNumber}}</ion-input>
+                            </ion-item>
+                          </ion-col>
+                          <ion-col col-6>
+                            <ion-item>
+                                <ion-label position="stacked" color="primary">Container Type</ion-label>
+                                <ion-input readonly=true>{{container.containerType}}</ion-input>
+                            </ion-item>
+                          </ion-col>
+                        </ion-row> 
+                        <ion-row>
+                          <ion-col col-6>
+                            <ion-item>
+                                <ion-label position="stacked" color="primary">Description</ion-label>
+                                <ion-input readonly=true>{{container.containerDescription}}</ion-input>
+                            </ion-item>
+                          </ion-col>
+                          <ion-col col-6>
+                            <ion-item>
+                                <ion-label position="stacked" color="primary">Seal Number</ion-label>
+                                <ion-input readonly=true>{{container.sealNumber}}</ion-input>
+                            </ion-item>
+                          </ion-col>
+                        </ion-row> 
+                      </ion-card-content>
+                    </ion-card>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+          </ion-list>
+      </ion-content>
+
     </ion-tab>
     
   </ion-tabs>

@@ -1,4 +1,4 @@
-import { FreightApiService, Shipment } from '../../providers/freight-api.service';
+import { FreightApiService, Shipment, ModeType, TransportLeg } from '../../providers/freight-api.service';
 import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
@@ -63,6 +63,33 @@ export class ShipmentDetailPage {
 
       }, error =>  spinner.dismiss());
     });
+  }
+
+  isTransportModeValid(mode) {
+    if ((mode === ModeType.SEA) || (mode === ModeType.AIR)) {
+      return true;
+    }
+    return false;
+  }
+
+  getVesselIdentifierType(mode: ModeType) {
+    if (mode === ModeType.SEA) {
+      return 'IMO';
+    } else if (mode === ModeType.AIR) {
+      return 'Flight No.';
+    } else {
+      return null;
+    }
+  }
+
+  getVesselIdentifier(leg: TransportLeg) {
+    if (leg.transportMode === ModeType.SEA) {
+      return leg.VesselLloydsIMO;
+    } else if (leg.transportMode === ModeType.AIR) {
+      return leg.voyageNumber;
+    } else {
+      return null;
+    }
   }
 
 

@@ -1,3 +1,5 @@
+import { forEach } from '@angular/router/src/utils/collection';
+import { FreightMilestone, MilestonesNext } from './freight-api.service';
 import { Injectable } from '@angular/core';
 import { ToastOptions } from '@ionic/core';
 
@@ -56,6 +58,7 @@ export class GlobalService {
         return `assets/img/${imageKey}${suffix}.png`;
     }
 
+    
     public getToastConfiguration(toastMessage: string): ToastOptions {
         
         const toastConfig = {

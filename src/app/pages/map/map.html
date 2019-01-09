@@ -2,9 +2,12 @@
   <ion-toolbar color="primary">
 
     <ion-buttons slot="start">
-      <ion-back-button *ngIf="returnToShipment"
-        [defaultHref]="'shipment-details/' + returnToShipment + '/' + routingTabIndex">
+        <ion-back-button *ngIf="returnToShipment"
+        (click)="navigateBack()">
       </ion-back-button>
+      <!-- <ion-back-button *ngIf="returnToShipment"
+        [defaultHref]="'shipment-details/' + returnToShipment + '/' + routingTabIndex">
+      </ion-back-button> -->
 
      <ion-menu-button *ngIf="!returnToShipment">
      </ion-menu-button>

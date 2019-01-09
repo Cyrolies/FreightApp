@@ -2,7 +2,7 @@ import { MyNavService } from './../../providers/my-nav.service';
 import { FreightApiService, ModeType, TransportLegResult, Position, Geography, TransportLeg } from './../../providers/freight-api.service';
 import { Component, ElementRef, ViewChild, ViewEncapsulation, OnDestroy, OnInit } from '@angular/core';
 
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 
 import { MapHostService } from '../../providers/map-host-service';
 import { BehaviorSubject } from 'rxjs';
@@ -55,7 +55,8 @@ export class MapPage implements OnInit, OnDestroy {
     private mapHostService: MapHostService,
     private freightApiService: FreightApiService,
     public loading: LoadingController,
-    public navService: MyNavService
+    public navService: MyNavService,
+    public navCtrl: NavController
   ) { }
   
   ngOnInit() {
@@ -298,5 +299,11 @@ export class MapPage implements OnInit, OnDestroy {
     // Coordinates should not be exactly zero.
     return (Math.abs(latitude) < Number.EPSILON && Math.abs(longitude) < Number.EPSILON);
 
+  }
+
+  navigateBack() {
+
+    const returnUrl = `shipment-details/${this.returnToShipment}/${this.routingTabIndex}`;
+    this.navCtrl.navigateBack(returnUrl);
   }
 }

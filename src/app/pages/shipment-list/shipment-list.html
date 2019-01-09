@@ -28,11 +28,11 @@
                     </ion-item>
                     <ion-item>
                         <ion-label class="search-filter-label" floating>Date From.</ion-label>
-                        <ion-datetime class="search-filter" displayFormat="YYYY-MM-DD" [(ngModel)]="filters.datefrom" name="dtfrom"></ion-datetime>
+                        <ion-datetime #myPickerFrom class="search-filter" displayFormat="YYYY-MM-DD" (ionChange)='ngOnDateFromChange(myPickerFrom.value)' name="dtfrom"></ion-datetime>
                     </ion-item>
                     <ion-item>
                         <ion-label class="search-filter-label" floating>Date To.</ion-label>
-                        <ion-datetime class="search-filter" displayFormat="YYYY-MM-DD" [(ngModel)]="filters.dateto" name="dtto"></ion-datetime>
+                        <ion-datetime #myPickerTo class="search-filter" displayFormat="YYYY-MM-DD" (ionChange)='ngOnDateToChange(myPickerTo.value)' name="dtto"></ion-datetime>
                     </ion-item>
                     <ion-item>
                         <ion-label item-width="20%" class="search-filter-label" floating>Open Shipments</ion-label>

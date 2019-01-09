@@ -1,15 +1,15 @@
 import { FreightApiService, FreightMilestone, Profile } from '../../providers/freight-api.service';
-import { Component, ViewEncapsulation , OnDestroy, OnInit} from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild , OnDestroy, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { HttpClient } from '@angular/common/http';
-import { ToastController, LoadingController, NavController, ActionSheetController, NavParams, Events } from '@ionic/angular';
+import { ToastController, LoadingController, NavController, ActionSheetController, NavParams, Events, Datetime } from '@ionic/angular';
 import { MyNavService } from './../../providers/my-nav.service';
 import { ShipmentFilters } from '../../interfaces/shipment-filters';
 import { UserData } from '../../providers/user-data';
 import { NgForm } from '@angular/forms';
 import { GlobalService } from '../../providers/global.service';
-
+import { format } from 'date-fns';
 
 @Component({
   selector: 'page-shipment-list',
@@ -23,6 +23,8 @@ export class ShipmentListPage implements OnInit, OnDestroy {
   private profileSubscription: any;
   private selectedProfile: Profile;
   public hideFilters = true;
+  @ViewChild('myPickerFrom') myPickerFrom: Datetime;
+  @ViewChild('myPickerTo') myPickerTo: Datetime;
 
   constructor(
     public actionSheetCtrl: ActionSheetController,
@@ -52,10 +54,14 @@ export class ShipmentListPage implements OnInit, OnDestroy {
 
   async ionViewDidEnter() {
 
-    // if (!(this.selectedProfile && this.selectedProfile.CargoWiseCode)) {
-    //    this.presentToast('Could not determine selected Profile. Please logout and re-login.');
-    //    return;
-    // }
+    if (!(this.selectedProfile && this.selectedProfile.CargoWiseCode)) {
+       this.presentToast('Could not determine selected Profile. Please logout and re-login.');
+       return;
+    }
+    this.myPickerFrom.value = format(new Date(), 'yyyy-MM-dd');
+    this.filters.datefrom = format(new Date(), 'yyyy-MM-dd');
+    this.myPickerTo.value = format(new Date(), 'yyyy-MM-dd');
+    this.filters.dateto = format(new Date(), 'yyyy-MM-dd');
   }
 
   async listShipments(form: NgForm) {
@@ -63,9 +69,9 @@ export class ShipmentListPage implements OnInit, OnDestroy {
   
     spinner.present().then(() => {
       
-    this.freightApiService.GetShipments('SIMFISSEA', this.filters.shipmentno, this.filters.orderno,
-      this.filters.datefrom !== '' ? (this.filters.datefrom['year'].text + '-' + this.filters.datefrom['month'].text + '-' + this.filters.datefrom['day'].text) : '',
-      this.filters.dateto !== '' ? (this.filters.dateto['year'].text + '-' + this.filters.dateto['month'].text + '-' + this.filters.dateto['day'].text) : '',
+    this.freightApiService.GetShipments(this.selectedProfile.CargoWiseCode, this.filters.shipmentno, this.filters.orderno,
+      this.filters.datefrom, // !== '' ? format(this.filters.datefrom, 'yyyy-MM-dd') : '', //  (this.filters.datefrom['year'].text + '-' + this.filters.datefrom['month'].text + '-' + this.filters.datefrom['day'].text) : '',
+      this.filters.dateto, // !== '' ? format(this.filters.dateto, 'yyyy-MM-dd') : '', // (this.filters.dateto['year'].text + '-' + this.filters.dateto['month'].text + '-' + this.filters.dateto['day'].text) : '',
       this.filters.openshipments, true).subscribe((result: FreightMilestone[]) => {
     this.freightmilestones =  result;
     if (this.freightmilestones == null) {
@@ -77,6 +83,16 @@ export class ShipmentListPage implements OnInit, OnDestroy {
     });
   }
 
+  ngOnDateFromChange(date) {
+    if (typeof date !== 'string') {
+    this.filters.datefrom =  (date['year'].text + '-' + date['month'].text + '-' + date['day'].text);
+    }
+  }
+  ngOnDateToChange(date) {
+    if (typeof date !== 'string') {
+    this.filters.dateto =  (date['year'].text + '-' + date['month'].text + '-' + date['day'].text);
+    }
+  }
   ngOnDestroy() {
     // prevent memory leak when component is destroyed
     this.profileSubscription.unsubscribe();

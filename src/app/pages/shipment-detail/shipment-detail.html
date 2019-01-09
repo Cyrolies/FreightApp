@@ -206,58 +206,69 @@
                               <ion-text color="light"> {{leg.portOfLoading}}</ion-text> 
                               &nbsp;
                               <ion-text style="padding-right: 5px!important" color="secondary">POD</ion-text> 
-                              <ion-text color="light"> {{leg.portOfDischarge}}</ion-text>                 
+                              <ion-text color="light"> {{leg.portOfDischarge}}</ion-text>
+                              <ion-button slot="end" class="secondary-button" (click)="viewTransportLeg(leg)">
+                                View Map
+                                <ion-icon slot="end" name="globe"></ion-icon>
+                            </ion-button>                
                           </ion-item>
                         </ion-card-header>
               
                       <ion-card-content >
                         <ion-row>
                           <ion-col col-6>
-                            <ion-item>
+                            <ion-item no-padding text-wrap>
                                 <ion-label position="stacked" color="primary">POL</ion-label>
-                                <ion-input readonly=true>{{leg.portOfLoading}}</ion-input>
+                                <ion-item no-padding> {{leg.portOfLoading}}</ion-item>
+                                <!-- <ion-input readonly=true>{{leg.portOfLoading}}</ion-input> -->
                             </ion-item>
                           </ion-col>
                           <ion-col col-6>
-                            <ion-item >
+                            <ion-item no-padding text-wrap>
                                 <ion-label position="stacked" color="primary">POD</ion-label>
-                                <ion-input readonly=true>{{leg.portOfDischarge}}</ion-input>
+                                <ion-item no-padding> {{leg.portOfDischarge}}</ion-item>
+                                <!-- <ion-input readonly=true>{{leg.portOfDischarge}}</ion-input> -->
                             </ion-item>
                           </ion-col>
                         </ion-row> 
                         <ion-row>
                           <ion-col col-6>
-                            <ion-item>
+                            <ion-item no-padding text-wrap>
                                 <ion-label position="stacked" color="primary">Actual Arrival</ion-label>
-                                <ion-input readonly=true>{{leg.actualArrival}}</ion-input>
+                                <ion-item no-padding> {{leg.actualArrival | date}}</ion-item>
+                                <!-- <ion-input readonly=true>{{leg.actualArrival}}</ion-input> -->
                             </ion-item>
                           </ion-col>
                           <ion-col col-6>
-                            <ion-item>
-                                <ion-label position="stacked" color="primary">Estimated Arrival</ion-label>
-                                <ion-input readonly=true>{{leg.estimatedArrival}}</ion-input>
+                            <ion-item no-padding text-wrap>
+                                <ion-label position="stacked" color="primary">Est. Arrival</ion-label>
+                                <ion-item no-padding> {{leg.estimatedArrival | date}}</ion-item>
+                                <!-- <ion-input readonly=true>{{leg.estimatedArrival}}</ion-input> -->
                             </ion-item>
                           </ion-col>
                         </ion-row> 
                         <ion-row>
                           <ion-col col-6>
-                              <ion-item>
+                              <ion-item no-padding text-wrap>
                                   <ion-label position="stacked" color="primary">Actual Departure</ion-label>
-                                  <ion-input readonly=true>{{leg.actualDeparture}}</ion-input>
+                                  <ion-item no-padding> {{leg.actualDeparture | date}}</ion-item>
+                                  <!-- <ion-input readonly=true>{{leg.actualDeparture}}</ion-input> -->
                               </ion-item>
                             </ion-col>
                             <ion-col col-6>
-                              <ion-item>
-                                  <ion-label position="stacked" color="primary">Estimated Departure</ion-label>
-                                  <ion-input readonly=true>{{leg.estimatedDeparture}}</ion-input>
+                              <ion-item no-padding text-wrap>
+                                  <ion-label position="stacked" color="primary">Est.Departure</ion-label>
+                                  <ion-item no-padding> {{leg.estimatedDeparture | date}}</ion-item>
+                                  <!-- <ion-input readonly=true>{{leg.estimatedDeparture}}</ion-input> -->
                               </ion-item>
                             </ion-col>
                         </ion-row> 
                         <ion-row>
                             <ion-col col-6>
-                                <ion-item>
+                                <ion-item no-padding text-wrap>
                                     <ion-label position="stacked" color="primary">Vessel</ion-label>
-                                    <ion-input readonly=true>{{leg.vesselName}}</ion-input>
+                                    <ion-item no-padding> {{leg.vesselName}}</ion-item>
+                                    <!-- <ion-input readonly=true>{{leg.vesselName}}</ion-input> -->
                                 </ion-item>
                               </ion-col>
                               <ion-col col-6 *ngIf="isTransportModeValid(leg.transportMode)">
@@ -270,20 +281,24 @@
                                       <span slot="start" style="margin:0!important;">
                                         {{getVesselIdentifier(leg)}}
                                       </span>
-                                      <ion-item  slot="end">
+                                      <!-- <ion-item>
                                         <ion-button class="secondary-button" (click)="viewTransportLeg(leg)">
                                           View Map
                                           <ion-icon slot="end" name="globe"></ion-icon>
                                         </ion-button>
-                                      </ion-item>     
+                                      </ion-item>-->   
                                     </ion-item>
-                                    <!-- <ion-input readonly=true>
-                                      {{getVesselIdentifier(leg)}}
-                                    </ion-input> -->                                 
                                 </ion-item>
-
                               </ion-col>
                           </ion-row>
+                          <!-- <ion-row>
+                            <ion-col>
+                                <ion-button expand="full" class="secondary-button" (click)="viewTransportLeg(leg)">
+                                    View Map
+                                    <ion-icon slot="end" name="globe"></ion-icon>
+                                </ion-button>
+                            </ion-col>
+                          </ion-row> -->
                       </ion-card-content>
                     </ion-card>
                   </ion-col>

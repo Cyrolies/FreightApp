@@ -43,10 +43,16 @@ ion-menu-button {
   color: var(--ion-color-secondary) !important;
 }
 
-ion-card {
+  ion-card {
     border-radius:  10px!important;
     margin-top: 0px!important;
     margin-bottom: 0px!important;
+  }
+
+  //Override above style for header cards:
+  ion-header ion-card {
+    margin-top: 10px!important;
+    margin-bottom: 10px!important;
   }
 
   ion-card-header {

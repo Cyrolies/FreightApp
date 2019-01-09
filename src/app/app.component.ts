@@ -14,6 +14,7 @@ import { ProfileSelectModal } from './pages/profile-select-modal/profile-select-
 
 import * as moment from 'moment'; // TODO: remove;
 import { GlobalService } from './providers/global.service';
+import { truncate } from 'fs';
 
 @Component({
   selector: 'app-root',
@@ -151,7 +152,7 @@ export class AppComponent implements OnInit {
       this.global.isDevice = this.platform.is('cordova');
 
       this.isMenuDisabled = false || !environment.production;
-      this.isSplitViewDisabled = false || !environment.production;
+      this.isSplitViewDisabled = true; // || !environment.production;
     });
   }
 
@@ -171,7 +172,7 @@ export class AppComponent implements OnInit {
     this.events.subscribe('user:login', () => {
       this.updateLoggedInStatus(true);
 
-      this.isSplitViewDisabled = false;
+      // this.isSplitViewDisabled = false;
       this.isMenuDisabled = false;
     });
 

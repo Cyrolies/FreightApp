@@ -261,18 +261,27 @@
                                 </ion-item>
                               </ion-col>
                               <ion-col col-6 *ngIf="isTransportModeValid(leg.transportMode)">
-                                <ion-item>
+
+                                <ion-item no-padding text-wrap>
                                     <ion-label position="stacked" color="primary">                                  
                                       {{getVesselIdentifierType(leg.transportMode)}}
                                     </ion-label>
-                                    <ion-input readonly=true>
+                                    <ion-item no-padding>
+                                      <span slot="start" style="margin:0!important;">
+                                        {{getVesselIdentifier(leg)}}
+                                      </span>
+                                      <ion-item  slot="end">
+                                        <ion-button class="secondary-button" (click)="viewTransportLeg(leg)">
+                                          View Map
+                                          <ion-icon slot="end" name="globe"></ion-icon>
+                                        </ion-button>
+                                      </ion-item>     
+                                    </ion-item>
+                                    <!-- <ion-input readonly=true>
                                       {{getVesselIdentifier(leg)}}
-                                    </ion-input>
-                                    <a (click)=viewTransportLeg(leg)>
-                                      View on map
-                                    </a>
-                                    
+                                    </ion-input> -->                                 
                                 </ion-item>
+
                               </ion-col>
                           </ion-row>
                       </ion-card-content>

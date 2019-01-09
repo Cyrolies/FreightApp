@@ -109,6 +109,10 @@ export class ShipmentDetailPage {
 
   }
 
+  getMapIcon(leg: TransportLeg) {
+
+    return `../../../assets/img/${
+      leg.transportMode === ModeType.AIR ? 'Pin-Blue-Air.png' : 'Pin-Blue-Sea.png'
+    }`;
+  }
 }
-
-

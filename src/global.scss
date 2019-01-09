@@ -43,10 +43,16 @@ ion-menu-button {
   color: var(--ion-color-secondary) !important;
 }
 
-ion-card {
+  ion-card {
     border-radius:  10px!important;
     margin-top: 0px!important;
     margin-bottom: 0px!important;
+  }
+
+  //Override above style for header cards:
+  ion-header ion-card {
+    margin-top: 10px!important;
+    margin-bottom: 10px!important;
   }
 
   ion-card-header {
@@ -62,11 +68,6 @@ ion-card {
     margin: 0.3em !important;
   }
 
-  ion-card-content ion-item {
-    --border-width: 0;
-    font-size: smaller!important;
-  }
-
   ion-card-content {
     background-color: #F2F3F4;
     padding-top: 0!important;
@@ -77,15 +78,31 @@ ion-card {
     padding: 0!important;
   }
 
-  ion-card-content ion-label {
-    margin-top: 0!important;
-    font-weight: bold !important;
-  }
-
   ion-card-content ion-col {
     padding-bottom: 0!important;
   }
-  
-  ion-card-content input {
-    padding: 0!important;
+
+  ion-card-content ion-item {
+    --border-style: none;
+
+    // Prevent unnecessary whitespace in cards:
+    --min-height: 0;
+  }
+
+  ion-card-content ion-item > ion-label {
+    margin-top: 0!important;
+    font-weight: bold !important;
+    font-size: smaller!important;
+  }
+
+  ion-card-content ion-item > ion-item {
+    margin-top: 0!important;
+    font-size: smaller!important;
+    align-self: flex-start;
+  }
+
+  ion-card-content ion-item > ion-input {
+    margin-top: 0!important;
+    font-size: smaller!important;
+    --pading: 0;
   }

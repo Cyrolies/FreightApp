@@ -7,6 +7,40 @@ page-shipment-list {
     background-image: url('../../../assets/img/Ocean.png');
    // background-color: transparent;
   }
+
+
+
+
+
+// Icons with captions, use as follows:
+//   <ion-list class="caption-icon">
+//   <ion-item>
+//       <ion-avatar>
+//           <img  [src]="'../../../assets/img/' + freightmilestone.milestonesNext.CompletedMilestoneCode + '.png'">
+//       </ion-avatar>
+//   </ion-item>
+//   <ion-item>
+//       THis is a long caption.
+//   </ion-item>
+//   </ion-list>
+  .caption-icon {
+    background-color: transparent;
+  }
+  .caption-icon > ion-item {
+    --min-height: 0;
+    --padding-start: 0;
+    --padding-end: 0;
+    --inner-padding-start: 0;
+    --inner-padding-end: 0;
+    --border-style: none;
+  }
+  .caption-icon > ion-item > ion-avatar {
+    margin:auto!important
+  }
+
+
+
+
   .shipment-card {
     height: 100%;
     display: flex;

@@ -1,10 +1,12 @@
-import { FreightApiService, Shipment } from '../../providers/freight-api.service';
+import { OrderLine } from './../../providers/freight-api.service';
+import { FreightApiService, Shipment, ModeType, TransportLeg } from '../../providers/freight-api.service';
 import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { HttpClient } from '@angular/common/http';
 import { ToastController, LoadingController, NavController, ActionSheetController, NavParams, Events, Tabs } from '@ionic/angular';
 import { forEach } from '@angular/router/src/utils/collection';
+import { MyNavService } from '../../providers/my-nav.service';
 
 @Component({
   selector: 'page-shipment-detail',
@@ -23,14 +25,19 @@ export class ShipmentDetailPage {
     public freightApiService: FreightApiService,
     public toastCtrl: ToastController,
     public route: ActivatedRoute,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    private navService: MyNavService,
   ) {}
 
   async ionViewDidEnter() {
 
     if (this.tabRef) {
-      this.tabRef.select(0);
+
+      const tabIndex = this.route.snapshot.paramMap.get('tabIndex');
+      this.tabRef.select(tabIndex == null ? 0 : +tabIndex);
     }
+
+    // TODO: Return to saved scroll position (https://github.com/joanroig/Ionic4-restore-scroll-position).
 
     const spinner = await this.loading.create();
 
@@ -61,12 +68,66 @@ export class ShipmentDetailPage {
          }
         spinner.dismiss();
 
+        // TODO: Delete test data.
+        // const line = new OrderLine();
+        // line.Description = 'This is an order line with a long name.';
+        // if (this.shipment.orders.length) {
+        //   if (!this.shipment.orders[0].OrderLines) {
+        //     this.shipment.orders[0].OrderLines = new Array<OrderLine>();
+        //   }
+        //   this.shipment.orders[0].OrderLines.push(line);
+        //   this.shipment.orders[0].OrderLines.push(line);
+        //   this.shipment.orders[0].OrderLines.push(line);
+        //   this.shipment.orders[0].OrderLines.push(line);
+        // }
+        
+
       }, error =>  spinner.dismiss());
     });
   }
 
+  isTransportModeValid(mode) {
+    if ((mode === ModeType.SEA) || (mode === ModeType.AIR)) {
+      return true;
+    }
+    return false;
+  }
 
+  getVesselIdentifierType(mode: ModeType) {
+    if (mode === ModeType.SEA) {
+      return 'IMO';
+    } else if (mode === ModeType.AIR) {
+      return 'Flight No.';
+    } else {
+      return null;
+    }
+  }
 
+  getVesselIdentifier(leg: TransportLeg) {
+    if (leg.transportMode === ModeType.SEA) {
+      return leg.VesselLloydsIMO;
+    } else if (leg.transportMode === ModeType.AIR) {
+      return leg.voyageNumber;
+    } else {
+      return null;
+    }
+  }
+
+  viewTransportLeg(leg: TransportLeg) {
+
+    this.navService.push({
+      transportLeg: leg,
+      returnToShipment: this.shipment.ShipmentNo
+    });
+
+    this.navCtrl.navigateForward('map');
+
+  }
+
+  getMapIcon(leg: TransportLeg) {
+
+    return `../../../assets/img/${
+      leg.transportMode === ModeType.AIR ? 'Pin-Blue-Air.png' : 'Pin-Blue-Sea.png'
+    }`;
+  }
 }
-
-

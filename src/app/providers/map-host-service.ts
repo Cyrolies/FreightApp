@@ -58,7 +58,9 @@ export class MapHostService {
     });
   }
 
-  uninitialize() {}
+  uninitialize() {
+    this.bingMapsService.uninitialize();    
+  }
 
   centerViewOnLocation(location: Microsoft.Maps.Location) {
     this.map.setView({

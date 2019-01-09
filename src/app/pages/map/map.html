@@ -1,8 +1,18 @@
 <ion-header>
   <ion-toolbar color="primary">
+
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+        <ion-back-button *ngIf="returnToShipment"
+        (click)="navigateBack()">
+      </ion-back-button>
+      <!-- <ion-back-button *ngIf="returnToShipment"
+        [defaultHref]="'shipment-details/' + returnToShipment + '/' + routingTabIndex">
+      </ion-back-button> -->
+
+     <ion-menu-button *ngIf="!returnToShipment">
+     </ion-menu-button>
     </ion-buttons>
+
     <ion-title>Map</ion-title>
   </ion-toolbar>
 </ion-header>

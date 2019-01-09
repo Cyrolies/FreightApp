@@ -14,8 +14,13 @@ import { GlobalService } from '../../providers/global.service';
 })
 export class EventNotificationListPage implements OnInit, OnDestroy {
   notifications: ShipmentEvent[] = [];
+  public dataLoaded = false;
+
   private profileSubscription: any;
   private selectedProfile: Profile;
+  
+  private userName: string;
+  private pageIsInView = false;
 
   constructor(
     public actionSheetCtrl: ActionSheetController,
@@ -30,18 +35,43 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.pageIsInView = false;
+
     // Subscribing to selectedProfile$ serves to...
     //  i) give the current selectedProfile
-    //  ii) trigger the specified function (to reload data) whenever the profile changes.
+    //  ii) trigger the specified function (to reload data) whenever the profile changes (IF the page is in view).
     this.profileSubscription = this.userData.selectedProfile$
        .subscribe(selectedProfile => {
           this.selectedProfile = selectedProfile;
-          this.ionViewDidEnter();
+
+          if (this.pageIsInView) {
+            this.loadData();
+          }
+          
       });
   }
+  
+  ngOnDestroy() {
+    // prevent memory leak when component is destroyed
+    this.profileSubscription.unsubscribe();
+  }
 
-  async ionViewDidEnter() {
+  ionViewDidEnter() {
 
+    this.pageIsInView = true;
+
+    this.loadData();
+  }
+
+  ionViewDidLeave() {
+    this.pageIsInView = false;
+  }
+
+  async loadData() {
+
+    this.dataLoaded = false;
+   
+    // Validate CW code for selected profile:
     if (!(this.selectedProfile && this.selectedProfile.CargoWiseCode)) {
 
       this.presentToast('Could not determine selected Profile. Please logout and re-login.');
@@ -54,11 +84,45 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
     const spinner = await this.loading.create();
     await spinner.present();
 
-    // Retrieve x-months worth of notifications, according to spec in server config.
-    this.freightService.GetShipmentEvents(this.selectedProfile.CargoWiseCode)
+    // Validate username:
+    try {
+
+      this.userName = await this.userData.getUsername();
+      
+      if (!this.userName) {
+        spinner.dismiss();
+        this.onCannotObtainUserName();
+        return;
+      }
+    } catch {
+      spinner.dismiss();
+      this.onCannotObtainUserName();
+      return;
+    }
+
+    // Fetch data:
+    //  Retrieve x-months worth of notifications, according to spec in server config.
+    
+    this.freightService.GetShipmentEvents(this.selectedProfile.CargoWiseCode, this.userName)
       .subscribe((result: ShipmentEvent[]) => {
+
+        this.dataLoaded = true;
+
         this.notifications = result;
         this.notifications.sort(this.eventDateComparer).reverse();
+
+        // Extend Notification object with image properties to be consumed by html:
+        this.notifications.forEach((notification) => {
+
+          const eventCode = notification.EventCode.trim().toUpperCase();
+          const isLate = notification.ActualDate > notification.EstimatedDate;    
+          
+          notification['isImageAvailable'] = this.global.isMilestoneImageAvailable(eventCode);
+          notification['imageUrl'] = notification['isImageAvailable'] 
+            ? this.global.getMilestoneImageUrl(eventCode, isLate) 
+            : '';
+        });
+
 
         spinner.dismiss();
     }, (error) => {
@@ -70,6 +134,11 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
       console.log(error);
       this.presentToast('Failed to fetch Notifications from Server.');
     });
+  }
+
+  onCannotObtainUserName() {
+    this.presentToast('Could not obtain Username. Please logout and re-login.');
+    this.notifications = [];
   }
 
   eventDateComparer(a: ShipmentEvent, b: ShipmentEvent) {
@@ -88,11 +157,6 @@ export class EventNotificationListPage implements OnInit, OnDestroy {
     );
     
     await toast.present();
-  }
-
-  ngOnDestroy() {
-    // prevent memory leak when component is destroyed
-    this.profileSubscription.unsubscribe();
   }
 
 }

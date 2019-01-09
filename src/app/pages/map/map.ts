@@ -2,11 +2,12 @@ import { MyNavService } from './../../providers/my-nav.service';
 import { FreightApiService, ModeType, TransportLegResult, Position, Geography, TransportLeg } from './../../providers/freight-api.service';
 import { Component, ElementRef, ViewChild, ViewEncapsulation, OnDestroy, OnInit } from '@angular/core';
 
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 
 import { MapHostService } from '../../providers/map-host-service';
 import { BehaviorSubject } from 'rxjs';
 import * as moment from 'moment';
+import { BingMapsService } from '../../providers/bing-maps-service';
 
 
 @Component({
@@ -36,10 +37,13 @@ export class MapPage implements OnInit, OnDestroy {
 
   transportLeg: TransportLeg;
 
-
   fromPort: Microsoft.Maps.Location;
   toPort: Microsoft.Maps.Location;
   currentFreightLocation: Microsoft.Maps.Location;
+
+  returnToShipment: string;
+
+  readonly routingTabIndex = 2;
 
 
   @ViewChild('map') mapElement: ElementRef;
@@ -51,7 +55,8 @@ export class MapPage implements OnInit, OnDestroy {
     private mapHostService: MapHostService,
     private freightApiService: FreightApiService,
     public loading: LoadingController,
-    public navService: MyNavService
+    public navService: MyNavService,
+    public navCtrl: NavController
   ) { }
   
   ngOnInit() {
@@ -74,7 +79,9 @@ export class MapPage implements OnInit, OnDestroy {
 
   async ionViewDidEnter() {
 
-    this.transportLeg = this.navService.pop();
+    const params = this.navService.pop();
+    this.returnToShipment = params['returnToShipment'];
+    this.transportLeg = params['transportLeg'];
 
     if (!this.transportLeg) {
 
@@ -292,5 +299,11 @@ export class MapPage implements OnInit, OnDestroy {
     // Coordinates should not be exactly zero.
     return (Math.abs(latitude) < Number.EPSILON && Math.abs(longitude) < Number.EPSILON);
 
+  }
+
+  navigateBack() {
+
+    const returnUrl = `shipment-details/${this.returnToShipment}/${this.routingTabIndex}`;
+    this.navCtrl.navigateBack(returnUrl);
   }
 }

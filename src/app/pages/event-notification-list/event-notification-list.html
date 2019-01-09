@@ -13,7 +13,7 @@
 </ion-header>
 
 <ion-content class="backImg">
-  <ion-list class="backImg">
+  <ion-list style="background: transparent">
     <ion-grid fixed>
       <ion-row align-items-stretch>
 
@@ -23,8 +23,8 @@
               <ion-item detail="false" lines="none">
                   <ion-text style="padding-right: 5px!important" color="secondary">EVENT CODE</ion-text> 
                   <ion-text color="light"> {{notification.EventCode}}</ion-text>
-                  <ion-avatar slot="end" *ngIf="global.isMilestoneImageAvailable(notification.EventCode.trim().toUpperCase())">
-                      <img [src]="'assets/img/' + notification.EventCode.trim().toUpperCase() + 'Orange.png'">
+                  <ion-avatar slot="end" *ngIf="notification['isImageAvailable']">
+                      <img [src]="notification['imageUrl']">
                   </ion-avatar>
               </ion-item>
             </ion-card-header>
@@ -35,48 +35,54 @@
                 <ion-row>
                   <ion-col col-6>
                          
-                    <ion-item no-padding>
-                        <ion-label position="stacked" color="primary">Shipment No</ion-label>
-                        <ion-input [ngModel]="notification.ShipmentNo" readonly=true></ion-input>
+                    <ion-item no-padding text-wrap>
+                        <ion-label position="stacked" color="primary">Shipment No:</ion-label>
+                        <ion-item no-padding> {{notification.ShipmentNo}}</ion-item>
+                        <!-- <ion-input [ngModel]="notification.ShipmentNo" readonly=true></ion-input> -->
                     </ion-item>
                   </ion-col>
 
                   <ion-col col-6>
-                    <ion-item no-padding>
+                    <ion-item no-padding text-wrap>
                         <ion-label position="stacked" color="primary">Description</ion-label>
-                        <ion-input [ngModel]="notification.EventDescription" readonly=true></ion-input>
+                        <ion-item no-padding> {{notification.EventDescription}}</ion-item>
+                        <!-- <ion-input [ngModel]="notification.EventDescription" readonly=true></ion-input> -->
                     </ion-item>
                   </ion-col>
                 </ion-row>
 
                 <ion-row>
                   <ion-col col-6>
-                    <ion-item no-padding>
+                    <ion-item no-padding text-wrap>
                         <ion-label position="stacked" color="primary">Consignee Code</ion-label>
-                        <ion-input [ngModel]="notification.ConsigneeCode" readonly=true></ion-input>
+                        <ion-item no-padding> {{notification.ConsigneeCode}}</ion-item>
+                        <!-- <ion-input [ngModel]="notification.ConsigneeCode" readonly=true></ion-input> -->
                     </ion-item>
                   </ion-col>
 
                   <ion-col col-6>
-                    <ion-item no-padding>
+                    <ion-item no-padding text-wrap>
                         <ion-label position="stacked" color="primary">Consignor Code</ion-label>
-                        <ion-input [ngModel]="notification.ConsignorCode" readonly=true></ion-input>
+                        <ion-item no-padding> {{notification.ConsignorCode}}</ion-item>
+                        <!-- <ion-input [ngModel]="notification.ConsignorCode" readonly=true></ion-input> -->
                     </ion-item>
                   </ion-col>
                 </ion-row>
 
                 <ion-row>
                   <ion-col col-6>
-                    <ion-item no-padding>
+                    <ion-item no-padding text-wrap>
                         <ion-label position="stacked" color="primary">Estimated Date</ion-label>
-                        <ion-input [ngModel]="notification.EstimatedDate | date" readonly=true></ion-input>
+                        <ion-item no-padding> {{notification.EstimatedDate | date}}</ion-item>
+                        <!-- <ion-input [ngModel]="notification.EstimatedDate | date" readonly=true></ion-input> -->
                     </ion-item>
                   </ion-col>
 
                   <ion-col col-6>
-                    <ion-item no-padding>
+                    <ion-item no-padding text-wrap>
                         <ion-label position="stacked" color="primary">Actual Date</ion-label>
-                        <ion-input [ngModel]="notification.ActualDate | date" readonly=true></ion-input>
+                        <ion-item no-padding> {{notification.ActualDate | date}}</ion-item>
+                        <!-- <ion-input [ngModel]="notification.ActualDate | date" readonly=true></ion-input> -->
                     </ion-item>
                   </ion-col>
                 </ion-row>
@@ -91,4 +97,14 @@
       </ion-row>
     </ion-grid>
   </ion-list>
+
+  <ion-grid>
+      <ion-row justify-content-center align-items-center>
+          <ion-text color="mybackground" text-center
+          *ngIf = "this.dataLoaded && (this.notifications || []).length < 1">
+              There are currently no Notifications for this Profile.
+          </ion-text>
+      </ion-row>
+  </ion-grid>
+
 </ion-content>

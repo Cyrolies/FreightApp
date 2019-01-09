@@ -78,6 +78,9 @@ ion-card {
 
   ion-card-content ion-item {
     --border-style: none;
+
+    // Prevent unnecessary whitespace in cards:
+    --min-height: 0;
   }
 
   ion-card-content ion-item > ion-label {

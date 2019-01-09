@@ -49,30 +49,30 @@ export class AppComponent implements OnInit {
       title: 'Subscribe',
       url: '/subscriptions',
       icon: 'mail'
-    },
-    {
-      title: 'Test Map',
-      url: '/map',
-      icon: 'map',
-      data: {
-        transportLeg: { // Some data from S00975554
-          '$id': '20',
-          'estimatedArrival': '2018-11-16T15:29:00',
-          'estimatedDeparture': '2018-11-15T15:29:00',
-          'actualArrival': moment().subtract(1, 'days').toDate(), // null,
-          'actualDeparture': null,
-          'portOfDischarge': 'USSEA',
-          'portOfLoading': 'USTIW',
-          'voyageNumber': '0185E',
-          'vesselName': 'EVER SIGMA',
-          'transportMode': 0,
-          'legType': 2,
-          'carrier': null,
-          'customValues': null,
-          'VesselLloydsIMO': '9300439'
-        }        
-      }     
     }
+    // {
+    //   title: 'Test Map',
+    //   url: '/map',
+    //   icon: 'map',
+    //   data: {
+    //     transportLeg: { // Some data from S00975554
+    //       '$id': '20',
+    //       'estimatedArrival': '2018-11-16T15:29:00',
+    //       'estimatedDeparture': '2018-11-15T15:29:00',
+    //       'actualArrival': moment().subtract(1, 'days').toDate(), // null,
+    //       'actualDeparture': null,
+    //       'portOfDischarge': 'USSEA',
+    //       'portOfLoading': 'USTIW',
+    //       'voyageNumber': '0185E',
+    //       'vesselName': 'EVER SIGMA',
+    //       'transportMode': 0,
+    //       'legType': 2,
+    //       'carrier': null,
+    //       'customValues': null,
+    //       'VesselLloydsIMO': '9300439'
+    //     }        
+    //   }     
+    // }
   ];
 
   // appPages = [

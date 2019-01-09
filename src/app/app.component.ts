@@ -235,8 +235,12 @@ export class AppComponent implements OnInit {
   }
 
   async presentProfileSelectModal() {
+    
     const modal = await this.modalCtrl.create({
-      component: ProfileSelectModal
+      component: ProfileSelectModal,
+      componentProps: {
+        selectionRequired: false
+      }
     });
 
     modal.present();

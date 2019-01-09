@@ -1,3 +1,4 @@
+import { OrderLine } from './../../providers/freight-api.service';
 import { FreightApiService, Shipment, ModeType, TransportLeg } from '../../providers/freight-api.service';
 import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -66,6 +67,20 @@ export class ShipmentDetailPage {
 
          }
         spinner.dismiss();
+
+        // TODO: Delete test data.
+        // const line = new OrderLine();
+        // line.Description = 'This is an order line with a long name.';
+        // if (this.shipment.orders.length) {
+        //   if (!this.shipment.orders[0].OrderLines) {
+        //     this.shipment.orders[0].OrderLines = new Array<OrderLine>();
+        //   }
+        //   this.shipment.orders[0].OrderLines.push(line);
+        //   this.shipment.orders[0].OrderLines.push(line);
+        //   this.shipment.orders[0].OrderLines.push(line);
+        //   this.shipment.orders[0].OrderLines.push(line);
+        // }
+        
 
       }, error =>  spinner.dismiss());
     });

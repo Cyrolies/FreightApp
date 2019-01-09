@@ -181,6 +181,7 @@ export class MapPage implements OnInit, OnDestroy {
     } catch (err) {
 
       console.log(err);
+      spinner.dismiss();
 
       return;
     

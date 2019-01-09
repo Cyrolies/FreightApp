@@ -1,3 +1,4 @@
+import { GlobalService } from './../../providers/global.service';
 import { OrderLine } from './../../providers/freight-api.service';
 import { FreightApiService, Shipment, ModeType, TransportLeg } from '../../providers/freight-api.service';
 import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
@@ -27,6 +28,7 @@ export class ShipmentDetailPage {
     public route: ActivatedRoute,
     public navCtrl: NavController,
     private navService: MyNavService,
+    private global: GlobalService
   ) {}
 
   async ionViewDidEnter() {
@@ -115,6 +117,17 @@ export class ShipmentDetailPage {
 
   viewTransportLeg(leg: TransportLeg) {
 
+    // First check that we have a vessel identifier.
+    if (!this.getVesselIdentifier(leg)) {
+      
+      let identifierType = this.getVesselIdentifierType(leg.transportMode);
+      identifierType = identifierType ? identifierType : 'Vessel Identifier';
+
+      this.presentToast(`No ${identifierType}. This is required to load geolocation.`);
+
+      return;
+    }
+
     this.navService.push({
       transportLeg: leg,
       returnToShipment: this.shipment.ShipmentNo
@@ -129,5 +142,14 @@ export class ShipmentDetailPage {
     return `../../../assets/img/${
       leg.transportMode === ModeType.AIR ? 'Pin-Blue-Air.png' : 'Pin-Blue-Sea.png'
     }`;
+  }
+
+  async presentToast(toastMessage: string) {
+
+    const toast = await this.toastCtrl.create(
+      this.global.getToastConfiguration(toastMessage)
+    );
+    
+    await toast.present();
   }
 }

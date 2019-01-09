@@ -151,8 +151,8 @@ export class AppComponent implements OnInit {
 
       this.global.isDevice = this.platform.is('cordova');
 
-      this.isMenuDisabled = false || !environment.production;
-      this.isSplitViewDisabled = true; // || !environment.production;
+      this.isMenuDisabled = false || environment.production;
+      this.isSplitViewDisabled = false || environment.production;
     });
   }
 
@@ -172,7 +172,7 @@ export class AppComponent implements OnInit {
     this.events.subscribe('user:login', () => {
       this.updateLoggedInStatus(true);
 
-      // this.isSplitViewDisabled = false;
+      this.isSplitViewDisabled = false;
       this.isMenuDisabled = false;
     });
 

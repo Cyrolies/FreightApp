@@ -43,7 +43,7 @@ export class HomePage implements OnInit, OnDestroy {
     // TODO: Add transparency
     this.chartColors = [
       { 
-        backgroundColor: [this.getRgbString(this.colors.mybackground, 0.8), this.getRgbString(this.colors.secondary, 0.8)],
+        backgroundColor: [this.colors.mybackground, this.colors.secondary], // [this.getRgbString(this.colors.mybackground, 0.8), this.getRgbString(this.colors.secondary, 0.8)],
         borderColor: [this.colors.mybackground, this.colors.secondary]
       }
     ];

@@ -19,10 +19,14 @@ const routes: Routes = [
     path: 'shipment-details',
     loadChildren: './pages/shipment-detail/shipment-detail.module#ShipmentDetailModule'
   },
+  
+  // The Map component currently needs to be eager-loaded (should only be loaded once during the application).
+  // Thus don't include the following here (move to map-routing-module):
   {
-    path: 'test-map',
+    path: 'map',
     loadChildren: './pages/map/map.module#MapModule'
   },
+
   {
     path: 'event-notifications',
     loadChildren: './pages/event-notification-list/event-notification-list.module#EventNotificationListModule'

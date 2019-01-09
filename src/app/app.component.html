@@ -7,20 +7,7 @@
           <!-- <ion-icon slot="start" name="calendar" ></ion-icon> -->
         </ion-toolbar>
       </ion-header>
-      <ion-content>
-
-          <!-- <ion-list >
-                <ion-menu-toggle auto-hide="false" *ngFor="let p of tigersPages; let i = index">
-                <ion-item color="primary" button (click)="navigate(p.url)">
-                  <ion-icon slot="start" [name]="p.icon"></ion-icon>
-                  <ion-label>
-                    {{p.title}}
-                  </ion-label>
-                </ion-item>
-    
-              </ion-menu-toggle>
-            </ion-list> -->
-    
+      <ion-content>  
 
         <ion-list>
           <ion-list-header>
@@ -70,14 +57,14 @@
               </ion-item>
             </ion-menu-toggle>
 
-          <ion-menu-toggle auto-hide="false">
+          <!-- <ion-menu-toggle auto-hide="false">
             <ion-item button (click)="navigate('/support')">
               <ion-icon slot="start" name="help"></ion-icon>
               <ion-label>
                 Support
               </ion-label>
             </ion-item>
-          </ion-menu-toggle>
+          </ion-menu-toggle> -->
 
           <ion-menu-toggle auto-hide="false">
             <ion-item button (click)="logout()">

@@ -56,6 +56,8 @@ export class HomePage implements OnInit, OnDestroy {
   private profileSubscription: any;
   private selectedProfile: Profile;
 
+  private pageIsInView = false;
+
   // Pie Chart:
 
   @ViewChild(BaseChartDirective)
@@ -138,10 +140,20 @@ export class HomePage implements OnInit, OnDestroy {
   };
 
   ngOnInit() {
+
+    this.pageIsInView = false;
+
+    // Subscribing to selectedProfile$ serves to...
+    //  i) give the current selectedProfile
+    //  ii) trigger the specified function (to reload data) whenever the profile changes (IF the page is in view).
     this.profileSubscription = this.userData.selectedProfile$
        .subscribe(selectedProfile => {
           this.selectedProfile = selectedProfile;
-          this.ionViewWillEnter();
+          
+          if (this.pageIsInView) {
+            this.loadData();
+          }
+
        });
   }
   ngOnDestroy() {
@@ -149,7 +161,20 @@ export class HomePage implements OnInit, OnDestroy {
     this.profileSubscription.unsubscribe();
   }
 
-  async ionViewWillEnter() {
+  ionViewDidEnter() {
+
+    this.pageIsInView = true;
+
+    this.loadData();
+  }
+
+  ionViewDidLeave() {
+    this.pageIsInView = false;
+  }
+
+  async loadData() {
+
+    this.dataLoaded = false;
 
     if (!(this.selectedProfile && this.selectedProfile.CargoWiseCode)) {
 
@@ -167,7 +192,6 @@ export class HomePage implements OnInit, OnDestroy {
     const fromDate = format(subMonths(new Date().toISOString(), 6), 'yyyy-MM-dd');
     const toDate = format(new Date().toISOString(), 'yyyy-MM-dd');
 
-    this.dataLoaded = false;
     const spinner = await this.loading.create();
     spinner.present().then(() => {
        this.freightService

@@ -1,3 +1,4 @@
+import { TransportLeg } from './providers/freight-api.service';
 import { environment } from './../environments/environment.prod';
 import { NetworkService } from './providers/network.service';
 import { MyNavService } from './providers/my-nav.service';
@@ -13,6 +14,7 @@ import { ProfileSelectModal } from './pages/profile-select-modal/profile-select-
 
 import * as moment from 'moment'; // TODO: remove;
 import { GlobalService } from './providers/global.service';
+import { truncate } from 'fs';
 
 @Component({
   selector: 'app-root',
@@ -50,24 +52,26 @@ export class AppComponent implements OnInit {
     },
     {
       title: 'Test Map',
-      url: '/test-map',
+      url: '/map',
       icon: 'map',
-      data:     { // Some data from S00975554
-        '$id': '20',
-        'estimatedArrival': '2018-11-16T15:29:00',
-        'estimatedDeparture': '2018-11-15T15:29:00',
-        'actualArrival': moment().subtract(1, 'days').toDate(), // null,
-        'actualDeparture': null,
-        'portOfDischarge': 'USSEA',
-        'portOfLoading': 'USTIW',
-        'voyageNumber': '0185E',
-        'vesselName': 'EVER SIGMA',
-        'transportMode': 0,
-        'legType': 2,
-        'carrier': null,
-        'customValues': null,
-        'VesselLloydsIMO': '9300439'
-      }
+      data: {
+        transportLeg: { // Some data from S00975554
+          '$id': '20',
+          'estimatedArrival': '2018-11-16T15:29:00',
+          'estimatedDeparture': '2018-11-15T15:29:00',
+          'actualArrival': moment().subtract(1, 'days').toDate(), // null,
+          'actualDeparture': null,
+          'portOfDischarge': 'USSEA',
+          'portOfLoading': 'USTIW',
+          'voyageNumber': '0185E',
+          'vesselName': 'EVER SIGMA',
+          'transportMode': 0,
+          'legType': 2,
+          'carrier': null,
+          'customValues': null,
+          'VesselLloydsIMO': '9300439'
+        }        
+      }     
     }
   ];
 
@@ -148,7 +152,7 @@ export class AppComponent implements OnInit {
       this.global.isDevice = this.platform.is('cordova');
 
       this.isMenuDisabled = false || !environment.production;
-      this.isSplitViewDisabled = false || !environment.production;
+      this.isSplitViewDisabled = true; // || !environment.production;
     });
   }
 
@@ -168,7 +172,7 @@ export class AppComponent implements OnInit {
     this.events.subscribe('user:login', () => {
       this.updateLoggedInStatus(true);
 
-      this.isSplitViewDisabled = false;
+      // this.isSplitViewDisabled = false;
       this.isMenuDisabled = false;
     });
 

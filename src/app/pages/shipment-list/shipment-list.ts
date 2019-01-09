@@ -42,6 +42,8 @@ export class ShipmentListPage implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.initialiseDatePickers();
+
     // Subscribing to selectedProfile$ serves to...
     //  i) give the current selectedProfile
     //  ii) trigger the specified function (to reload data) whenever the profile changes.
@@ -58,10 +60,16 @@ export class ShipmentListPage implements OnInit, OnDestroy {
        this.presentToast('Could not determine selected Profile. Please logout and re-login.');
        return;
     }
-    this.myPickerFrom.value = format(new Date(), 'yyyy-MM-dd');
-    this.filters.datefrom = format(new Date(), 'yyyy-MM-dd');
-    this.myPickerTo.value = format(new Date(), 'yyyy-MM-dd');
-    this.filters.dateto = format(new Date(), 'yyyy-MM-dd');
+  }
+
+  initialiseDatePickers() {
+    const today = new Date();
+    const sixMonthsAgo = (new Date()).setMonth(today.getMonth() - 6);
+
+    this.myPickerFrom.value = format(sixMonthsAgo, 'yyyy-MM-dd');
+    this.filters.datefrom = format(sixMonthsAgo, 'yyyy-MM-dd');
+    this.myPickerTo.value = format(today, 'yyyy-MM-dd');
+    this.filters.dateto = format(today, 'yyyy-MM-dd');
   }
 
   async listShipments(form: NgForm) {

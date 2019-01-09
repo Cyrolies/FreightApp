@@ -7,6 +7,7 @@ import { plainToClass, Expose, Exclude, Type } from 'class-transformer';
 import { IsNotEmpty, IsEnum } from 'class-validator';
 import * as pbi from 'adal-angular';
 import { stringify } from '../../../node_modules/@angular/core/src/util';
+import { forEach } from '@angular/router/src/utils/collection';
 
 
 export class CargoWiseFilter {
@@ -100,6 +101,12 @@ export class ShipmentEvent {
 
 @Exclude()
 export class FreightMilestone {
+
+  constructor(
+  ) { // this.milestonesNext = this.getNextMilestones(); 
+  }
+  @Expose()
+  milestonesNext: MilestonesNext;
   @Expose()
   Status: string;
   @Expose()
@@ -155,6 +162,59 @@ export class FreightMilestone {
   @Expose()
   @Type(() => Date)
   JS_SystemCreateTimeUtc: Date;
+  public getNextMilestones (
+
+  ) {
+    const nextMStones = new MilestonesNext();
+    if (this.ActualDelivery != null && this.ActualDelivery.length > 0) {
+      nextMStones.CompletedMilestoneCode = 'ATD';
+      nextMStones.CompletedMilestoneDescription = 'Actual Delivery'; 
+      nextMStones.CompletedActualDate = this.ActualDelivery;
+   } else if (this.TruckerNotified != null && this.TruckerNotified.length > 0) {
+    nextMStones.CompletedMilestoneCode = 'ATA';
+    nextMStones.CompletedMilestoneDescription = 'Truck Notified'; 
+    nextMStones.CompletedActualDate = this.TruckerNotified;
+    nextMStones.NextMilestoneCode = 'ATD';
+    nextMStones.NextMilestoneDescription = 'Actual Delivery';
+   } else if (this.ImportCustomsClearance != null && this.ImportCustomsClearance.length > 0) {
+    nextMStones.CompletedMilestoneCode = 'CLR';
+    nextMStones.CompletedMilestoneDescription = 'Customs Cleared'; 
+    nextMStones.CompletedActualDate = this.ImportCustomsClearance;
+    nextMStones.NextMilestoneCode = 'DCA';
+    nextMStones.NextMilestoneDescription = 'Truck Notified';
+  } else if (this.PortOfDischarge != null && this.PortOfDischarge.length > 0) {
+    nextMStones.CompletedMilestoneCode = 'POD';
+    nextMStones.CompletedMilestoneDescription = 'Actual Departure'; 
+    nextMStones.CompletedActualDate = this.PortOfDischarge;
+    nextMStones.NextMilestoneCode = 'CLR';
+    nextMStones.NextMilestoneDescription = 'Customs Cleared';
+   } else if (this.ActualDeparture != null && this.ActualDeparture.length > 0) {
+    nextMStones.CompletedMilestoneCode = 'POD';
+    nextMStones.CompletedMilestoneDescription = 'Actual Departure'; 
+    nextMStones.CompletedActualDate = this.PortOfDischarge;
+    nextMStones.NextMilestoneCode = 'CLR';
+    nextMStones.NextMilestoneDescription = 'Customs Cleared';
+   } else if (this.Pickup != null && this.Pickup.length > 0) {
+    nextMStones.CompletedMilestoneCode = 'PCK';
+    nextMStones.CompletedMilestoneDescription = 'Pickup'; 
+    nextMStones.CompletedActualDate = this.Pickup;
+    nextMStones.NextMilestoneCode = 'ATD';
+    nextMStones.NextMilestoneDescription = 'Actual Departure';
+   } else if (this.CargoBooked != null && this.CargoBooked.length > 0) {
+    nextMStones.CompletedMilestoneCode = 'ADD';
+    nextMStones.CompletedMilestoneDescription = 'Cargo Booked'; 
+    nextMStones.CompletedActualDate = this.CargoBooked;
+    nextMStones.NextMilestoneCode = 'PCK';
+    nextMStones.NextMilestoneDescription = 'Pickup';
+   } else {
+    nextMStones.CompletedMilestoneCode = 'ADD';
+    nextMStones.CompletedMilestoneDescription = 'Cargo Booked'; 
+    nextMStones.CompletedActualDate = this.CargoBooked;
+    nextMStones.NextMilestoneCode = 'PCK';
+    nextMStones.NextMilestoneDescription = 'Pickup';
+   }
+   this.milestonesNext = nextMStones;
+  }
 }
 
 @Exclude()
@@ -804,6 +864,22 @@ export class PortDetail {
     Code: string;
 }
 
+@Exclude()
+export class MilestonesNext {
+    @Expose()
+    CompletedMilestoneCode: string;
+    @Expose()
+    CompletedMilestoneDescription: string;
+    @Expose()
+    CompletedActualDate: string;
+    @Expose()
+    NextMilestoneCode: string;
+    @Expose()
+    NextMilestoneDescription: string;
+    @Expose()
+    NextEstimatedDate: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -862,7 +938,8 @@ export class FreightApiService {
     orderNo: string,
     fromDate: string,
     toDate: string,
-    includeOpenShipments: boolean): Observable<FreightMilestone[]> {
+    includeOpenShipments: boolean,
+    isShipmentScreen: boolean): Observable<FreightMilestone[]> {
 
     console.log('FreightApiService: Get shipments.');
 
@@ -872,8 +949,10 @@ export class FreightApiService {
       filters.push(new CargoWiseFilter('cargowisecode', 'cargowisecode', cargoWiseCode));
       filters.push(new CargoWiseFilter('shipmentNumber', 'shipmentNumber', shipmentNo));
       filters.push(new CargoWiseFilter('orderNumber', 'orderNumber', orderNo));
-      filters.push(new CargoWiseFilter('DateFrom', 'DateFrom', fromDate !== '' ? fromDate['year'].text + '-' + fromDate['month'].text + '-' + fromDate['day'].text : ''));
-      filters.push(new CargoWiseFilter('DateTo', 'DateTo', toDate !== '' ? toDate['year'].text + '-' + toDate['month'].text + '-' + toDate['day'].text : ''));
+      filters.push(new CargoWiseFilter('DateFrom', 'DateFrom', fromDate));
+      filters.push(new CargoWiseFilter('DateTo', 'DateTo', toDate));
+     
+      // filters.push(new CargoWiseFilter('DateTo', 'DateTo', toDate !== '' ? toDate['year'].text + '-' + toDate['month'].text + '-' + toDate['day'].text : ''));
       filters.push(new CargoWiseFilter('OpenShipments', 'OpenShipments', includeOpenShipments ? '1' : '0'));
 
     const params = new HttpParams()
@@ -883,7 +962,14 @@ export class FreightApiService {
     .get(endpoint, {params})
     .pipe(map((result: object[]) =>  {
 
-      return plainToClass(FreightMilestone, result['Items']);
+      // const freightmilestones: FreightMilestone[] = new Array<FreightMilestone>();
+      const freightmilestones = plainToClass(FreightMilestone, result['Items']);
+      if (isShipmentScreen) {
+      freightmilestones.forEach ( (element) => {
+        element.getNextMilestones();
+      });
+     }
+      return freightmilestones;
     }));
   }
 

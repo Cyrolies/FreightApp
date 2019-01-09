@@ -46,4 +46,64 @@ page-shipment-list {
     background-color: white;
     padding:0;
   }
+  .ion-avatar {
+    display: flex!important;
+    flex-direction: column!important;    /* align flex items vertically */
+    justify-content: center;   /* center items vertically, in this case */
+    align-items: center;       /* center single-line items horizontally, in this case */
+    align-content: center;     /* center multi-line items horizontally, in this case */
+    width:100% !important;  
+    height : 100% !important;  
+    max-width: 30px !important;  //any size
+    max-height: 30px !important; //any size 
+}
+.item-avatar  {     
+  width:100% !important;  
+  height : 100% !important;  
+  max-width: 30px !important;  //any size
+  max-height: 30px !important; //any size 
+  align-content: center;
+  padding:0;
+  }
+  .col-milestone  {     
+    width:100% !important;  
+    // height : 100% !important;  
+    max-width: 33% !important;  //any size
+    // max-height: 30px !important; //any size 
+    padding:0;
+    }
+  .item-middle-avatar  {     
+    width:100% !important;  
+    height : 100% !important;  
+    max-width: 20px !important;  //any size
+    max-height: 20px !important; //any size 
+    }
+  .text-avatar
+  {
+   // width:5% !important;  
+    height : 5% !important;  
+  //  max-width: 5% !important;  //any size
+    max-height: 5% !important; //any size 
+    padding:0;
+  }
+  .text-row
+  {
+    width:100% !important;  
+    height : 100% !important;  
+    max-width: 33% !important;  //any size
+    max-height: 5px !important; //any size 
+    font-size: xx-small;
+    align-content: center;
+    padding:0;
+  }
+  .text-middle-row
+  {
+    width:100% !important;  
+    height : 100% !important;  
+    max-width: 20% !important;  //any size
+    max-height: 5px !important; //any size 
+    font-size: xx-small;
+    align-content: center;
+    padding:0;
+  }
 }

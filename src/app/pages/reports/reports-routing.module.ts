@@ -7,6 +7,18 @@ const routes: Routes = [
   {
     path: '',
     component: ReportsPage
+  },
+  {
+    path: 'freightspend',
+    loadChildren: './freightspend/freightspend.module#FreightSpendModule'
+  },
+  {
+    path: 'freightshipment',
+    loadChildren: './freightshipment/freightshipment.module#FreightShipmentModule'
+  },
+  {
+    path: 'freightmilestone',
+    loadChildren: './freightmilestone/freightmilestone.module#FreightMilestoneModule'
   }
 ];
 

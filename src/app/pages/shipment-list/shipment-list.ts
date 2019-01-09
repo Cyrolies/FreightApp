@@ -99,7 +99,7 @@ export class ShipmentListPage implements OnInit, OnDestroy {
   }
 
   goToShipmentDetail(FreightMilestone: any) {
-    this.navCtrl.navigateForward('shipment-details/' + FreightMilestone.ShipmentRef);
+    this.navCtrl.navigateForward(`shipments/details/${FreightMilestone.ShipmentRef}`);
   }
 
   async presentToast(toastMessage: string) {

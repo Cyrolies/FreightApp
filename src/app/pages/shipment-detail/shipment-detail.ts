@@ -1,8 +1,8 @@
 import { GlobalService } from './../../providers/global.service';
 import { OrderLine } from './../../providers/freight-api.service';
 import { FreightApiService, Shipment, ModeType, TransportLeg } from '../../providers/freight-api.service';
-import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, ViewEncapsulation, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { HttpClient } from '@angular/common/http';
 import { ToastController, LoadingController, NavController, ActionSheetController, NavParams, Events, Tabs } from '@ionic/angular';
@@ -15,8 +15,9 @@ import { MyNavService } from '../../providers/my-nav.service';
   styleUrls: ['./shipment-detail.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ShipmentDetailPage {
+export class ShipmentDetailPage implements OnInit, OnDestroy {
   public shipment: Shipment;
+  public shipmentNumber: string;
   @ViewChild(Tabs) tabRef: Tabs;
   constructor(
     public actionSheetCtrl: ActionSheetController,
@@ -28,16 +29,33 @@ export class ShipmentDetailPage {
     public route: ActivatedRoute,
     public navCtrl: NavController,
     private navService: MyNavService,
-    private global: GlobalService
+    private global: GlobalService,
+    public router: Router
   ) {}
+
+
+  ngOnInit() {
+    // Only set initial tab once in the component's lifecycle.
+    //  Thereafter, preserve the tab selection.
+
+    if (this.tabRef) {
+      this.tabRef.select(0);
+    }
+  }
+
+  ngOnDestroy() {
+    console.log('Detail page destroyed.');
+  }
 
   async ionViewDidEnter() {
 
-    if (this.tabRef) {
+    this.shipmentNumber = this.route.snapshot.paramMap.get('ShipmentRef');
 
-      const tabIndex = this.route.snapshot.paramMap.get('tabIndex');
-      this.tabRef.select(tabIndex == null ? 0 : +tabIndex);
-    }
+    // if (this.tabRef) {
+
+    //   const tabIndex = this.route.snapshot.paramMap.get('tabIndex');
+    //   this.tabRef.select(tabIndex == null ? 0 : +tabIndex);
+    // }
 
     // TODO: Return to saved scroll position (https://github.com/joanroig/Ionic4-restore-scroll-position).
 
@@ -45,7 +63,7 @@ export class ShipmentDetailPage {
 
     spinner.present().then(() => {
       
-      this.freightApiService.GetShipment(this.route.snapshot.paramMap.get('ShipmentRef')).subscribe((result: Shipment) => {
+      this.freightApiService.GetShipment(this.shipmentNumber).subscribe((result: Shipment) => {
 
         this.shipment =  result;
          if (this.shipment != null) {
@@ -119,7 +137,7 @@ export class ShipmentDetailPage {
 
     // First check that we have a vessel identifier.
     if (!this.getVesselIdentifier(leg)) {
-      
+
       let identifierType = this.getVesselIdentifierType(leg.transportMode);
       identifierType = identifierType ? identifierType : 'Vessel Identifier';
 
@@ -133,8 +151,9 @@ export class ShipmentDetailPage {
       returnToShipment: this.shipment.ShipmentNo
     });
 
-    this.navCtrl.navigateForward('map');
-
+    // The first option doesn't seem to allow navigatin back and fourth:
+    //    this.navCtrl.navigateForward(['./map'], true, { relativeTo: this.route});
+    this.navCtrl.navigateForward(`/shipments/details/${this.shipmentNumber}/map`);
   }
 
   getMapIcon(leg: TransportLeg) {

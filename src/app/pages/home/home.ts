@@ -5,7 +5,7 @@ import { Component, ViewEncapsulation, ViewChild, OnDestroy, OnInit } from '@ang
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import 'chartjs-plugin-labels';
-
+import { format, formatDistance, formatRelative, subMonths} from 'date-fns';
 import { UserData } from '../../providers/user-data';
 import { round } from 'lodash';
 import { BaseChartDirective } from 'ng2-charts';
@@ -164,8 +164,8 @@ export class HomePage implements OnInit, OnDestroy {
     const shipmentNo = '';
     const orderNo = '';
     const openShipments = true;
-    const fromDate = moment().subtract(6, 'months').toDate();
-    const toDate = moment().toDate();
+    const fromDate = format(subMonths(new Date().toISOString(), 6), 'yyyy-MM-dd');
+    const toDate = format(new Date().toISOString(), 'yyyy-MM-dd');
 
     this.dataLoaded = false;
     const spinner = await this.loading.create();
@@ -174,9 +174,10 @@ export class HomePage implements OnInit, OnDestroy {
        .GetShipments(cargoWiseCode, 
           shipmentNo,
           orderNo,
-          fromDate.toISOString(),
-          toDate.toISOString(),
-          openShipments
+          fromDate,
+          toDate,
+          openShipments,
+          false
         ).subscribe((shipments: FreightMilestone[]) => {
         
         this.dataLoaded = true;

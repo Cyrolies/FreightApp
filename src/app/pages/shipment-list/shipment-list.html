@@ -49,49 +49,81 @@
         </ion-grid>
     <ion-grid fixed>
       <ion-row align-items-stretch>
-        <ion-col size="12" size-md="6" *ngFor="let freightmilestone of freightmilestones">
+        <ion-col text-right size="12" size-md="6" *ngFor="let freightmilestone of freightmilestones">
           <ion-card class="shipment-card" (click)="goToShipmentDetail(freightmilestone)" >
               
               <ion-card-header>
                   <ion-row align-items-stretch>
                       <ion-col text-left size="auto">
                           <ion-item>
-                          {{freightmilestone.ShipmentRef}}
+                            <ion-text style="font: bold!important;font-size: small" color="primary"> {{freightmilestone.ShipmentRef}}</ion-text>   
                           </ion-item>
                       </ion-col>
-                      <ion-col text-right size="auto">
+                      <!-- <ion-col text-center size="auto">
                           <ion-item>
-                            Mode:{{freightmilestone.TransportMode}}
-                              </ion-item>
+                                <ion-text style="font: bold!important" color="primary">Mode : </ion-text> 
+                                <ion-text color="primary"> &nbsp;{{freightmilestone.TransportMode}}</ion-text>   
+                          </ion-item>
+                      </ion-col> -->
+                      <ion-col text-right size="auto">
+                            <ion-grid >
+                             <ion-row >
+                               <ion-col class="col-milestone" text-left size="auto">
+                                 <ion-avatar class="item-avatar">
+                                    <img  [src]="'../../../assets/img/' + freightmilestone.milestonesNext.CompletedMilestoneCode + '.png'">
+                                 </ion-avatar>
+                                </ion-col>
+                                <ion-col text-center size="auto" >
+                                    <ion-avatar class="item-middle-avatar" *ngIf="freightmilestone.milestonesNext.NextMilestoneCode">
+                                     <img  src="../../../assets/img/rightarrow.png">
+                                    </ion-avatar>
+                                </ion-col>
+                                <ion-col class="col-milestone" text-right size="auto" >
+                                    <ion-avatar class="item-avatar" *ngIf="freightmilestone.milestonesNext.NextMilestoneCode">   
+                                     <img  [src]="'../../../assets/img/' + freightmilestone.milestonesNext.NextMilestoneCode + '.png'">
+                                    </ion-avatar>
+                                </ion-col>
+                            </ion-row>
+                            <ion-row >
+                                <ion-col class="text-row" text-left size="auto">
+                                        {{freightmilestone.milestonesNext.CompletedMilestoneDescription}}<br>{{freightmilestone.milestonesNext.CompletedActualDate}}
+                                </ion-col>
+                                <ion-col text-center size="auto" >
+                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </ion-col>
+                                <ion-col class="text-row" text-right size="auto" *ngIf="freightmilestone.milestonesNext.NextMilestoneCode">
+                                    {{freightmilestone.milestonesNext.NextMilestoneDescription}}
+                                </ion-col>
+                            </ion-row>
+                            </ion-grid>
                       </ion-col>
-                      
                     </ion-row> 
             </ion-card-header>
          
           
             <ion-card-content>
                
-                <ion-row class="shipment-card-row">
+                <ion-row>
                     <ion-col text-left size="auto">
-                        <ion-item>
-                        Consignee:{{freightmilestone.Consignee}}
+                        <ion-item >
+                        Consignee : {{freightmilestone.Consignee}}
                         </ion-item>
                     </ion-col>
                     <ion-col text-center size="auto">
-                        <ion-item>
-                        Consignor: {{freightmilestone.Shipper}}
+                        <ion-item >
+                        Consignor : {{freightmilestone.Shipper}}
                         </ion-item>
                     </ion-col>
                   </ion-row> 
-                  <ion-row class="shipment-card-row">
+                  <ion-row>
                       <ion-col text-left size="auto">
-                        <ion-item>
-                        POL:{{freightmilestone.PortOfLoading}}
+                        <ion-item >
+                        POL : {{freightmilestone.PortOfLoading}}
                         </ion-item>
                       </ion-col>
                       <ion-col text-center size="auto">
-                        <ion-item>
-                        POD: {{freightmilestone.PortOfDischarge}}  
+                        <ion-item >
+                        POD : {{freightmilestone.PortOfDischarge}}  
                         </ion-item>
                       </ion-col>
                   </ion-row> 

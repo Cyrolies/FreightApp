@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
     },
     {
       title: 'Shipments',
-      url: '/shipment-search',
+      url: '/shipments',
       icon: 'boat'
     },
     {

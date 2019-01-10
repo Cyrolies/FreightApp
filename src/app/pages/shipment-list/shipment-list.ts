@@ -61,7 +61,7 @@ export class ShipmentListPage implements OnInit, OnDestroy {
   async ionViewDidEnter() {
 
     if (!(this.selectedProfile && this.selectedProfile.CargoWiseCode)) {
-       this.presentToast('Could not determine selected Profile. Please logout and re-login.');
+       this.presentToast('Could not determine selected Profile. Please close the app and re-login.');
        return;
     }
   }

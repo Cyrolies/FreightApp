@@ -66,10 +66,9 @@ export class MapPage implements OnInit, OnDestroy {
       this._mapHostInitialisedSource.next(true);
     }, (error) => {
       this._mapHostInitialisedSource.next(false);
-    });
-    
-    // this.mapHostInitialized = true;
+    });    
   }
+  
   ngOnDestroy() {
 
     if (this._mapHostInitialisedSource.value === true) {
@@ -181,6 +180,7 @@ export class MapPage implements OnInit, OnDestroy {
     } catch (err) {
 
       console.log(err);
+      spinner.dismiss();
 
       return;
     

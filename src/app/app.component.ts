@@ -7,7 +7,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { Events, MenuController, Platform, ModalController } from '@ionic/angular';
+import { Events, MenuController, Platform, ModalController, NavController } from '@ionic/angular';
 
 import { UserData } from './providers/user-data';
 import { ProfileSelectModal } from './pages/profile-select-modal/profile-select-modal';
@@ -132,7 +132,8 @@ export class AppComponent implements OnInit {
     public modalCtrl: ModalController,
     private navService: MyNavService,
     private network: NetworkService,
-    private global: GlobalService
+    private global: GlobalService,
+    private navCtrl: NavController
   ) {
     this.initializeApp();
   }
@@ -151,8 +152,8 @@ export class AppComponent implements OnInit {
 
       this.global.isDevice = this.platform.is('cordova');
 
-      this.isMenuDisabled = false || !environment.production;
-      this.isSplitViewDisabled = true; // || !environment.production;
+      this.isMenuDisabled = false || environment.production;
+      this.isSplitViewDisabled = false || environment.production;
     });
   }
 
@@ -172,7 +173,7 @@ export class AppComponent implements OnInit {
     this.events.subscribe('user:login', () => {
       this.updateLoggedInStatus(true);
 
-      // this.isSplitViewDisabled = false;
+      this.isSplitViewDisabled = false;
       this.isMenuDisabled = false;
     });
 
@@ -210,7 +211,8 @@ export class AppComponent implements OnInit {
       this.navService.push(data);
     }
 
-    return this.router.navigateByUrl(url);
+    return this.navCtrl.navigateRoot(url);
+    // return this.router.navigateByUrl(url);
   }
 
   logout() {
@@ -233,8 +235,12 @@ export class AppComponent implements OnInit {
   }
 
   async presentProfileSelectModal() {
+    
     const modal = await this.modalCtrl.create({
-      component: ProfileSelectModal
+      component: ProfileSelectModal,
+      componentProps: {
+        selectionRequired: false
+      }
     });
 
     modal.present();

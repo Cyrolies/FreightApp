@@ -72,7 +72,7 @@ export class FreightMilestonePage implements OnInit, OnDestroy {
     // Validate CW code for selected profile:
     if (!(this.selectedProfile && this.selectedProfile.CargoWiseCode)) {
 
-      this.presentToast('Could not determine selected Profile. Please logout and re-login.');
+      this.presentToast('Could not determine selected Profile. Please close the app and re-login.');
       return;
     }
 

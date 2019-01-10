@@ -40,7 +40,7 @@ export class MapHostService {
       showDashboard: false,
       showZoomButtons: true,
       enableClickableLogo: false,
-      zoom: 0.5
+      zoom: 1
     }).then((map) => {
 
       console.log(`Map returned by BingMapService.`);
@@ -72,7 +72,7 @@ export class MapHostService {
     
     const rect = Microsoft.Maps.LocationRect.fromLocations(locations);
     
-    this.map.setView({ bounds: rect, padding: 0 });
+    this.map.setView({ bounds: rect });
   }
 
   addStandardPushpin(location: Microsoft.Maps.Location, 

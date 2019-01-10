@@ -2,10 +2,15 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { ShipmentListPage } from './shipment-list';
+
 const routes: Routes = [
-  {
-    path: '',
+  { 
+    path: '', 
     component: ShipmentListPage
+  },
+  {
+    path: 'details',
+    loadChildren: '../shipment-detail/shipment-detail.module#ShipmentDetailModule'
   }
 ];
 

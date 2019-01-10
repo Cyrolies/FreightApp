@@ -1,6 +1,6 @@
 import { TransportLeg } from './providers/freight-api.service';
 import { environment } from './../environments/environment.prod';
-import { NetworkService } from './providers/network.service';
+// import { NetworkService } from './providers/network.service';
 import { MyNavService } from './providers/my-nav.service';
 import { AboutModal } from './pages/about-modal/about-modal';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
@@ -131,7 +131,7 @@ export class AppComponent implements OnInit {
     private statusBar: StatusBar,
     public modalCtrl: ModalController,
     private navService: MyNavService,
-    private network: NetworkService,
+    // private network: NetworkService,
     private global: GlobalService,
     private navCtrl: NavController
   ) {
@@ -148,7 +148,7 @@ export class AppComponent implements OnInit {
       this.statusBar.styleDefault();    
       this.splashScreen.hide();
 
-      this.network.initializeNetworkEvents();
+      // this.network.initializeNetworkEvents();
 
       this.global.isDevice = this.platform.is('cordova');
 

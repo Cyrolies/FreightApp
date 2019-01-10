@@ -13,6 +13,7 @@ import { FreightApiService, ApplicationUser } from '../../providers/freight-api.
 import { GlobalService } from '../../providers/global.service';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Network } from '@ionic-native/network/ngx';
 
 
 @Component({
@@ -41,7 +42,7 @@ export class LoginPage implements OnInit {
     public loading: LoadingController,
     public toastCtrl: ToastController,
     public modalCtrl: ModalController,
-    private network: NetworkService,
+    private network: Network,
     private global: GlobalService,
     private screenOrientation: ScreenOrientation
   ) { }
@@ -105,6 +106,8 @@ export class LoginPage implements OnInit {
 
       await spinner.present();
 
+      try {
+
         // If running on device, first check if has internet connectivity:
         if (this.global.isDevice && !this.isUserOnline()) {
 
@@ -151,6 +154,14 @@ export class LoginPage implements OnInit {
           this.onLoginFailed();
 
         });
+
+      } catch (error) {
+        spinner.dismiss();
+
+        this.presentToast('Login failed.');
+
+        this.onLoginFailed();
+      }
     }
   }
 
@@ -175,7 +186,7 @@ export class LoginPage implements OnInit {
 
   isUserOnline(): boolean {
 
-    const isOnline = this.network.isOnline();
+    const isOnline = this.isOnline();
 
     if (isOnline) {
 
@@ -187,6 +198,10 @@ export class LoginPage implements OnInit {
            
       return false;
     } 
+  }
+
+  public isOnline() {
+    return this.network.type !== 'none';
   }
 
   async presentToast(toastMessage: string) {

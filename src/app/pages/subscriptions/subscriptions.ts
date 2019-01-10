@@ -71,7 +71,7 @@ export class SubscriptionsPage {
   }
 
   onCannotObtainUserName() {
-    this.presentToast('Could not obtain Username. Please logout and re-login.');
+    this.presentToast('Could not obtain Username. Please close the app and re-login.');
     this.topics = [];
   }
 

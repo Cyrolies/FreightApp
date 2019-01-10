@@ -19,6 +19,10 @@ import { format } from 'date-fns';
 })
 export class ShipmentListPage implements OnInit, OnDestroy {
   freightmilestones: FreightMilestone[] = new Array<FreightMilestone>();
+  displayedFreightmilestones: FreightMilestone[] = new Array<FreightMilestone>();
+  readonly chunkSize = 10;
+  isAllDataDisplayed = true;
+
   public filters: ShipmentFilters = { cargowisecode: '', shipmentno: '', orderno: '', datefrom: '', dateto: '', openshipments: true };
   private profileSubscription: any;
   private selectedProfile: Profile;
@@ -73,6 +77,7 @@ export class ShipmentListPage implements OnInit, OnDestroy {
   }
 
   async listShipments(form: NgForm) {
+
     const spinner = await this.loading.create();
   
     spinner.present().then(() => {
@@ -81,7 +86,13 @@ export class ShipmentListPage implements OnInit, OnDestroy {
       this.filters.datefrom, // !== '' ? format(this.filters.datefrom, 'yyyy-MM-dd') : '', //  (this.filters.datefrom['year'].text + '-' + this.filters.datefrom['month'].text + '-' + this.filters.datefrom['day'].text) : '',
       this.filters.dateto, // !== '' ? format(this.filters.dateto, 'yyyy-MM-dd') : '', // (this.filters.dateto['year'].text + '-' + this.filters.dateto['month'].text + '-' + this.filters.dateto['day'].text) : '',
       this.filters.openshipments, true).subscribe((result: FreightMilestone[]) => {
+
     this.freightmilestones =  result;
+
+    this.displayedFreightmilestones = [];
+    this.isAllDataDisplayed = false;
+    this.displayMoreData();
+
     if (this.freightmilestones == null) {
       spinner.dismiss();
       this.presentToast('No shipments found try different filters');
@@ -89,6 +100,28 @@ export class ShipmentListPage implements OnInit, OnDestroy {
     spinner.dismiss();
       }, error =>  spinner.dismiss());
     });
+  }
+
+   displayMoreData(event?) {
+
+    setTimeout(() => { // Required, since displayMoreData must be async.
+
+      const nextItem = this.displayedFreightmilestones.length;
+      const lastItem = Math.min(nextItem + this.chunkSize - 1, this.freightmilestones.length - 1);
+      const chunk = this.freightmilestones.slice(nextItem, lastItem + 1);
+  
+      Array.prototype.push.apply(this.displayedFreightmilestones, chunk);
+  
+      if (this.displayedFreightmilestones.length === this.freightmilestones.length) {
+        this.isAllDataDisplayed = true;
+      }
+
+      if (event) {
+          event.target.complete();
+      }
+
+     }, 100);  // Delay by 100ms, to prevent 'smooth' scrolling.
+
   }
 
   ngOnDateFromChange(date) {

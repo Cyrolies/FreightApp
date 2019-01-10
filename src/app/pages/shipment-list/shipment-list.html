@@ -49,7 +49,7 @@
         </ion-grid>
     <ion-grid fixed>
       <ion-row align-items-stretch>
-        <ion-col text-right size="12" size-md="6" *ngFor="let freightmilestone of freightmilestones">
+        <ion-col text-right size="12" size-md="6" *ngFor="let freightmilestone of displayedFreightmilestones">
           <ion-card (click)="goToShipmentDetail(freightmilestone)" >
               
               <ion-card-header style="background-color: var(--ion-color-secondary)">
@@ -93,7 +93,7 @@
                         <ion-col col-2 no-padding>
                                 <!-- Icon two -->
                                 <ion-list class="caption-icon"
-                                *ngIf="freightmilestone.milestonesNext.NextMilestoneCode">
+                                [hidden]="!freightmilestone.milestonesNext.NextMilestoneCode">
                                     <ion-item>
                                         <ion-avatar style="margin:auto!important">
                                             <img  src="../../../assets/img/rightarrow.png">
@@ -104,7 +104,7 @@
                         <ion-col col-5 no-padding>
                                 <!-- Icon three -->
                                 <ion-list class="caption-icon"
-                                *ngIf="freightmilestone.milestonesNext.NextMilestoneCode">
+                                [hidden]="!freightmilestone.milestonesNext.NextMilestoneCode">
                                     <ion-item>
                                         <ion-avatar style="margin:auto!important">
                                             <img  [src]="'../../../assets/img/' + freightmilestone.milestonesNext.NextMilestoneCode + '.png'">
@@ -225,4 +225,13 @@
       </ion-row>
     </ion-grid>
   </ion-list>
+
+    <ion-infinite-scroll class="whiteSpinner" (ionInfinite)="displayMoreData($event)"
+        [disabled]="isAllDataDisplayed">
+        <ion-infinite-scroll-content
+          loadingSpinner="circles"
+          loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
 </ion-content>

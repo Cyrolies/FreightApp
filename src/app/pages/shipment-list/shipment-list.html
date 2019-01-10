@@ -15,9 +15,14 @@
 <ion-content class="backImg">
   <ion-list style="background-color: transparent">
       <ion-grid fixed>
-          <ion-row align-items-stretch>
+          <ion-row>
             <ion-col size="12" size-md="6">
-                <form #filterForm="ngForm" novalidate>
+                <ion-item>
+                <ion-avatar  [hidden]="showFilters" (click)='ngShowFilters()'>
+                  <img  src="../../../assets/img/FilterBlue.png">
+                </ion-avatar>
+                </ion-item>
+                <form #filterForm="ngForm" novalidate [hidden]="!showFilters">
                     <ion-item>
                         <ion-label class="search-filter-label" floating>Shipment No.</ion-label>
                         <ion-input class="search-filter" [(ngModel)]="filters.shipmentno" name="shipno" type="text"></ion-input>
@@ -41,7 +46,7 @@
                 </form>
             </ion-col>
           </ion-row>
-          <ion-row align-items-stretch>
+          <ion-row [hidden]="!showFilters" align-items-stretch>
               <ion-col size="12" size-md="6">
                   <ion-button (click)="listShipments(filterForm)" type="submit" >Search</ion-button>
               </ion-col>
@@ -53,7 +58,7 @@
           <ion-card (click)="goToShipmentDetail(freightmilestone)" >
               
               <ion-card-header style="background-color: var(--ion-color-secondary)">
-                  <ion-row>
+                  <!-- <ion-row>
                       <ion-col style="text-align:center">
                             <ion-chip color="primary "style="font-weight: bold!important;font-size: small">
                                 <ion-label>
@@ -61,7 +66,7 @@
                                 </ion-label>
                             </ion-chip>   
                       </ion-col>
-                </ion-row>
+                </ion-row> -->
                       <!-- <ion-col text-center size="auto">
                           <ion-item>
                                 <ion-text style="font: bold!important" color="primary">Mode : </ion-text> 
@@ -158,7 +163,22 @@
             <ion-card-content>
 
                 <ion-grid>
-
+                        <ion-row>
+                                <ion-col col-6>                                
+                                    <ion-item no-padding text-wrap>
+                                        <!-- <ion-label position="stacked" color="primary">Consignee</ion-label> -->
+                                        <ion-label position="stacked" color="primary"style="font-weight: bold!important;font-size: medium"> {{(freightmilestone.ShipmentRef)}}</ion-label>
+                                        
+                                    </ion-item>
+                                </ion-col>
+            
+                                <ion-col col-6>
+                                    <ion-item no-padding text-wrap>
+                                        <ion-label position="stacked" color="primary">Mode {{(freightmilestone.TransportMode) || '-'}}</ion-label>
+                                        <!-- <ion-item no-padding> {{(freightmilestone.TransportMode) || '-'}}</ion-item> -->
+                                    </ion-item>
+                                </ion-col>
+                            </ion-row>
                     <ion-row>
                         <ion-col col-6>                                
                             <ion-item no-padding text-wrap>

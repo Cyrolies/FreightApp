@@ -26,7 +26,7 @@ export class ShipmentListPage implements OnInit, OnDestroy {
   public filters: ShipmentFilters = { cargowisecode: '', shipmentno: '', orderno: '', datefrom: '', dateto: '', openshipments: true };
   private profileSubscription: any;
   private selectedProfile: Profile;
-  public hideFilters = true;
+  public showFilters = true;
   @ViewChild('myPickerFrom') myPickerFrom: Datetime;
   @ViewChild('myPickerTo') myPickerTo: Datetime;
 
@@ -95,7 +95,10 @@ export class ShipmentListPage implements OnInit, OnDestroy {
 
     if (this.freightmilestones == null) {
       spinner.dismiss();
+      this.showFilters = true;
       this.presentToast('No shipments found try different filters');
+    } else {
+    this.showFilters = false;
     }
     spinner.dismiss();
       }, error =>  spinner.dismiss());
@@ -134,6 +137,11 @@ export class ShipmentListPage implements OnInit, OnDestroy {
     this.filters.dateto =  (date['year'].text + '-' + date['month'].text + '-' + date['day'].text);
     }
   }
+
+  ngShowFilters() {
+    this.showFilters = true;
+  }
+
   ngOnDestroy() {
     // prevent memory leak when component is destroyed
     this.profileSubscription.unsubscribe();

@@ -18,11 +18,11 @@
           <ion-row>
             <ion-col size="12" size-md="6">
                 <ion-item>
-                <ion-avatar  *ngIf="!showFilters" (click)='ngShowFilters()'>
+                <ion-avatar  [hidden]="showFilters" (click)='ngShowFilters()'>
                   <img  src="../../../assets/img/FilterBlue.png">
                 </ion-avatar>
                 </ion-item>
-                <form #filterForm="ngForm" novalidate *ngIf="showFilters">
+                <form #filterForm="ngForm" novalidate [hidden]="!showFilters">
                     <ion-item>
                         <ion-label class="search-filter-label" floating>Shipment No.</ion-label>
                         <ion-input class="search-filter" [(ngModel)]="filters.shipmentno" name="shipno" type="text"></ion-input>
@@ -46,7 +46,7 @@
                 </form>
             </ion-col>
           </ion-row>
-          <ion-row *ngIf="showFilters" align-items-stretch>
+          <ion-row [hidden]="!showFilters" align-items-stretch>
               <ion-col size="12" size-md="6">
                   <ion-button (click)="listShipments(filterForm)" type="submit" >Search</ion-button>
               </ion-col>

@@ -106,9 +106,10 @@ export class LoginPage implements OnInit {
 
       await spinner.present();
 
+      try {
+
         // If running on device, first check if has internet connectivity:
-        // if (this.global.isDevice && !this.isUserOnline()) {
-        if (!this.isUserOnline()) {
+        if (this.global.isDevice && !this.isUserOnline()) {
 
           spinner.dismiss();
 
@@ -153,6 +154,14 @@ export class LoginPage implements OnInit {
           this.onLoginFailed();
 
         });
+
+      } catch (error) {
+        spinner.dismiss();
+
+        this.presentToast('Login failed.');
+
+        this.onLoginFailed();
+      }
     }
   }
 

@@ -43,7 +43,7 @@ export class HomePage implements OnInit, OnDestroy {
     // TODO: Add transparency
     this.chartColors = [
       { 
-        backgroundColor: [this.getRgbString(this.colors.mybackground, 0.8), this.getRgbString(this.colors.secondary, 0.8)],
+        backgroundColor: [this.colors.mybackground, this.colors.secondary], // [this.getRgbString(this.colors.mybackground, 0.8), this.getRgbString(this.colors.secondary, 0.8)],
         borderColor: [this.colors.mybackground, this.colors.secondary]
       }
     ];
@@ -178,7 +178,7 @@ export class HomePage implements OnInit, OnDestroy {
 
     if (!(this.selectedProfile && this.selectedProfile.CargoWiseCode)) {
 
-      this.presentToast('Could not determine selected Profile. Please logout and re-login.');
+      this.presentToast('Could not determine selected Profile. Please close the app and re-login.');
 
       this.totalShipmentsCount = null;
 

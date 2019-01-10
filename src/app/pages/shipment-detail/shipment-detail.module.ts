@@ -9,7 +9,7 @@ import { IonicModule } from '@ionic/angular';
   imports: [
     CommonModule,
     IonicModule,
-    ShipmentDetailPageRoutingModule
+    ShipmentDetailPageRoutingModule,
   ],
   declarations: [
     ShipmentDetailPage,

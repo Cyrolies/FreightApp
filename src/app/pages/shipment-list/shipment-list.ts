@@ -19,6 +19,10 @@ import { format } from 'date-fns';
 })
 export class ShipmentListPage implements OnInit, OnDestroy {
   freightmilestones: FreightMilestone[] = new Array<FreightMilestone>();
+  displayedFreightmilestones: FreightMilestone[] = new Array<FreightMilestone>();
+  readonly chunkSize = 10;
+  isAllDataDisplayed = true;
+
   public filters: ShipmentFilters = { cargowisecode: '', shipmentno: '', orderno: '', datefrom: '', dateto: '', openshipments: true };
   private profileSubscription: any;
   private selectedProfile: Profile;
@@ -42,6 +46,8 @@ export class ShipmentListPage implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.initialiseDatePickers();
+
     // Subscribing to selectedProfile$ serves to...
     //  i) give the current selectedProfile
     //  ii) trigger the specified function (to reload data) whenever the profile changes.
@@ -55,16 +61,23 @@ export class ShipmentListPage implements OnInit, OnDestroy {
   async ionViewDidEnter() {
 
     if (!(this.selectedProfile && this.selectedProfile.CargoWiseCode)) {
-       this.presentToast('Could not determine selected Profile. Please logout and re-login.');
+       this.presentToast('Could not determine selected Profile. Please close the app and re-login.');
        return;
     }
-    this.myPickerFrom.value = format(new Date(), 'yyyy-MM-dd');
-    this.filters.datefrom = format(new Date(), 'yyyy-MM-dd');
-    this.myPickerTo.value = format(new Date(), 'yyyy-MM-dd');
-    this.filters.dateto = format(new Date(), 'yyyy-MM-dd');
+  }
+
+  initialiseDatePickers() {
+    const today = new Date();
+    const sixMonthsAgo = (new Date()).setMonth(today.getMonth() - 6);
+
+    this.myPickerFrom.value = format(sixMonthsAgo, 'yyyy-MM-dd');
+    this.filters.datefrom = format(sixMonthsAgo, 'yyyy-MM-dd');
+    this.myPickerTo.value = format(today, 'yyyy-MM-dd');
+    this.filters.dateto = format(today, 'yyyy-MM-dd');
   }
 
   async listShipments(form: NgForm) {
+
     const spinner = await this.loading.create();
   
     spinner.present().then(() => {
@@ -73,7 +86,13 @@ export class ShipmentListPage implements OnInit, OnDestroy {
       this.filters.datefrom, // !== '' ? format(this.filters.datefrom, 'yyyy-MM-dd') : '', //  (this.filters.datefrom['year'].text + '-' + this.filters.datefrom['month'].text + '-' + this.filters.datefrom['day'].text) : '',
       this.filters.dateto, // !== '' ? format(this.filters.dateto, 'yyyy-MM-dd') : '', // (this.filters.dateto['year'].text + '-' + this.filters.dateto['month'].text + '-' + this.filters.dateto['day'].text) : '',
       this.filters.openshipments, true).subscribe((result: FreightMilestone[]) => {
+
     this.freightmilestones =  result;
+
+    this.displayedFreightmilestones = [];
+    this.isAllDataDisplayed = false;
+    this.displayMoreData();
+
     if (this.freightmilestones == null) {
       spinner.dismiss();
       this.presentToast('No shipments found try different filters');
@@ -81,6 +100,28 @@ export class ShipmentListPage implements OnInit, OnDestroy {
     spinner.dismiss();
       }, error =>  spinner.dismiss());
     });
+  }
+
+   displayMoreData(event?) {
+
+    setTimeout(() => { // Required, since displayMoreData must be async.
+
+      const nextItem = this.displayedFreightmilestones.length;
+      const lastItem = Math.min(nextItem + this.chunkSize - 1, this.freightmilestones.length - 1);
+      const chunk = this.freightmilestones.slice(nextItem, lastItem + 1);
+  
+      Array.prototype.push.apply(this.displayedFreightmilestones, chunk);
+  
+      if (this.displayedFreightmilestones.length === this.freightmilestones.length) {
+        this.isAllDataDisplayed = true;
+      }
+
+      if (event) {
+          event.target.complete();
+      }
+
+     }, 100);  // Delay by 100ms, to prevent 'smooth' scrolling.
+
   }
 
   ngOnDateFromChange(date) {
@@ -99,7 +140,7 @@ export class ShipmentListPage implements OnInit, OnDestroy {
   }
 
   goToShipmentDetail(FreightMilestone: any) {
-    this.navCtrl.navigateForward('shipment-details/' + FreightMilestone.ShipmentRef);
+    this.navCtrl.navigateForward(`shipments/details/${FreightMilestone.ShipmentRef}`);
   }
 
   async presentToast(toastMessage: string) {

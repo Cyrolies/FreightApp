@@ -5,15 +5,13 @@ import { ShipmentDetailPage } from './shipment-detail';
 
 const routes: Routes = [
   {
-    path: ':ShipmentRef/:tabIndex',
-    component: ShipmentDetailPage,
-    pathMatch: 'full'
-  },
-  {
     path: ':ShipmentRef',
     component: ShipmentDetailPage,
-    pathMatch: 'full'
-  }
+  },
+  {
+    path: ':ShipmentRef/map',
+    loadChildren: '../map/map.module#MapModule',
+  },
 ];
 
 @NgModule({

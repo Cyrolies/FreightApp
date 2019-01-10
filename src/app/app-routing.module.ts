@@ -15,17 +15,14 @@ const routes: Routes = [
     path: 'shipments',
     loadChildren: './pages/shipment-list/shipment-list.module#ShipmentListModule'
   },
-  {
-    path: 'shipment-details',
-    loadChildren: './pages/shipment-detail/shipment-detail.module#ShipmentDetailModule'
-  },
-  
-  // The Map component currently needs to be eager-loaded (should only be loaded once during the application).
-  // Thus don't include the following here (move to map-routing-module):
-  {
-    path: 'map',
-    loadChildren: './pages/map/map.module#MapModule'
-  },
+  // {
+  //   path: 'shipment-details',
+  //   loadChildren: './pages/shipment-detail/shipment-detail.module#ShipmentDetailModule'
+  // },
+  // {
+  //   path: 'map',
+  //   loadChildren: './pages/map/map.module#MapModule'
+  // },
 
   {
     path: 'event-notifications',
@@ -50,19 +47,19 @@ const routes: Routes = [
   {
     path: 'about',
     loadChildren: './pages/about/about.module#AboutModule'
-  },
-  {
-    path: 'reports/freightspend',
-    loadChildren: './pages/reports/freightspend/freightspend.module#FreightSpendModule'
-  },
-  {
-    path: 'reports/freightshipment',
-    loadChildren: './pages/reports/freightshipment/freightshipment.module#FreightShipmentModule'
-  },
-  {
-    path: 'reports/freightmilestone',
-    loadChildren: './pages/reports/freightmilestone/freightmilestone.module#FreightMilestoneModule'
   }
+  // {
+  //   path: 'reports/freightspend',
+  //   loadChildren: './pages/reports/freightspend/freightspend.module#FreightSpendModule'
+  // },
+  // {
+  //   path: 'reports/freightshipment',
+  //   loadChildren: './pages/reports/freightshipment/freightshipment.module#FreightShipmentModule'
+  // },
+  // {
+  //   path: 'reports/freightmilestone',
+  //   loadChildren: './pages/reports/freightmilestone/freightmilestone.module#FreightMilestoneModule'
+  // }
   // {
   //   path: 'account',
   //   loadChildren: './pages/account/account.module#AccountModule'

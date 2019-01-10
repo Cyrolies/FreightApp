@@ -1,7 +1,7 @@
 import { Profile } from './../../providers/freight-api.service';
 import { UserData } from './../../providers/user-data';
 import { Component, OnInit } from '@angular/core';
-import { NavParams, ModalController } from '@ionic/angular';
+import { NavParams, ModalController, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,14 +10,22 @@ import { Router } from '@angular/router';
 })
 export class ProfileSelectModal {
 
+  selectionRequired: boolean;
+
   constructor(private modalController: ModalController,
     public router: Router,
+    public navCtrl: NavController,
     public userData: UserData) { }
 
   goBack() {
-    this.userData.logout().then(() => {
+    if (this.selectionRequired) {
+      this.userData.logout().then(() => {
+        this.navCtrl.navigateRoot('/login');
+        this.closeModal();
+      });
+    } else {
       this.closeModal();
-    });
+    }
   }
 
   closeModal() {       
@@ -28,7 +36,8 @@ export class ProfileSelectModal {
     this.userData.changeProfile(profile);
     // this.userData.selectedProfile = profile;
 
-    this.router.navigateByUrl('/home');
+    this.navCtrl.navigateRoot('/home');
+    // this.router.navigateByUrl('/home');
 
     this.closeModal();
   }

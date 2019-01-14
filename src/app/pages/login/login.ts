@@ -142,7 +142,10 @@ export class LoginPage implements OnInit {
 
         }, (error) =>  {
 
-          if ((error instanceof HttpErrorResponse) && ((<HttpErrorResponse>error).status === 401)) {            
+          if (error['name'] === 'TimeoutError') {
+            this.presentToast('No response from the server. Please try again.');
+
+          } else if ((error instanceof HttpErrorResponse) && ((<HttpErrorResponse>error).status === 401)) {            
             this.presentToast('Invalid username or password.');
 
           } else {
@@ -201,7 +204,8 @@ export class LoginPage implements OnInit {
   }
 
   public isOnline() {
-    return this.network.type !== 'none';
+
+    return (this.network.type !== 'none' && this.network.type !== 'unknown');
   }
 
   async presentToast(toastMessage: string) {

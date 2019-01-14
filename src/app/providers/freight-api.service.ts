@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, timeout, catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { plainToClass, Expose, Exclude, Type } from 'class-transformer';
 import { IsNotEmpty, IsEnum } from 'class-validator';
@@ -1009,6 +1009,8 @@ export class FreightApiService {
 
   public Authenticate(username: string, password): Observable<AuthResult> {
 
+    const loginTimeoutInMs = 15000;
+
     console.log('FreightApiService: Get [single] shipment.');
 
     const endpoint = environment.freightApiUrl + 'FreightShipping/auth';
@@ -1019,6 +1021,7 @@ export class FreightApiService {
 
     return this.http
     .get(endpoint, {params})
+    .pipe(timeout(loginTimeoutInMs))
     .pipe(map((response) => {
       // Shouldn't get here if server returns 401/405 authentication error.
       // But just to be safe, add additional check:

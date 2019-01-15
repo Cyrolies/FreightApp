@@ -1,7 +1,8 @@
+import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
 import { map } from 'rxjs/operators';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { LoadingController, ToastController, Content, Platform } from '@ionic/angular';
 import { FreightApiService, FreightMilestone, Profile } from './../../providers/freight-api.service';
-import { Component, ViewEncapsulation, ViewChild, OnDestroy, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild, OnDestroy, OnInit, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import 'chartjs-plugin-labels';
@@ -25,7 +26,8 @@ export class HomePage implements OnInit, OnDestroy {
     public freightService: FreightApiService,
     public loading: LoadingController,
     private global: GlobalService,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private platform: Platform
   ) {
 
     const rootStyle = getComputedStyle(document.body);
@@ -62,6 +64,10 @@ export class HomePage implements OnInit, OnDestroy {
 
   @ViewChild(BaseChartDirective)
   public chart: BaseChartDirective;
+
+  @ViewChild('content', {read: ElementRef}) pageContent: ElementRef;
+  @ViewChild('theToolbar', {read: ElementRef}) theToolbar: ElementRef;
+  @ViewChild('theHeader', {read: ElementRef}) theHeader: ElementRef;
   
   public colors = undefined;
   public chartType = 'pie';
@@ -154,8 +160,9 @@ export class HomePage implements OnInit, OnDestroy {
             this.loadData();
           }
 
-       });
+    });
   }
+
   ngOnDestroy() {
     // prevent memory leak when component is destroyed
     this.profileSubscription.unsubscribe();
@@ -284,6 +291,25 @@ export class HomePage implements OnInit, OnDestroy {
     );
     
     await toast.present();
+  }
+
+  getChartStyle() {
+
+    const maxWidth = (<HTMLElement>this.pageContent.nativeElement).getBoundingClientRect().width * 0.8;
+
+    const toolbarHeight = (<HTMLElement>this.theToolbar.nativeElement).getBoundingClientRect().height;
+    const headerHeight = (<HTMLElement>this.theHeader.nativeElement).getBoundingClientRect().height;
+    const availableHeight = this.platform.height() * 0.9 - toolbarHeight - headerHeight;
+
+    const chartWidth = Math.min(availableHeight, maxWidth);
+    const chartWidthString = !chartWidth || isNaN(chartWidth) ? '100%' : `${chartWidth}px`; 
+
+    return {
+      'display': 'block',
+      'padding-top': '20px',
+      'width': chartWidthString,
+      'margin': 'auto'
+    };
   }
 }
 

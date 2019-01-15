@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar #theToolbar color="primary">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -7,15 +7,15 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="backImg">
+<ion-content #content class="backImg">
 
-  <ion-grid>
+  <ion-grid #theHeader>
       <ion-row justify-content-center align-items-center>
           <h1><ion-text color="mybackground">Shipments</ion-text></h1>
       </ion-row>
   </ion-grid>
 
-  <div style="display: block; padding-top: 20px; width: 80%; margin:auto">
+  <div [ngStyle]="getChartStyle()">
     <!-- Specifying width/height = 100% creates quadratic canvas,
     to prevent unnecessary padding on sides of pie. -->
     <canvas *ngIf = "this.totalShipmentsCount"

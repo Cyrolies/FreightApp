@@ -1,13 +1,12 @@
 import { MyNavService } from './../../providers/my-nav.service';
-import { FreightApiService, ModeType, TransportLegResult, Position, Geography, TransportLeg } from './../../providers/freight-api.service';
+import { FreightApiService, ModeType, TransportLeg } from './../../providers/freight-api.service';
 import { Component, ElementRef, ViewChild, ViewEncapsulation, OnDestroy, OnInit } from '@angular/core';
 
-import { LoadingController, NavController } from '@ionic/angular';
+import { LoadingController, NavController, ToastController } from '@ionic/angular';
 
 import { MapHostService } from '../../providers/map-host-service';
 import { BehaviorSubject } from 'rxjs';
-import * as moment from 'moment';
-import { BingMapsService } from '../../providers/bing-maps-service';
+import { GlobalService } from '../../providers/global.service';
 
 
 @Component({
@@ -40,10 +39,18 @@ export class MapPage implements OnInit, OnDestroy {
   fromPort: Microsoft.Maps.Location;
   toPort: Microsoft.Maps.Location;
   currentFreightLocation: Microsoft.Maps.Location;
+  isUnavailable = {
+    vesselNumber: false,
+    vesselPosition: false,
+    fromPortDetails: false,
+    toPortDetails: false
+  };
 
   returnToShipment: string;
 
   readonly routingTabIndex = 2;
+
+  createdToastInstances: any[];
 
 
   @ViewChild('map') mapElement: ElementRef;
@@ -56,15 +63,17 @@ export class MapPage implements OnInit, OnDestroy {
     private freightApiService: FreightApiService,
     public loading: LoadingController,
     public navService: MyNavService,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    private global: GlobalService,
+    private toastCtrl: ToastController
   ) { }
   
   ngOnInit() {
     this.mapHostService
     .initialize(this.mapElement.nativeElement)
-    .then((success) => {
+    .then(() => {
       this._mapHostInitialisedSource.next(true);
-    }, (error) => {
+    }, () => {
       this._mapHostInitialisedSource.next(false);
     });    
   }
@@ -78,13 +87,14 @@ export class MapPage implements OnInit, OnDestroy {
 
   async ionViewDidEnter() {
 
+    this.createdToastInstances = [];
+
     const params = this.navService.pop();
     this.returnToShipment = params['returnToShipment'];
     this.transportLeg = params['transportLeg'];
 
     if (!this.transportLeg) {
-
-      // TODO: display error.
+      this.onMapFailedToLoad();
       return;
     }
 
@@ -108,6 +118,13 @@ export class MapPage implements OnInit, OnDestroy {
       // const shipmentNumber = 'S01004325';
       // const legSequence = 1;
 
+
+    this.isUnavailable = {
+      vesselNumber: false,
+      vesselPosition: false,
+      fromPortDetails: false,
+      toPortDetails: false
+    };
   
     // Get vessel position:
 
@@ -117,91 +134,55 @@ export class MapPage implements OnInit, OnDestroy {
     try {
 
       if (this.legIsComplete()) {
-        // Already arrived  
-
+        
+        // Already arrived
         this.currentFreightLocation = null;
 
-      } else {
+      }  else {
 
-        if (this.transportLeg.transportMode === ModeType.SEA) {
-        
-          // const imoNumber = await this.getImoNumber(shipmentNumber, legSequence); 
-
-          const vesselPosition = await this.freightApiService.GetShipGeoLoc(this.transportLeg.VesselLloydsIMO).toPromise();
-  
-          if (vesselPosition &&
-            !this.invalidCoordinates(+vesselPosition.LAT, +vesselPosition.LON)) {
-            
-            this.currentFreightLocation = new Microsoft.Maps.Location(vesselPosition.LAT, vesselPosition.LON);
-
-          } else {
-            // Position data is not available for some reason.
-            // TODO: Display error message?
-
-            this.currentFreightLocation = null;
-
-          }          
-  
-        } else if (this.transportLeg.transportMode === ModeType.AIR) {
-  
-          const vesselPosition = await this.freightApiService.GetAirlineGeoLoc(this.transportLeg.voyageNumber).toPromise();
-  
-          if (vesselPosition && vesselPosition.geography && 
-            !this.invalidCoordinates(vesselPosition.geography.latitude, vesselPosition.geography.longitude)) {
-            
-            this.currentFreightLocation = new Microsoft.Maps.Location(vesselPosition.geography.latitude, vesselPosition.geography.longitude);
-
-          } else {
-            // Position data is not available for some reason.
-            // TODO: Display error message?
-
-            this.currentFreightLocation = null;
-
-          }          
-  
-  
-        } else {
-          
+        if (!this.isTransportModeValid(this.transportLeg.transportMode)) {
           throw new Error(`${this.transportLeg.transportMode} is not a recognised transport mode.`);
         }
 
+        await this.setCurrentFreightLocation(this.getVesselIdentifier(this.transportLeg));
       }
 
       // Get geography of ports:
 
       const portDetails = await this.freightApiService.GetPortDetails([this.transportLeg.portOfLoading, this.transportLeg.portOfDischarge]).toPromise();
 
-      const fromPortDetail = portDetails.filter(p => p.Code === this.transportLeg.portOfLoading).pop();
-      const toPortDetail = portDetails.filter(p => p.Code === this.transportLeg.portOfDischarge).pop();
+      const fromPortDetail = portDetails && portDetails.length
+        ? portDetails.filter(p => p.Code === this.transportLeg.portOfLoading).pop()
+        : null;
 
-      this.fromPort = new Microsoft.Maps.Location(fromPortDetail.Latitude, fromPortDetail.Longitude);
-      this.toPort = new Microsoft.Maps.Location(toPortDetail.Latitude, toPortDetail.Longitude);
+      const toPortDetail = portDetails && portDetails.length
+        ? portDetails.filter(p => p.Code === this.transportLeg.portOfDischarge).pop()
+        : null;
+
+      if (fromPortDetail) {
+        this.fromPort = new Microsoft.Maps.Location(fromPortDetail.Latitude, fromPortDetail.Longitude);
+      } else {
+        this.fromPort = null;
+        this.isUnavailable.fromPortDetails = true;
+      }
+
+      if (toPortDetail) {
+        this.toPort = new Microsoft.Maps.Location(toPortDetail.Latitude, toPortDetail.Longitude);
+      } else {
+        this.toPort = null;
+        this.isUnavailable.toPortDetails = true;
+      }    
 
     } catch (err) {
 
       console.log(err);
       spinner.dismiss();
 
-      return;
-    
+      this.onMapFailedToLoad();
+
+      return;    
     }
     
-    // const imoNumber = '9300439';
-    // const flightNumber = 'SA410'; // == SAA410
-
-    // let position;
-    // this.freightApiService.GetShipGeoLoc(imoNumber)
-    // .subscribe(res => {
-    //   position = res;
-    // });
-
-    // this.freightApiService.GetAirlineGeoLoc(flightNumber)
-    // .subscribe(res => {
-    //   position = res;
-    // });
-
-
-
     // Wait for map to be ready:
     if (this._mapHostInitialisedSource.value === false) {
 
@@ -230,6 +211,40 @@ export class MapPage implements OnInit, OnDestroy {
     }
   }
 
+  async ionViewDidLeave() {
+    this.createdToastInstances.forEach(toast => 
+      toast && toast.dismiss() // Should not cause issues even if toast was already dismissed.
+    );
+  }
+
+  async setCurrentFreightLocation(vesselNumber: string) {
+
+    if (!vesselNumber) {
+
+      this.currentFreightLocation = null;
+      this.isUnavailable.vesselNumber = true;
+
+    } else {
+
+      const vesselPosition = await this.freightApiService.GetShipGeoLoc(vesselNumber).toPromise();
+    
+      if (vesselPosition &&
+        !this.invalidCoordinates(+vesselPosition.LAT, +vesselPosition.LON)) {
+        
+        this.currentFreightLocation = new Microsoft.Maps.Location(vesselPosition.LAT, vesselPosition.LON);
+
+      } else {
+
+        this.currentFreightLocation = null;
+        this.isUnavailable.vesselPosition = true;
+      } 
+    }
+  }
+
+  onMapFailedToLoad() {
+    this.presentToast('Failed to load map details.');
+  }
+
    async getImoNumber(shipmentNumber: string, sequenceOfThisLeg: number): Promise<string> {
 
     const legResults = await this.freightApiService.GetIMONumbers(shipmentNumber).toPromise();
@@ -253,38 +268,66 @@ export class MapPage implements OnInit, OnDestroy {
         this.transportLeg.transportMode === ModeType.AIR ? 'assets/img/Pin-Blue-Air.png' : 'assets/img/Pin-Blue-Sea.png',
         new Microsoft.Maps.Point(Math.ceil(this.pinIconDimensions.x / 2), this.pinIconDimensions.y)
       );
-
     }
 
-    this.mapHostService.addIconPushpin(
-      this.fromPort,
-      'Port of Loading',
-      'assets/img/Sm-ADD.png',
-      new Microsoft.Maps.Point(Math.ceil(this.circleIconDimensions.x / 2), this.circleIconDimensions.y)
-    );
-
-    this.mapHostService.addIconPushpin(
-      this.toPort,
-      'Port of Discharge',
-      'assets/img/Sm-ATA.png',
-      new Microsoft.Maps.Point(Math.ceil(this.circleIconDimensions.x / 2), this.circleIconDimensions.y)
-    );
-
-    if (this.currentFreightLocation) {
-
-      this.mapHostService.setViewToIncludeLocations([this.fromPort, this.toPort, this.currentFreightLocation]);   
-    
-    } else {
-
-      this.mapHostService.setViewToIncludeLocations([this.fromPort, this.toPort]);
-
+    if (this.fromPort) {
+      this.mapHostService.addIconPushpin(
+        this.fromPort,
+        'Port of Loading',
+        'assets/img/Sm-ADD.png',
+        new Microsoft.Maps.Point(Math.ceil(this.circleIconDimensions.x / 2), this.circleIconDimensions.y)
+      );
     }
 
-    if (this.legIsComplete() && this.doDrawLineForCompleteLeg) {
+    if (this.toPort) {
+      this.mapHostService.addIconPushpin(
+        this.toPort,
+        'Port of Discharge',
+        'assets/img/Sm-ATA.png',
+        new Microsoft.Maps.Point(Math.ceil(this.circleIconDimensions.x / 2), this.circleIconDimensions.y)
+      );
+    }
+
+    const drawnMapLocations = [this.fromPort, this.toPort, this.currentFreightLocation]
+      .filter(ml => !!ml); // Filter out flags for which there is no data.
+
+    if (drawnMapLocations.length > 0) {
+      this.mapHostService.setViewToIncludeLocations(drawnMapLocations); 
+    }      
+
+    if (this.legIsComplete() && this.fromPort && this.toPort && this.doDrawLineForCompleteLeg) {
 
       this.mapHostService.drawLine([this.fromPort, this.toPort]);
+    }
 
-    }     
+    // Alert user to missing data:
+    if (this.isUnavailable.fromPortDetails || this.isUnavailable.toPortDetails || this.isUnavailable.vesselPosition) {
+
+      const missingDataMsg =  
+        (`${this.isUnavailable.fromPortDetails 
+          ? 'Port of Loading, ' : ''
+        }${this.isUnavailable.toPortDetails 
+          ? 'Port of Discharge, ' : ''
+        }${this.isUnavailable.vesselPosition
+          ? 'Current Vessel Location' : ''}`
+        ).replace(/,\s*$/, ''); // Remove trailing commas.
+
+      this.presentToast(
+        `Data are not available for: ${missingDataMsg}.`
+        , true
+      );
+    }
+
+    // (Show the vessel-number-error toast second, so that it will be on top.)
+    if (this.isUnavailable.vesselNumber) {
+
+      let identifierType = this.getVesselIdentifierType(this.transportLeg.transportMode);
+      identifierType = identifierType ? identifierType : 'Vessel Identifier';
+    
+      this.presentToast(`No ${identifierType} is available. This is required to obtain current vessel location.`,
+        true);    
+    }
+
   }
 
   legIsComplete(actualArrival?: Date) {
@@ -301,9 +344,45 @@ export class MapPage implements OnInit, OnDestroy {
 
   }
 
+  getVesselIdentifierType(mode: ModeType) {
+    if (mode === ModeType.SEA) {
+      return 'IMO';
+    } else if (mode === ModeType.AIR) {
+      return 'Flight No.';
+    } else {
+      return null;
+    }
+  }
+
+  getVesselIdentifier(leg: TransportLeg) {
+    if (leg.transportMode === ModeType.SEA) {
+      return leg.VesselLloydsIMO.trim();
+    } else if (leg.transportMode === ModeType.AIR) {
+      return leg.voyageNumber.trim();
+    } else {
+      return null;
+    }
+  }
+
+  isTransportModeValid(mode: ModeType) {
+    return (mode === ModeType.SEA) 
+      || (mode === ModeType.AIR);
+  }
+
   navigateBack() {
 
     const returnUrl = `shipment-details/${this.returnToShipment}/${this.routingTabIndex}`;
     this.navCtrl.navigateBack(returnUrl);
+  }
+
+  async presentToast(toastMessage: string, doRequireDismissal = false) {
+
+    const toast = await this.toastCtrl.create(
+      this.global.getToastConfiguration(toastMessage, doRequireDismissal)
+    );
+
+    this.createdToastInstances.push(toast);
+    
+    await toast.present();
   }
 }

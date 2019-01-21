@@ -135,16 +135,7 @@ export class ShipmentDetailPage implements OnInit, OnDestroy {
 
   viewTransportLeg(leg: TransportLeg) {
 
-    // First check that we have a vessel identifier.
-    if (!this.getVesselIdentifier(leg)) {
-
-      let identifierType = this.getVesselIdentifierType(leg.transportMode);
-      identifierType = identifierType ? identifierType : 'Vessel Identifier';
-
-      this.presentToast(`No ${identifierType}. This is required to load geolocation.`);
-
-      return;
-    }
+    // The check for a valid vessel identifier (IMO/Flight# is performed by the map component).
 
     this.navService.push({
       transportLeg: leg,

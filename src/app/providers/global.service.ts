@@ -59,19 +59,26 @@ export class GlobalService {
     }
 
     
-    public getToastConfiguration(toastMessage: string): ToastOptions {
+    public getToastConfiguration(toastMessage: string, requireDismissal = false): ToastOptions {
         
-        const toastConfig = {
-            message: toastMessage,
-            duration: 5000,
-            position: 'bottom',
-            showCloseButton: false
-        };
+        let toastConfig: ToastOptions;
+        if (!requireDismissal) {
+            toastConfig = {
+                message: toastMessage,
+                duration: 5000,
+                position: 'bottom',
+                showCloseButton: false
+            };
+        } else {
+            toastConfig = {
+                message: toastMessage,
+                position: 'bottom',
+                showCloseButton: true
+            };
+        }
 
         return <ToastOptions> toastConfig;                
     }
-
-
             
     constructor() {
     }

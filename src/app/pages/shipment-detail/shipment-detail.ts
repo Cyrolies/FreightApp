@@ -9,6 +9,16 @@ import { ToastController, LoadingController, NavController, ActionSheetControlle
 import { forEach } from '@angular/router/src/utils/collection';
 import { MyNavService } from '../../providers/my-nav.service';
 
+export enum EventCode {
+  ADD = 0,
+  IRP = 1,
+  DEP = 2,
+  ARV = 3,
+  CLR = 4,
+  DCA = 5,
+  DCF = 6
+}
+
 @Component({
   selector: 'page-shipment-detail',
   templateUrl: 'shipment-detail.html',
@@ -78,7 +88,29 @@ export class ShipmentDetailPage implements OnInit, OnDestroy {
            if (orgConsignor.length > 0) {
              this.shipment.Shipper = orgConsignor[0];
            }
+           
            this.shipment.milestones = result.milestones;
+
+           // Order milestones according to the chronological order in which we expect them to occur.
+           // Convert milestone code into an ordered integer using EventCode enum.
+           this.shipment.milestones = this.shipment.milestones.sort((m1, m2) => {
+              const code1 = EventCode[m1.EventCode as keyof typeof EventCode];
+              const code2 = EventCode[m2.EventCode as keyof typeof EventCode];
+
+              if (code1 === undefined && code2 === undefined) {
+                return 0;
+              } else if (code1 === undefined) {
+                // Move code1 to end:
+                return 1;
+              } else if (code2 === undefined) {
+                // Move code2 to end:
+                return -1;
+              } else {
+                return code1 - code2;
+              }              
+            });
+
+
            this.shipment.orders = result.orders;
            this.shipment.transportLegs = result.transportLegs;
            this.shipment.containers = result.containers;

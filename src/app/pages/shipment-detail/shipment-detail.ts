@@ -34,20 +34,23 @@ export class ShipmentDetailPage implements OnInit, OnDestroy {
   ) {}
 
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.loadShipment();
+
     // Only set initial tab once in the component's lifecycle.
     //  Thereafter, preserve the tab selection.
 
     if (this.tabRef) {
       this.tabRef.select(0);
     }
+
   }
 
   ngOnDestroy() {
     console.log('Detail page destroyed.');
   }
 
-  async ionViewDidEnter() {
+  async loadShipment() {
 
     this.shipmentNumber = this.route.snapshot.paramMap.get('ShipmentRef');
 

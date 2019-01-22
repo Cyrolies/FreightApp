@@ -3,7 +3,7 @@ import { Component, ViewEncapsulation, ViewChild , OnDestroy, OnInit} from '@ang
 import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { HttpClient } from '@angular/common/http';
-import { ToastController, LoadingController, NavController, ActionSheetController, NavParams, Events, Datetime } from '@ionic/angular';
+import { ToastController, LoadingController, NavController, ActionSheetController, NavParams, Events, Datetime, Content } from '@ionic/angular';
 import { MyNavService } from './../../providers/my-nav.service';
 import { ShipmentFilters } from '../../interfaces/shipment-filters';
 import { UserData } from '../../providers/user-data';
@@ -29,6 +29,9 @@ export class ShipmentListPage implements OnInit, OnDestroy {
   public showFilters = true;
   @ViewChild('myPickerFrom') myPickerFrom: Datetime;
   @ViewChild('myPickerTo') myPickerTo: Datetime;
+  
+  @ViewChild(Content) content: Content;
+  scrollPosition = 0;
 
   constructor(
     public actionSheetCtrl: ActionSheetController,
@@ -65,6 +68,23 @@ export class ShipmentListPage implements OnInit, OnDestroy {
        return;
     }
   }
+  
+  ionViewWillEnter() {
+    // Restore scroll position.
+    // Will become unnecessary in later Ionic versions.
+    // See: https://github.com/ionic-team/ionic/issues/14737
+    this.content.scrollToPoint(0, this.scrollPosition);
+  }
+
+  ionViewDidLeave() {
+    // Save scroll position.
+    // Will become unnecessary in later Ionic versions.
+    // See: https://github.com/ionic-team/ionic/issues/14737
+   this.content.getScrollElement().then(data => {
+     console.log(data.scrollTop);
+     this.scrollPosition = data.scrollTop;
+   });
+ }
 
   initialiseDatePickers() {
     const today = new Date();

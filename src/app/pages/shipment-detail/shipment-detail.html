@@ -28,14 +28,14 @@
             <ion-col>
               <ion-item no-padding text-wrap>
                 <ion-label position="stacked" color="primary">Consignee</ion-label>
-                <ion-item no-padding> {{shipment.Consignee?.name}}</ion-item>
+                <ion-item no-padding> {{this.global.toProperCase(shipment.Consignee?.name || '') || '-'}}</ion-item>
                 <!-- <ion-input readonly=true>{{shipment.Consignee?.name}}</ion-input> -->
               </ion-item>
             </ion-col>
             <ion-col>
               <ion-item no-padding text-wrap>
                 <ion-label position="stacked" color="primary">Consignor</ion-label>
-                <ion-item no-padding> {{shipment.Shipper?.name}}</ion-item>
+                <ion-item no-padding> {{this.global.toProperCase(shipment.Shipper?.name || '') || '-'}}</ion-item>
                 <!-- <ion-input readonly=true>{{shipment.Shipper?.name}}</ion-input> -->
               </ion-item>
             </ion-col>
@@ -44,14 +44,14 @@
             <ion-col>
               <ion-item no-padding text-wrap>
                 <ion-label position="stacked" color="primary">POL</ion-label>
-                <ion-item no-padding> {{shipment.PortOfLoading}}</ion-item>
+                <ion-item no-padding> {{shipment.PortOfLoading || '-'}}</ion-item>
                 <!-- <ion-input readonly=true>{{shipment.PortOfLoading}}</ion-input> -->
               </ion-item>
             </ion-col>
             <ion-col>
               <ion-item no-padding text-wrap>
                 <ion-label position="stacked" color="primary">POD</ion-label>
-                <ion-item no-padding> {{shipment.PortOfDischarge}}</ion-item>
+                <ion-item no-padding> {{shipment.PortOfDischarge || '-'}}</ion-item>
                 <!-- <ion-input readonly=true>{{shipment.PortOfDischarge}}</ion-input> -->
               </ion-item>
             </ion-col>
@@ -91,7 +91,7 @@
                             <ion-col col-6>
                               <ion-item no-padding text-wrap style="padding-bottom: 0.3em;">
                                 <ion-label position="stacked" color="primary">Description</ion-label>
-                                <ion-item no-padding> {{milestone.Description}}</ion-item>
+                                <ion-item no-padding> {{milestone.Description || '-'}}</ion-item>
                               </ion-item>
                             </ion-col>
                             <!-- <ion-col col-6>
@@ -219,10 +219,10 @@
                         <ion-card-header color="primary">
                           <ion-item detail="false" lines="none">
                               <ion-text style="padding-right: 5px!important" color="secondary">POL</ion-text> 
-                              <ion-text color="light"> {{leg.portOfLoading}}</ion-text> 
+                              <ion-text color="light"> {{leg.portOfLoading || '-'}}</ion-text> 
                               &nbsp;
                               <ion-text style="padding-right: 5px!important" color="secondary">POD</ion-text> 
-                              <ion-text color="light"> {{leg.portOfDischarge}}</ion-text>
+                              <ion-text color="light"> {{leg.portOfDischarge || '-'}}</ion-text>
                               <ion-button slot="end" class="secondary-button" (click)="viewTransportLeg(leg)">
                                 View Map
                                 <ion-icon slot="end" name="globe"></ion-icon>
@@ -235,13 +235,13 @@
                           <ion-col col-6>
                             <ion-item no-padding text-wrap>
                                 <ion-label position="stacked" color="primary">POL</ion-label>
-                                <ion-item no-padding> {{leg.portOfLoading}}</ion-item>                                
+                                <ion-item no-padding> {{leg.portOfLoading || '-'}}</ion-item>                                
                             </ion-item>
                           </ion-col>
                           <ion-col col-6>
                             <ion-item no-padding text-wrap>
                                 <ion-label position="stacked" color="primary">POD</ion-label>
-                                <ion-item no-padding> {{leg.portOfDischarge}}</ion-item>                                
+                                <ion-item no-padding> {{leg.portOfDischarge || '-'}}</ion-item>                                
                             </ion-item>
                           </ion-col>
                         </ion-row> 
@@ -277,7 +277,7 @@
                             <ion-col col-6>
                                 <ion-item no-padding text-wrap>
                                     <ion-label position="stacked" color="primary">Vessel</ion-label>
-                                    <ion-item no-padding> {{leg.vesselName}}</ion-item>                                    
+                                    <ion-item no-padding> {{this.global.toProperCase(leg.vesselName || '') || '-'}}</ion-item>                                    
                                 </ion-item>
                               </ion-col>
                               <ion-col col-6 *ngIf="isTransportModeValid(leg.transportMode)">
@@ -288,7 +288,7 @@
                                     </ion-label>
                                     <ion-item no-padding>
                                       <span slot="start" style="margin:0!important;">
-                                        {{getVesselIdentifier(leg)}}
+                                        {{getVesselIdentifier(leg) || '-'}}
                                       </span>
                                       <!-- <ion-item>
                                         <ion-button class="secondary-button" (click)="viewTransportLeg(leg)">
@@ -330,7 +330,7 @@
                         <ion-card-header color="primary">
                           <ion-item detail="false" lines="none">
                               <ion-text style="padding-right: 5px!important" color="secondary">CONTAINER</ion-text> 
-                              <ion-text color="light"> {{container.containerNumber}}</ion-text>                  
+                              <ion-text color="light"> {{container.containerNumber || '-'}}</ion-text>                  
                           </ion-item>
                         </ion-card-header>
               
@@ -338,15 +338,15 @@
                         <ion-row>
                           <ion-col col-6>
                             <ion-item no-padding text-wrap>
-                                <ion-label position="stacked" color="primary">Container Number</ion-label>
-                                <ion-item no-padding> {{container.containerNumber}}</ion-item>
+                                <ion-label position="stacked" color="primary">Container No.</ion-label>
+                                <ion-item no-padding> {{container.containerNumber || '-'}}</ion-item>
                                 <!-- <ion-input readonly=true>{{container.containerNumber}}</ion-input> -->
                             </ion-item>
                           </ion-col>
                           <ion-col col-6>
                             <ion-item no-padding text-wrap>
                                 <ion-label position="stacked" color="primary">Container Type</ion-label>
-                                <ion-item no-padding> {{container.containerType}}</ion-item>
+                                <ion-item no-padding> {{container.containerType || '-'}}</ion-item>
                                 <!-- <ion-input readonly=true>{{container.containerType}}</ion-input> -->
                             </ion-item>
                           </ion-col>
@@ -355,14 +355,14 @@
                           <ion-col col-6>
                             <ion-item no-padding text-wrap>
                                 <ion-label position="stacked" color="primary">Description</ion-label>
-                                <ion-item no-padding> {{container.containerDescription}}</ion-item>
+                                <ion-item no-padding> {{container.containerDescription || '-'}}</ion-item>
                                 <!-- <ion-input readonly=true>{{container.containerDescription}}</ion-input> -->
                             </ion-item>
                           </ion-col>
                           <ion-col col-6>
                             <ion-item no-padding text-wrap>
-                                <ion-label position="stacked" color="primary">Seal Number</ion-label>
-                                <ion-item no-padding> {{container.sealNumber}}</ion-item>
+                                <ion-label position="stacked" color="primary">Seal No.</ion-label>
+                                <ion-item no-padding> {{container.sealNumber || '-'}}</ion-item>
                                 <!-- <ion-input readonly=true>{{container.sealNumber}}</ion-input> -->
                             </ion-item>
                           </ion-col>

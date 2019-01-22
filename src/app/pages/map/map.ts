@@ -290,7 +290,7 @@ export class MapPage implements OnInit, OnDestroy {
           if (this.transportLeg.transportMode === ModeType.SEA) {
             displayItems.push({
               key: 'Vessel Name',
-              value: this.global.toProperCase(this.transportLeg.vesselName.toLocaleLowerCase())
+              value: this.global.toProperCase(this.transportLeg.vesselName || '')
             });
           }
 

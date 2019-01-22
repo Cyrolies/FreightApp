@@ -332,15 +332,11 @@ export class MapPage implements OnInit, OnDestroy {
           const displayItems = [
             {
               key: 'Estimated Departure',
-              value: this.transportLeg.estimatedDeparture
-                      ? formatDate(this.transportLeg.estimatedDeparture, 'yyyy-MM-dd', 'en-US')
-                      : ''
+              value: this.global.formatNullableDate(this.transportLeg.estimatedDeparture, '')
             },
             {
               key: 'Actual Departure',
-              value: this.transportLeg.actualDeparture
-                      ? formatDate(this.transportLeg.actualDeparture, 'yyyy-MM-dd', 'en-US')
-                      : ''
+              value: this.global.formatNullableDate(this.transportLeg.actualDeparture, '')
             } 
           ];
 
@@ -360,15 +356,11 @@ export class MapPage implements OnInit, OnDestroy {
           const displayItems = [
             {
               key: 'Estimated Arrival',
-              value: this.transportLeg.estimatedArrival
-                      ? formatDate(this.transportLeg.estimatedArrival, 'yyyy-MM-dd', 'en-US')
-                      : ''
+              value: this.global.formatNullableDate(this.transportLeg.estimatedArrival, '')
             },
             {
               key: 'Actual Arrival',
-              value: this.transportLeg.actualArrival 
-                      ? formatDate(this.transportLeg.actualArrival, 'yyyy-MM-dd', 'en-US')
-                      : ''
+              value: this.global.formatNullableDate(this.transportLeg.actualArrival, '')
             } 
           ];
 

@@ -2,6 +2,7 @@ import { forEach } from '@angular/router/src/utils/collection';
 import { FreightMilestone, MilestonesNext } from './freight-api.service';
 import { Injectable } from '@angular/core';
 import { ToastOptions } from '@ionic/core';
+import { formatDate } from '@angular/common';
 
 @Injectable({
     providedIn: 'root'
@@ -89,7 +90,20 @@ export class GlobalService {
             }
         );
     }
-            
-    constructor() {
+
+    public formatNullableDate(theDate: any, placeholder: string): string {
+        if (!this.isValidDate(theDate)) {
+            return placeholder;
+        } else {
+            return formatDate(theDate, 'yyyy-MM-dd', 'en-US');
+        }
     }
+
+    // Based on: https://stackoverflow.com/questions/1353684/detecting-an-invalid-date-date-instance-in-javascript
+    public isValidDate(d: any) {
+        if (!d) { return false; }
+        return d instanceof Date && !isNaN(d.getTime());
+    }
+
+    constructor() {}
 }

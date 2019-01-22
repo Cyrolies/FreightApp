@@ -107,14 +107,14 @@
                             <ion-col col-6>
                               <ion-item no-padding text-wrap>
                                 <ion-label position="stacked" color="primary">Actual Date</ion-label> 
-                                <ion-item no-padding> {{(milestone.ActualDate | date) || '-'}}</ion-item>                               
+                                <ion-item no-padding> {{ this.global.formatNullableDate(milestone.ActualDate, '-') }}</ion-item>                               
                                 <!-- <ion-input readonly=true>{{milestone.ActualDate}}</ion-input> -->
                               </ion-item>
                             </ion-col>
                             <ion-col col-6>
                               <ion-item no-padding text-wrap>
                                 <ion-label position="stacked" color="primary">Estimated Date</ion-label>   
-                                <ion-item no-padding> {{(milestone.EstimatedDate | date) || '-'}}</ion-item>                             
+                                <ion-item no-padding> {{ this.global.formatNullableDate(milestone.EstimatedDate, '-') }}</ion-item>                      
                                 <!-- <ion-input readonly=true>{{milestone.EstimatedDate}}</ion-input> -->
                               </ion-item>
                             </ion-col>
@@ -162,7 +162,7 @@
                                 <ion-col col-6>
                                   <ion-item no-padding text-wrap>
                                       <ion-label position="stacked" color="primary">Order Date</ion-label>
-                                      <ion-item no-padding> {{(order.OrderDate | date) || '-'}}</ion-item>
+                                      <ion-item no-padding> {{ this.global.formatNullableDate(order.OrderDate, '-') }}</ion-item>
                                       <!-- <ion-input readonly=true>{{order.OrderDate}}</ion-input> -->
                                   </ion-item>
                                 </ion-col>
@@ -171,7 +171,7 @@
                                 <ion-col col-6>
                                   <ion-item no-padding text-wrap>
                                       <ion-label position="stacked" color="primary">Actual Arrival</ion-label>
-                                      <ion-item no-padding> {{(order.ActualArrival | date) || '-'}}</ion-item>
+                                      <ion-item no-padding> {{ this.global.formatNullableDate(order.ActualArrival, '-') }}</ion-item>
                                       <!-- <ion-input readonly=true>{{order.ActualArrival}}</ion-input> -->
                                   </ion-item>
                                 </ion-col>
@@ -251,13 +251,13 @@
                           <ion-col col-6>
                             <ion-item no-padding text-wrap>
                                 <ion-label position="stacked" color="primary">Actual Arrival</ion-label>
-                                <ion-item no-padding> {{leg.actualArrival | date}}</ion-item>                                
+                                <ion-item no-padding> {{ this.global.formatNullableDate(leg.actualArrival, '-') }}</ion-item>                                
                             </ion-item>
                           </ion-col>
                           <ion-col col-6>
                             <ion-item no-padding text-wrap>
                                 <ion-label position="stacked" color="primary">Est. Arrival</ion-label>
-                                <ion-item no-padding> {{leg.estimatedArrival | date}}</ion-item>                                
+                                <ion-item no-padding> {{ this.global.formatNullableDate(leg.estimatedArrival, '-') }}</ion-item>                                
                             </ion-item>
                           </ion-col>
                         </ion-row> 
@@ -265,13 +265,13 @@
                           <ion-col col-6>
                               <ion-item no-padding text-wrap>
                                   <ion-label position="stacked" color="primary">Actual Departure</ion-label>
-                                  <ion-item no-padding> {{leg.actualDeparture | date}}</ion-item>                                  
+                                  <ion-item no-padding> {{ this.global.formatNullableDate(leg.actualDeparture, '-') }}</ion-item>                                  
                               </ion-item>
                             </ion-col>
                             <ion-col col-6>
                               <ion-item no-padding text-wrap>
                                   <ion-label position="stacked" color="primary">Est.Departure</ion-label>
-                                  <ion-item no-padding> {{leg.estimatedDeparture | date}}</ion-item>                                  
+                                  <ion-item no-padding> {{ this.global.formatNullableDate(leg.estimatedDeparture, '-') }}</ion-item>                                  
                               </ion-item>
                             </ion-col>
                         </ion-row> 

@@ -29,7 +29,7 @@ export class ShipmentDetailPage implements OnInit, OnDestroy {
     public route: ActivatedRoute,
     public navCtrl: NavController,
     private navService: MyNavService,
-    private global: GlobalService,
+    public global: GlobalService,
     public router: Router
   ) {}
 

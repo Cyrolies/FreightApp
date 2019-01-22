@@ -1,3 +1,4 @@
+import { MapPopover } from './map-popover';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
@@ -13,6 +14,10 @@ import { MapPageRoutingModule } from './map-routing.module';
   ],
   declarations: [
     MapPage,
+    MapPopover
+  ],
+  entryComponents: [
+    MapPopover
   ]
 })
 export class MapModule { }

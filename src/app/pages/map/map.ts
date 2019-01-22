@@ -1,12 +1,14 @@
 import { MyNavService } from './../../providers/my-nav.service';
-import { FreightApiService, ModeType, TransportLeg } from './../../providers/freight-api.service';
+import { FreightApiService, ModeType, TransportLeg, Position, AircraftPosition } from './../../providers/freight-api.service';
 import { Component, ElementRef, ViewChild, ViewEncapsulation, OnDestroy, OnInit } from '@angular/core';
 
-import { LoadingController, NavController, ToastController } from '@ionic/angular';
+import { LoadingController, NavController, ToastController, PopoverController } from '@ionic/angular';
 
 import { MapHostService } from '../../providers/map-host-service';
 import { BehaviorSubject } from 'rxjs';
 import { GlobalService } from '../../providers/global.service';
+import { MapPopover } from './map-popover';
+import { formatDate } from '@angular/common';
 
 
 @Component({
@@ -39,6 +41,7 @@ export class MapPage implements OnInit, OnDestroy {
   fromPort: Microsoft.Maps.Location;
   toPort: Microsoft.Maps.Location;
   currentFreightLocation: Microsoft.Maps.Location;
+  vesselDetails: any;
   isUnavailable = {
     vesselNumber: false,
     vesselPosition: false,
@@ -65,7 +68,8 @@ export class MapPage implements OnInit, OnDestroy {
     public navService: MyNavService,
     public navCtrl: NavController,
     private global: GlobalService,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private popoverController: PopoverController
   ) { }
   
   ngOnInit() {
@@ -226,12 +230,24 @@ export class MapPage implements OnInit, OnDestroy {
 
     } else {
 
-      const vesselPosition = await this.freightApiService.GetShipGeoLoc(vesselNumber).toPromise();
+      let lat: number, lon: number;
+      if (this.transportLeg.transportMode === ModeType.SEA) {
+        this.vesselDetails = await this.freightApiService.GetShipGeoLoc(vesselNumber).toPromise();
+
+        lat = this.vesselDetails && +(<Position>this.vesselDetails).LAT;
+        lon = this.vesselDetails && +(<Position>this.vesselDetails).LON;
+
+      } else {
+        this.vesselDetails = await this.freightApiService.GetAirlineGeoLoc(vesselNumber).toPromise();
+
+        lat = this.vesselDetails && (<AircraftPosition>this.vesselDetails).geography.latitude;
+        lon = this.vesselDetails && (<AircraftPosition>this.vesselDetails).geography.longitude;
+      }
+      
     
-      if (vesselPosition &&
-        !this.invalidCoordinates(+vesselPosition.LAT, +vesselPosition.LON)) {
+      if (!this.invalidCoordinates(lat, lon)) {
         
-        this.currentFreightLocation = new Microsoft.Maps.Location(vesselPosition.LAT, vesselPosition.LON);
+        this.currentFreightLocation = new Microsoft.Maps.Location(lat, lon);
 
       } else {
 
@@ -264,27 +280,100 @@ export class MapPage implements OnInit, OnDestroy {
       
       this.mapHostService.addIconPushpin(
         this.currentFreightLocation,
-        'Current Location',
         this.transportLeg.transportMode === ModeType.AIR ? 'assets/img/Pin-Blue-Air.png' : 'assets/img/Pin-Blue-Sea.png',
-        new Microsoft.Maps.Point(Math.ceil(this.pinIconDimensions.x / 2), this.pinIconDimensions.y)
+        new Microsoft.Maps.Point(Math.ceil(this.pinIconDimensions.x / 2), this.pinIconDimensions.y),
+        this.getVesselIdentifier(this.transportLeg),
+
+        (eventArgs) => {
+          let displayItems = [];
+
+          if (this.transportLeg.transportMode === ModeType.SEA) {
+            displayItems.push({
+              key: 'Vessel Name',
+              value: this.global.toProperCase(this.transportLeg.vesselName.toLocaleLowerCase())
+            });
+          }
+
+          displayItems = displayItems.concat([
+            {
+              key: 'Latitude',
+              value: this.currentFreightLocation.latitude.toString()
+            },
+            {
+              key: 'Longitude',
+              value: this.currentFreightLocation.longitude.toString()
+            } 
+          ]);
+
+          
+          if (this.transportLeg.transportMode === ModeType.AIR) {
+            let valueString = `${(<AircraftPosition>this.vesselDetails).geography.altitude * 100}`;
+            valueString = !!valueString ? `${valueString} ft` : '';
+
+            displayItems.push({
+              key: 'Altitude',
+              value: valueString
+            });
+          }
+
+          this.presentPopover(eventArgs, displayItems);
+        }
       );
     }
 
     if (this.fromPort) {
       this.mapHostService.addIconPushpin(
         this.fromPort,
-        'Port of Loading',
         'assets/img/Sm-ADD.png',
-        new Microsoft.Maps.Point(Math.ceil(this.circleIconDimensions.x / 2), this.circleIconDimensions.y)
+        new Microsoft.Maps.Point(Math.ceil(this.circleIconDimensions.x / 2), this.circleIconDimensions.y),
+        this.transportLeg.portOfLoading,
+
+        (eventArgs) => {
+          const displayItems = [
+            {
+              key: 'Estimated Departure',
+              value: this.transportLeg.estimatedDeparture
+                      ? formatDate(this.transportLeg.estimatedDeparture, 'yyyy-MM-dd', 'en-US')
+                      : ''
+            },
+            {
+              key: 'Actual Departure',
+              value: this.transportLeg.actualDeparture
+                      ? formatDate(this.transportLeg.actualDeparture, 'yyyy-MM-dd', 'en-US')
+                      : ''
+            } 
+          ];
+
+          this.presentPopover(eventArgs, displayItems);
+        }
       );
     }
 
     if (this.toPort) {
       this.mapHostService.addIconPushpin(
         this.toPort,
-        'Port of Discharge',
         'assets/img/Sm-ATA.png',
-        new Microsoft.Maps.Point(Math.ceil(this.circleIconDimensions.x / 2), this.circleIconDimensions.y)
+        new Microsoft.Maps.Point(Math.ceil(this.circleIconDimensions.x / 2), this.circleIconDimensions.y),
+        this.transportLeg.portOfDischarge,
+
+        (eventArgs) => {
+          const displayItems = [
+            {
+              key: 'Estimated Arrival',
+              value: this.transportLeg.estimatedArrival
+                      ? formatDate(this.transportLeg.estimatedArrival, 'yyyy-MM-dd', 'en-US')
+                      : ''
+            },
+            {
+              key: 'Actual Arrival',
+              value: this.transportLeg.actualArrival 
+                      ? formatDate(this.transportLeg.actualArrival, 'yyyy-MM-dd', 'en-US')
+                      : ''
+            } 
+          ];
+
+          this.presentPopover(eventArgs, displayItems);
+        }
       );
     }
 
@@ -340,8 +429,8 @@ export class MapPage implements OnInit, OnDestroy {
   invalidCoordinates(latitude: number, longitude: number) {
 
     // Coordinates should not be exactly zero.
-    return (Math.abs(latitude) < Number.EPSILON && Math.abs(longitude) < Number.EPSILON);
-
+    return latitude == null || longitude == null
+      || (Math.abs(latitude) < Number.EPSILON && Math.abs(longitude) < Number.EPSILON);
   }
 
   getVesselIdentifierType(mode: ModeType) {
@@ -385,4 +474,30 @@ export class MapPage implements OnInit, OnDestroy {
     
     await toast.present();
   }
+
+  async presentPopover(args: any , items: { key: string, value: string}[]) {
+
+    const popoverPositioner = {
+      target : {
+        getBoundingClientRect: () => {
+          return {
+            top: args.pageY,
+            left: args.pageX
+          };
+        }
+      }
+    };
+
+    const popover = await this.popoverController.create({
+      component: MapPopover,
+      componentProps: {
+        'items': items
+      },
+      event: popoverPositioner as any,
+      translucent: false
+    });
+    return await popover.present();
+  }
 }
+
+

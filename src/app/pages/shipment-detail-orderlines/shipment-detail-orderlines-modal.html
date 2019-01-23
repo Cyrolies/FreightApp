@@ -1,0 +1,35 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>Order Items</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list >
+      <ion-grid fixed>
+        <ion-row align-items-stretch>
+          <ion-col size="12" size-md="6"  *ngFor="let orderline of order.OrderLines">
+            <ion-col col=6>
+                <ion-item no-padding text-wrap>
+                  {{(orderline.PartNo)}} - {{(orderline.Description)}}
+            </ion-item>
+            </ion-col>
+            <ion-col col=2><ion-item no-padding text-wrap>{{(orderline.Quantity)}}</ion-item></ion-col>
+            <ion-col col=2><ion-item no-padding text-wrap>{{(orderline.ItemPrice)}}</ion-item></ion-col>
+              
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+  </ion-list> 
+
+</ion-content>
+  
+       
+<ion-footer>
+<ion-toolbar color="primary">
+    <ion-button expand="full" fill="clear" color="light" (click)="goBack()">
+      Back
+    </ion-button>
+</ion-toolbar>
+</ion-footer>

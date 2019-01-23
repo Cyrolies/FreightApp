@@ -35,9 +35,9 @@ export class EventTopic {
 @Exclude()
 export class Reference {
   @Expose()
-  Value: string;
+  value: string;
   @Expose()
-  Key: string;
+  referenceType: string;
  }
 
 @Exclude()
@@ -439,9 +439,6 @@ export class Order {
   OrderNumberSplit: string;
   @Expose()
   CountryOfOrigin: string;
-  // References: Reference[];
-  // Milestones: Milestone[];
-  // Hazards: Hazard[];
   @Expose()
   MarksAndNumbers: string;
   @Expose()
@@ -471,10 +468,41 @@ export class Order {
   @Expose()
   @Type(() => Organization)
   Organizations: Organization[];
-  // CustomValues: CustomValue[];
+  @Expose()
+  @Type(() => Reference)
+  References: Reference[];
+  Hazards: Hazard[];
+  @Expose()
+  @Type(() => CustomValue)
+  CustomValues: CustomValue[];
+  @Expose()
+  ReferencesAll: string;
 }
 
+@Exclude()
+export class CustomValue {
+  @Expose() 
+  Key: string;
+  @Expose()
+  Value: string;
+}
 
+@Exclude()
+export class Hazard {
+
+  @Expose() 
+  unCode: string;
+  @Expose()
+  commodityCode: string;
+  @Expose()
+  quantity: number;
+  @Expose()
+  quantityUnit: string;
+  @Expose()
+  weight: number;
+  @Expose()
+  weightUnit: string;
+}
 
 @Exclude()
 export class Container {

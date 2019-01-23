@@ -82,7 +82,8 @@ export class ShipmentListPage implements OnInit, OnDestroy {
   
     spinner.present().then(() => {
       
-    this.freightApiService.GetShipments(this.selectedProfile.CargoWiseCode, this.filters.shipmentno, this.filters.orderno,
+    // this.freightApiService.GetShipments(this.selectedProfile.CargoWiseCode, this.filters.shipmentno, this.filters.orderno,
+      this.freightApiService.GetShipments('KINCRO_AU', this.filters.shipmentno, this.filters.orderno,
       this.filters.datefrom, // !== '' ? format(this.filters.datefrom, 'yyyy-MM-dd') : '', //  (this.filters.datefrom['year'].text + '-' + this.filters.datefrom['month'].text + '-' + this.filters.datefrom['day'].text) : '',
       this.filters.dateto, // !== '' ? format(this.filters.dateto, 'yyyy-MM-dd') : '', // (this.filters.dateto['year'].text + '-' + this.filters.dateto['month'].text + '-' + this.filters.dateto['day'].text) : '',
       this.filters.openshipments, true).subscribe((result: FreightMilestone[]) => {

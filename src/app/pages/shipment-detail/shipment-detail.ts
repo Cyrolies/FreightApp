@@ -1,13 +1,14 @@
 import { GlobalService } from './../../providers/global.service';
-import { OrderLine } from './../../providers/freight-api.service';
-import { FreightApiService, Shipment, ModeType, TransportLeg } from '../../providers/freight-api.service';
+import { ShipmentDetailsOrderLinesModal } from './../shipment-detail-orderlines/shipment-detail-orderlines-modal';
+import { FreightApiService, Shipment, ModeType, TransportLeg, OrderLine, Order } from '../../providers/freight-api.service';
 import { Component, ViewEncapsulation, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { HttpClient } from '@angular/common/http';
-import { ToastController, LoadingController, NavController, ActionSheetController, NavParams, Events, Tabs } from '@ionic/angular';
+import { ToastController, LoadingController, NavController, ActionSheetController, NavParams, Events, Tabs, ModalController } from '@ionic/angular';
 import { forEach } from '@angular/router/src/utils/collection';
 import { MyNavService } from '../../providers/my-nav.service';
+import { Reference } from '@angular/compiler/src/render3/r3_ast';
 
 @Component({
   selector: 'page-shipment-detail',
@@ -30,7 +31,8 @@ export class ShipmentDetailPage implements OnInit, OnDestroy {
     public navCtrl: NavController,
     private navService: MyNavService,
     private global: GlobalService,
-    public router: Router
+    public router: Router,
+    public modalCtrl: ModalController,
   ) {}
 
 
@@ -76,13 +78,44 @@ export class ShipmentDetailPage implements OnInit, OnDestroy {
              this.shipment.Shipper = orgConsignor[0];
            }
            this.shipment.milestones = result.milestones;
-           this.shipment.orders = result.orders;
+          
+          
            this.shipment.transportLegs = result.transportLegs;
            this.shipment.containers = result.containers;
            this.shipment.ShipmentNo = this.route.snapshot.paramMap.get('ShipmentRef');
+           this.shipment.references = result.references;
           //  Get references
           if (this.shipment.references != null) {
-              this.shipment.ShipmentNumber = this.shipment.references[0].Value;
+            for (const ref of this.shipment.references) {
+              // Not empty and not shipment number
+             if (ref.value !== null) {
+               if (!(ref.referenceType = '5')) {
+               this.shipment.ReferenceAll = this.shipment.ReferenceAll != null ? this.shipment.ReferenceAll + '-' : ''  + ref.value;
+               }
+             }
+           
+          }
+
+          if (result.orders != null) {
+              let refDetails: string;
+              result.orders.forEach( (order) => {
+                order.References.forEach ( (refer) => {
+                  if ( refer.value !== null && refer.value !== '0' ) {
+                    console.log(order.ReferencesAll);
+                    console.log(refer.value);
+                    
+                    if ((refDetails || '').search(refer.value) === -1) {  
+                     refDetails = refDetails != null ? refDetails + '-' + refer.value : refer.value;
+                     console.log(refDetails);
+                    }
+                  }
+                });
+                order.ReferencesAll = refDetails;
+              });
+              this.shipment.orders = result.orders;
+            
+          }
+            
           }       
 
          }
@@ -104,6 +137,23 @@ export class ShipmentDetailPage implements OnInit, OnDestroy {
 
       }, error =>  spinner.dismiss());
     });
+  }
+
+  async presentOrderItemsModal(ord: Order) {
+    const modal = await this.modalCtrl.create({
+      component: ShipmentDetailsOrderLinesModal,
+      componentProps: {
+        'order': ord
+      },
+      backdropDismiss: false,
+      keyboardClose: true
+    });
+
+    // this.navService.push({
+    //   order: Order,
+    // });
+
+    modal.present();
   }
 
   isTransportModeValid(mode) {

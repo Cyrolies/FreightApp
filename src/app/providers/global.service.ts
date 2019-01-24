@@ -102,7 +102,7 @@ export class GlobalService {
     // Based on: https://stackoverflow.com/questions/1353684/detecting-an-invalid-date-date-instance-in-javascript
     public isValidDate(d: any) {
         if (!d) { return false; }
-        return d instanceof Date && !isNaN(d.getTime());
+        return d instanceof Date && !isNaN(d.getTime()) && d.getFullYear() > 1000;
     }
 
     constructor() {}

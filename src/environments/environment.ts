@@ -4,7 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 export const environment = {
   production: false,
-  freightApiUrl: 'https://freight-portal-mobile-api-test.production-ase1.p.azurewebsites.net/api/', 
+  freightApiUrl: 'https://freight-portal-mobile-api-live.production-ase1.p.azurewebsites.net/api/', 
   // freightApiUrl: 'https://freight-portal-mobile-api-live.production-ase1.p.azurewebsites.net/api/', 
                   // https://freight-portal-mobile-api-live.production-ase1.p.azurewebsites.net
   // freightApiUrl: 'http://localhost:9773/api/',

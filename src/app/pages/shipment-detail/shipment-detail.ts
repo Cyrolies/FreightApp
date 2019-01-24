@@ -130,15 +130,17 @@ export class ShipmentDetailPage implements OnInit, OnDestroy {
           }
 
           if (result.orders != null) {
-              let refDetails: string;
-              result.orders.forEach( (order) => {
+              
+              result.orders.forEach( (order) => {       
+                let refDetails: string = null;
+                
                 order.References.forEach ( (refer) => {
                   if ( refer.value !== null && refer.value !== '0' ) {
                     console.log(order.ReferencesAll);
                     console.log(refer.value);
                     
                     if ((refDetails || '').search(refer.value) === -1) {  
-                     refDetails = refDetails != null ? refDetails + '-' + refer.value : refer.value;
+                     refDetails = refDetails != null ? refDetails + ', ' + refer.value : refer.value;
                      console.log(refDetails);
                     }
                   }

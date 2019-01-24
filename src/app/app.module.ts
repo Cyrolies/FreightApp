@@ -19,6 +19,8 @@ import { HttpModule } from '@angular/http';
 import { Network } from '@ionic-native/network/ngx';
 // import { NetworkService } from './providers/network.service';
 import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
+import { SearchPipe } from './pipes/search/search.pipe';
+import { SortPipe } from './pipes/sort/sort.pipe';
 
 @NgModule({
   imports: [
@@ -33,7 +35,9 @@ import { ScreenOrientation } from '@ionic-native/screen-orientation/ngx';
     ProfileSelectModalModule
   ],
   declarations: [
-    AppComponent
+    AppComponent,
+    // SearchPipe,
+    // SortPipe
   ],
   providers: [
     InAppBrowser,

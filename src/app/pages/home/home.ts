@@ -140,7 +140,7 @@ export class HomePage implements OnInit, OnDestroy {
           // add margin of text when position is `outside` or `border`
           // default is 2
           // (This is the margin between the end of the graph and the start of the label text.)
-          textMargin: 5 // TODO: Check that there is enough left/right margin on canvas to support this text margin.
+          textMargin: 10 // TODO: Check that there is enough left/right margin on canvas to support this text margin.
         }
       }
   };
@@ -236,7 +236,7 @@ export class HomePage implements OnInit, OnDestroy {
         // If smallest slice has width less tha 12%, show labels outside chart.
         if (Math.min(this.chartData[0], this.chartData[1]) < 12) {
           this.chartOptions.plugins.labels.position = 'outside';
-          this.chartOptions.plugins.labels.fontColor = [this.colors.white, this.colors.white];
+           this.chartOptions.plugins.labels.fontColor = [this.colors.white, this.colors.white];
 
         } else {
           this.chartOptions.plugins.labels.position = 'default';

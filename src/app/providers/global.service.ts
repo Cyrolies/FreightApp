@@ -105,5 +105,14 @@ export class GlobalService {
         return d instanceof Date && !isNaN(d.getTime()) && d.getFullYear() > 1000;
     }
 
+    /*
+    * Enables list string to broken across multiple lines according to css wordwrap properties.
+    */
+    public ensureCommasSeperatedListIsSpaced(text: string) {
+        const spaced = text.split(new RegExp(',(?=\\S)')).join(', ');
+        // const spaced = text.replace(new RegExp(',(?=\\S)', 'g'), ', ');
+        return spaced;
+    }
+
     constructor() {}
 }

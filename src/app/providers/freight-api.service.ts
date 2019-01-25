@@ -718,6 +718,8 @@ export class Shipment {
   @Type(() => Order)
   orders: Order[];
   @Expose()
+  OrderRef: string;
+  @Expose()
   @Type(() => Organization)
   organizations: Organization[];
   @Expose()

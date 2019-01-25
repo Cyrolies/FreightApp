@@ -66,14 +66,6 @@ export class ShipmentDetailPage implements OnInit, OnDestroy {
 
     this.shipmentNumber = this.route.snapshot.paramMap.get('ShipmentRef');
 
-    // if (this.tabRef) {
-
-    //   const tabIndex = this.route.snapshot.paramMap.get('tabIndex');
-    //   this.tabRef.select(tabIndex == null ? 0 : +tabIndex);
-    // }
-
-    // TODO: Return to saved scroll position (https://github.com/joanroig/Ionic4-restore-scroll-position).
-
     const spinner = await this.loading.create();
 
     spinner.present().then(() => {
@@ -154,21 +146,7 @@ export class ShipmentDetailPage implements OnInit, OnDestroy {
           }       
 
          }
-        spinner.dismiss();
-
-        // TODO: Delete test data.
-        // const line = new OrderLine();
-        // line.Description = 'This is an order line with a long name.';
-        // if (this.shipment.orders.length) {
-        //   if (!this.shipment.orders[0].OrderLines) {
-        //     this.shipment.orders[0].OrderLines = new Array<OrderLine>();
-        //   }
-        //   this.shipment.orders[0].OrderLines.push(line);
-        //   this.shipment.orders[0].OrderLines.push(line);
-        //   this.shipment.orders[0].OrderLines.push(line);
-        //   this.shipment.orders[0].OrderLines.push(line);
-        // }
-        
+        spinner.dismiss();        
 
       }, error =>  spinner.dismiss());
     });
@@ -183,10 +161,6 @@ export class ShipmentDetailPage implements OnInit, OnDestroy {
       backdropDismiss: false,
       keyboardClose: true
     });
-
-    // this.navService.push({
-    //   order: Order,
-    // });
 
     modal.present();
   }

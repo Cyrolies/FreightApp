@@ -102,8 +102,8 @@ export class ShipmentListPage implements OnInit, OnDestroy {
   
     spinner.present().then(() => {
       
-    // this.freightApiService.GetShipments(this.selectedProfile.CargoWiseCode, this.filters.shipmentno, this.filters.orderno,
-      this.freightApiService.GetShipments('KINCRO_AU', this.filters.shipmentno, this.filters.orderno,
+    this.freightApiService.GetShipments(this.selectedProfile.CargoWiseCode, this.filters.shipmentno, this.filters.orderno,
+      // this.freightApiService.GetShipments('KINCRO_AU', this.filters.shipmentno, this.filters.orderno,
       this.filters.datefrom, // !== '' ? format(this.filters.datefrom, 'yyyy-MM-dd') : '', //  (this.filters.datefrom['year'].text + '-' + this.filters.datefrom['month'].text + '-' + this.filters.datefrom['day'].text) : '',
       this.filters.dateto, // !== '' ? format(this.filters.dateto, 'yyyy-MM-dd') : '', // (this.filters.dateto['year'].text + '-' + this.filters.dateto['month'].text + '-' + this.filters.dateto['day'].text) : '',
       this.filters.openshipments, true).subscribe((result: FreightMilestone[]) => {
@@ -180,86 +180,5 @@ export class ShipmentListPage implements OnInit, OnDestroy {
     
     await toast.present();
   }
-    // this.confData.getSpeakers().subscribe((speakers: any[]) => {
-    //   this.speakers = speakers;
-    // });
-   
-
-  // goToSessionDetail(session: any) {
-  //   this.router.navigateByUrl(`app/tabs/(speakers:session/${session.id})`);
-  // }
-
-  // goToSpeakerDetail(speaker: any) {
-  //   this.router.navigateByUrl(
-  //     `app/tabs/(speakers:speaker-details/${speaker.id})`
-  //   );
-  // }
-
-  // goToSpeakerTwitter(speaker: any) {
-  //   this.inAppBrowser.create(
-  //     `https://twitter.com/${speaker.twitter}`,
-  //     '_blank'
-  //   );
-  // }
-
-  // async openSpeakerShare(speaker: any) {
-  //   const actionSheet = await this.actionSheetCtrl.create({
-  //     header: 'Share ' + speaker.name,
-  //     buttons: [
-  //       {
-  //         text: 'Copy Link',
-  //         handler: () => {
-  //           console.log(
-  //             'Copy link clicked on https://twitter.com/' + speaker.twitter
-  //           );
-  //           if (
-  //             (window as any)['cordova'] &&
-  //             (window as any)['cordova'].plugins.clipboard
-  //           ) {
-  //             (window as any)['cordova'].plugins.clipboard.copy(
-  //               'https://twitter.com/' + speaker.twitter
-  //             );
-  //           }
-  //         }
-  //       },
-  //       {
-  //         text: 'Share via ...'
-  //       },
-  //       {
-  //         text: 'Cancel',
-  //         role: 'cancel'
-  //       }
-  //     ]
-  //   });
-
-  //   await actionSheet.present();
-  // }
-
-  // async openContact(speaker: any) {
-  //   const mode = 'ios'; // this.config.get('mode');
-
-  //   const actionSheet = await this.actionSheetCtrl.create({
-  //     header: 'Contact ' + speaker.name,
-  //     buttons: [
-  //       {
-  //         text: `Email ( ${speaker.email} )`,
-  //         icon: mode !== 'ios' ? 'mail' : null,
-  //         handler: () => {
-  //           window.open('mailto:' + speaker.email);
-  //         }
-  //       },
-  //       {
-  //         text: `Call ( ${speaker.phone} )`,
-  //         icon: mode !== 'ios' ? 'call' : null,
-  //         handler: () => {
-  //           window.open('tel:' + speaker.phone);
-  //         }
-  //       }
-  //     ]
-  //   });
-
-  //   await actionSheet.present();
-  // }
-
  
 }

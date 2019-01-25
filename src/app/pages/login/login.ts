@@ -74,8 +74,6 @@ export class LoginPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    // this.menu.enable(false);
-
     this.userData.getUsername().then((username) => {
       if (username) {
         this.login.username = username;
@@ -87,10 +85,7 @@ export class LoginPage implements OnInit {
     this.handleLogoCollision(this.logo, this.loginButton);
   }
 
-  ionViewDidLeave() {
-    // enable the root left menu when leaving the tutorial page
-    // this.menu.enable(true);
-  }
+  ionViewDidLeave() { }
 
   async onLogin(form: NgForm) {
 

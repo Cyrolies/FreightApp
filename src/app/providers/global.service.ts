@@ -2,6 +2,7 @@ import { forEach } from '@angular/router/src/utils/collection';
 import { FreightMilestone, MilestonesNext } from './freight-api.service';
 import { Injectable } from '@angular/core';
 import { ToastOptions } from '@ionic/core';
+import { formatDate } from '@angular/common';
 
 @Injectable({
     providedIn: 'root'
@@ -59,20 +60,59 @@ export class GlobalService {
     }
 
     
-    public getToastConfiguration(toastMessage: string): ToastOptions {
+    public getToastConfiguration(toastMessage: string, requireDismissal = false): ToastOptions {
         
-        const toastConfig = {
-            message: toastMessage,
-            duration: 5000,
-            position: 'bottom',
-            showCloseButton: false
-        };
+        let toastConfig: ToastOptions;
+        if (!requireDismissal) {
+            toastConfig = {
+                message: toastMessage,
+                duration: 5000,
+                position: 'bottom',
+                showCloseButton: false
+            };
+        } else {
+            toastConfig = {
+                message: toastMessage,
+                position: 'bottom',
+                showCloseButton: true
+            };
+        }
 
         return <ToastOptions> toastConfig;                
     }
 
-
-            
-    constructor() {
+    // From: https://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript
+    public toProperCase(str: string) {
+        return str.replace(
+            /\w\S*/g,
+            function(txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            }
+        );
     }
+
+    public formatNullableDate(theDate: any, placeholder: string): string {
+        if (!this.isValidDate(theDate)) {
+            return placeholder;
+        } else {
+            return formatDate(theDate, 'yyyy-MM-dd', 'en-US');
+        }
+    }
+
+    // Based on: https://stackoverflow.com/questions/1353684/detecting-an-invalid-date-date-instance-in-javascript
+    public isValidDate(d: any) {
+        if (!d) { return false; }
+        return d instanceof Date && !isNaN(d.getTime()) && d.getFullYear() > 1000;
+    }
+
+    /*
+    * Enables list string to broken across multiple lines according to css wordwrap properties.
+    */
+    public ensureCommasSeperatedListIsSpaced(text: string) {
+        const spaced = text.split(new RegExp(',(?=\\S)')).join(', ');
+        // const spaced = text.replace(new RegExp(',(?=\\S)', 'g'), ', ');
+        return spaced;
+    }
+
+    constructor() {}
 }

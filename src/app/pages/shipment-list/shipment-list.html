@@ -13,45 +13,49 @@
 </ion-header>
 
 <ion-content class="backImg">
-  <ion-list style="background-color: transparent">
-      <ion-grid fixed>
-          <ion-row>
+
+    <ion-item lines="none" [hidden]="showFilters">
+            <ion-avatar (click)='ngShowFilters()'>
+                <img  src="../../../assets/img/FilterBlue.png">
+            </ion-avatar>
+    </ion-item>
+
+    <ion-grid class="formGrid" [hidden]="!showFilters">
+        <ion-row>
             <ion-col size="12" size-md="6">
-                <ion-item>
-                <ion-avatar  [hidden]="showFilters" (click)='ngShowFilters()'>
-                  <img  src="../../../assets/img/FilterBlue.png">
-                </ion-avatar>
-                </ion-item>
                 <form #filterForm="ngForm" novalidate [hidden]="!showFilters">
-                    <ion-item>
-                        <ion-label class="search-filter-label" floating>Shipment No.</ion-label>
-                        <ion-input class="search-filter" [(ngModel)]="filters.shipmentno" name="shipno" type="text"></ion-input>
+                    <ion-item lines="full">
+                        <ion-label position="fixed" class="wider-fixed" color="primary">Shipment No.</ion-label>
+                        <ion-input [(ngModel)]="filters.shipmentno" name="shipno" type="text"></ion-input>
                     </ion-item>
-                    <ion-item>
-                        <ion-label class="search-filter-label" floating>Order No.</ion-label>
-                        <ion-input class="search-filter" [(ngModel)]="filters.orderno" name="ordno" type="text"></ion-input>
+                    <ion-item lines="full">
+                        <ion-label position="fixed" class="wider-fixed" color="primary">Order Ref.</ion-label>
+                        <ion-input [(ngModel)]="filters.orderno" name="ordno" type="text"></ion-input>
                     </ion-item>
-                    <ion-item>
-                        <ion-label class="search-filter-label" floating>Date From.</ion-label>
-                        <ion-datetime #myPickerFrom class="search-filter" displayFormat="YYYY-MM-DD" (ionChange)='ngOnDateFromChange(myPickerFrom.value)' name="dtfrom"></ion-datetime>
+                    <ion-item lines="full">
+                        <ion-label position="fixed" class="wider-fixed" color="primary">Date From.</ion-label>
+                        <ion-datetime #myPickerFrom displayFormat="YYYY-MM-DD" (ionChange)='ngOnDateFromChange(myPickerFrom.value)' name="dtfrom"></ion-datetime>
                     </ion-item>
-                    <ion-item>
-                        <ion-label class="search-filter-label" floating>Date To.</ion-label>
-                        <ion-datetime #myPickerTo class="search-filter" displayFormat="YYYY-MM-DD" (ionChange)='ngOnDateToChange(myPickerTo.value)' name="dtto"></ion-datetime>
+                    <ion-item lines="full">
+                        <!-- <ion-label class="search-filter-label" floating>Date To.</ion-label> -->
+                        <ion-label position="fixed" class="wider-fixed" color="primary">Date To.</ion-label>
+                        <ion-datetime #myPickerTo displayFormat="YYYY-MM-DD" (ionChange)='ngOnDateToChange(myPickerTo.value)' name="dtto"></ion-datetime>
                     </ion-item>
-                    <ion-item>
-                        <ion-label item-width="20%" class="search-filter-label" floating>Open Shipments</ion-label>
-                        <ion-checkbox [(ngModel)]="filters.openshipments" name="openship" ></ion-checkbox>
+                    <ion-item lines="full">
+                        <ion-checkbox slot="start" [(ngModel)]="filters.openshipments" name="openship" ></ion-checkbox>
+                        <ion-label color="primary">Open Shipments</ion-label>                        
                     </ion-item>
                 </form>
             </ion-col>
-          </ion-row>
-          <ion-row [hidden]="!showFilters" align-items-stretch>
-              <ion-col size="12" size-md="6">
-                  <ion-button (click)="listShipments(filterForm)" type="submit" >Search</ion-button>
-              </ion-col>
-            </ion-row>
-        </ion-grid>
+        </ion-row>
+
+        <ion-row [hidden]="!showFilters" align-items-stretch>
+            <ion-col size="12" size-md="6" text-center>
+                <ion-button (click)="listShipments(filterForm)" type="submit" class="secondary-button">Search</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
     <ion-grid fixed>
       <ion-row align-items-stretch>
         <ion-col text-right size="12" size-md="6" *ngFor="let freightmilestone of displayedFreightmilestones">
@@ -174,23 +178,34 @@
             
                                 <ion-col col-6>
                                     <ion-item no-padding text-wrap>
-                                        <ion-label position="stacked" color="primary">Mode {{(freightmilestone.TransportMode) || '-'}}</ion-label>
+                                        <ion-label position="stacked" color="primary">Mode: {{(freightmilestone.TransportMode) || '-'}}</ion-label>
                                         <!-- <ion-item no-padding> {{(freightmilestone.TransportMode) || '-'}}</ion-item> -->
                                     </ion-item>
                                 </ion-col>
-                            </ion-row>
+                        </ion-row>
+
+                        <ion-row *ngIf="freightmilestone.ConsigneeRef">
+                            <ion-col>
+                                <ion-item no-padding>
+                                    <ion-label position="stacked" color="primary">Order Refs</ion-label>
+                                    <ion-item no-padding>
+                                        <ion-text class="multiline-ellipsis">{{this.global.ensureCommasSeperatedListIsSpaced(freightmilestone.ConsigneeRef)}}</ion-text>
+                                    </ion-item>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+
                     <ion-row>
+                        <ion-col col-6>
+                                <ion-item no-padding text-wrap>
+                                    <ion-label position="stacked" color="primary">Consignor</ion-label>
+                                    <ion-item no-padding> {{this.global.toProperCase(freightmilestone.Shipper || '') || '-'}}</ion-item>
+                                </ion-item>
+                            </ion-col>
                         <ion-col col-6>                                
                             <ion-item no-padding text-wrap>
                                 <ion-label position="stacked" color="primary">Consignee</ion-label>
-                                <ion-item no-padding> {{(freightmilestone.Consignee) || '-'}}</ion-item>
-                            </ion-item>
-                        </ion-col>
-    
-                        <ion-col col-6>
-                            <ion-item no-padding text-wrap>
-                                <ion-label position="stacked" color="primary">Consignor</ion-label>
-                                <ion-item no-padding> {{(freightmilestone.Shipper) || '-'}}</ion-item>
+                                <ion-item no-padding> {{this.global.toProperCase(freightmilestone.Consignee || '') || '-'}}</ion-item>
                             </ion-item>
                         </ion-col>
                     </ion-row>
@@ -244,7 +259,6 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-  </ion-list>
 
     <ion-infinite-scroll class="whiteSpinner" (ionInfinite)="displayMoreData($event)"
         [disabled]="isAllDataDisplayed">

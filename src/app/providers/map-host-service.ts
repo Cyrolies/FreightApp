@@ -90,17 +90,27 @@ export class MapHostService {
   }
 
   addIconPushpin(location: Microsoft.Maps.Location, 
-    theTitle: string,
     iconUrl: string,
-    iconAnchor: Microsoft.Maps.Point): Microsoft.Maps.Pushpin {
+    iconAnchor: Microsoft.Maps.Point,
+    theTitle?: string,
+    onPushpinClick?: (eventArg?: any) => void): Microsoft.Maps.Pushpin {
 
-      const pin = new Microsoft.Maps.Pushpin(location, {
-        // title: theTitle,
+      const pinConfiguration = {
         icon: iconUrl,
         anchor: iconAnchor
-      });    
+      };
+
+      if (theTitle) {
+        pinConfiguration['title'] = theTitle;
+      }
+
+      const pin = new Microsoft.Maps.Pushpin(location, pinConfiguration); 
 
       this.map.entities.push(pin);
+
+      if (onPushpinClick) {
+        Microsoft.Maps.Events.addHandler(pin, 'click', onPushpinClick);
+      }
 
       return pin;
   }

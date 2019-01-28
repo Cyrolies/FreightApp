@@ -71,7 +71,7 @@ export class HomePage implements OnInit, OnDestroy {
   
   public colors = undefined;
   public chartType = 'pie';
-  public chartLabels: string[] = ['ON TIME', 'LATE'];
+  public chartLabels: string[] = ['OPEN', 'LATE'];
   public chartData: number[] = [];
   public chartColors: any[] = undefined;
 

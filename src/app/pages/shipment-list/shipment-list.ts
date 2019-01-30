@@ -108,6 +108,9 @@ export class ShipmentListPage implements OnInit, OnDestroy {
       this.filters.dateto, // !== '' ? format(this.filters.dateto, 'yyyy-MM-dd') : '', // (this.filters.dateto['year'].text + '-' + this.filters.dateto['month'].text + '-' + this.filters.dateto['day'].text) : '',
       this.filters.openshipments, true).subscribe((result: FreightMilestone[]) => {
 
+
+    // tslint:disable-next-line:no-debugger
+    debugger;
     this.freightmilestones =  result;
 
     this.displayedFreightmilestones = [];
@@ -169,6 +172,9 @@ export class ShipmentListPage implements OnInit, OnDestroy {
   }
 
   goToShipmentDetail(FreightMilestone: any) {
+    // tslint:disable-next-line:no-debugger
+    debugger;
+
     this.navCtrl.navigateForward(`shipments/details/${FreightMilestone.ShipmentRef}`);
   }
 

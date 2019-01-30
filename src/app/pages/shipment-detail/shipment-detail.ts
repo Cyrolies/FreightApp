@@ -72,6 +72,9 @@ export class ShipmentDetailPage implements OnInit, OnDestroy {
       
       this.freightApiService.GetShipment(this.shipmentNumber).subscribe((result: Shipment) => {
 
+        // tslint:disable-next-line:no-debugger
+        debugger;
+
         this.shipment =  result;
          if (this.shipment != null) {
            const orgConsignee = this.shipment.organizations.filter(o => o.organizationType === 0);
@@ -107,7 +110,7 @@ export class ShipmentDetailPage implements OnInit, OnDestroy {
 
            this.shipment.transportLegs = result.transportLegs;
            this.shipment.containers = result.containers;
-           this.shipment.ShipmentNo = this.route.snapshot.paramMap.get('ShipmentRef');
+           this.shipment.ShipmentNo = this.shipmentNumber;
            this.shipment.references = result.references;
           //  Get references
           if (this.shipment.references != null) {

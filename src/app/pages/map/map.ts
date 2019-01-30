@@ -94,6 +94,9 @@ export class MapPage implements OnInit, OnDestroy {
     this.createdToastInstances = [];
 
     const params = this.navService.pop();
+    // tslint:disable-next-line:no-debugger
+    debugger;
+
     this.returnToShipment = params['returnToShipment'];
     this.transportLeg = params['transportLeg'];
 
@@ -278,6 +281,9 @@ export class MapPage implements OnInit, OnDestroy {
     // Draw current location first, so that it will overlay POD/POL if necessary.
     if (this.currentFreightLocation) { 
       
+      // tslint:disable-next-line:no-debugger
+      debugger;
+
       this.mapHostService.addIconPushpin(
         this.currentFreightLocation,
         this.transportLeg.transportMode === ModeType.AIR ? 'assets/img/Pin-Blue-Air.png' : 'assets/img/Pin-Blue-Sea.png',

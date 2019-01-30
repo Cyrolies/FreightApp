@@ -2,10 +2,15 @@ page-shipment-list {
   .scroll {
     background: white;
   }
+
   .backImg
   {
     background-image: url('../../../assets/img/Ocean.png');
-   // background-color: transparent;
+  }
+
+  .formGrid {
+    background: white !important;
+    margin:0 !important;
   }
 
   .whiteSpinner ion-spinner {
@@ -74,6 +79,8 @@ page-shipment-list {
    // background-color:red;
     padding:0;
   }
+
+
   .search-filter-label
   {
     color: white;
@@ -87,6 +94,10 @@ page-shipment-list {
     background-color: white;
     padding:0;
   }
+  .wider-fixed {
+    flex: 0 0 150px !important;
+  }
+
   .ion-avatar {
     display: flex!important;
     flex-direction: column!important;    /* align flex items vertically */

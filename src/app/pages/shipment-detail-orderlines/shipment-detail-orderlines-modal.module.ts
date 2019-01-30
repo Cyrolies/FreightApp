@@ -4,12 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { ShipmentDetailsOrderLinesModal } from './shipment-detail-orderlines-modal';
+import { PipeModule } from '../../pipes/pipe.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    PipeModule
   ],
   declarations: [ShipmentDetailsOrderLinesModal],
   entryComponents: [],

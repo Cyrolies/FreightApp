@@ -1,5 +1,5 @@
 import { TransportLeg } from './providers/freight-api.service';
-import { environment } from './../environments/environment.prod';
+import { environment } from './../environments/environment';
 // import { NetworkService } from './providers/network.service';
 import { MyNavService } from './providers/my-nav.service';
 import { AboutModal } from './pages/about-modal/about-modal';

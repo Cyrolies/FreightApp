@@ -59,7 +59,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
                 //  Place toast at the top of the screen, rather than at the default bottom position,
                 //      so that it doesn't clash with another error toast that may be placed there by
                 //      the page making the request.
-                if (res.status === 401 || res.status === 403) { // 401: Unauthenticated; 403: Unauthorized.
+                if (res.status === 403) { // 403: Unauthorized.
 
                     this.userData.isLoggedIn().then(currentlyLoggedIn => {
                         if (currentlyLoggedIn) {

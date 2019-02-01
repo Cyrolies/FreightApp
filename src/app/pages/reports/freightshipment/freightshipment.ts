@@ -82,7 +82,7 @@ export class FreightShipmentPage implements OnInit, OnDestroy {
 
     powerBISettings.UserID = this.selectedProfile.CargoWiseCode;
 
-    powerBISettings.RoleName = 'FreightDashboard_Mobile_RLS';
+    powerBISettings.RoleName = 'Freight_Mobile_MonthlySummary_All';
     powerBISettings.ReportID = '164339c4-59d3-4f79-a31b-e4235807369f';
     powerBISettings.WorkspaceID = '0605ad47-8f86-435d-b6d8-63dc5842ee07';
 
@@ -139,7 +139,7 @@ export class FreightShipmentPage implements OnInit, OnDestroy {
           console.log('Loaded');
       });
         
-      report.on('error', function(event) {
+      report.on('error', (event) => {
         console.log('Me : ' + event.detail);
         this.presentToast('PowerBI report failed to display.');
 

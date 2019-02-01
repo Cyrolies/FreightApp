@@ -82,8 +82,8 @@ export class FreightSpendPage implements OnInit, OnDestroy {
 
     powerBISettings.UserID = this.selectedProfile.CargoWiseCode;
 
-    powerBISettings.RoleName = 'Freight Spend RLS';
-    powerBISettings.ReportID = '6930b36e-8ea3-4aba-b4ae-4b81c3ec4e99';
+    powerBISettings.RoleName = 'Freight_MobileDashboard_Spend_Viewall';
+    powerBISettings.ReportID = '6207ba27-b218-43f5-87b1-479598475a19'; // '6930b36e-8ea3-4aba-b4ae-4b81c3ec4e99';
     powerBISettings.WorkspaceID = '0605ad47-8f86-435d-b6d8-63dc5842ee07';
 
     this.freightApiService.GetPowerBiReport(powerBISettings).subscribe((result: EmbedConfig) => {
@@ -140,7 +140,7 @@ export class FreightSpendPage implements OnInit, OnDestroy {
           console.log('Loaded');
       });
 
-      report.on('error', function(event) {
+      report.on('error', (event) => {
         console.log('Me : ' + event.detail);
         this.presentToast('PowerBI report failed to display.');
 

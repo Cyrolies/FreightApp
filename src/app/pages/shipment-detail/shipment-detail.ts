@@ -1,4 +1,4 @@
-import { GlobalService } from './../../providers/global.service';
+import { GlobalService, EventCode } from './../../providers/global.service';
 import { ShipmentDetailsOrderLinesModal } from './../shipment-detail-orderlines/shipment-detail-orderlines-modal';
 import { FreightApiService, Shipment, ModeType, TransportLeg, OrderLine, Order } from '../../providers/freight-api.service';
 import { Component, ViewEncapsulation, ViewChild, OnInit, OnDestroy } from '@angular/core';
@@ -9,16 +9,6 @@ import { ToastController, LoadingController, NavController, ActionSheetControlle
 import { forEach } from '@angular/router/src/utils/collection';
 import { MyNavService } from '../../providers/my-nav.service';
 import { Reference } from '@angular/compiler/src/render3/r3_ast';
-
-export enum EventCode {
-  ADD = 0,
-  IRP = 1,
-  DEP = 2,
-  ARV = 3,
-  CLR = 4,
-  DCA = 5,
-  DCF = 6
-}
 
 @Component({
   selector: 'page-shipment-detail',
@@ -88,23 +78,11 @@ export class ShipmentDetailPage implements OnInit, OnDestroy {
            
            this.shipment.milestones = result.milestones;
 
-           // Order milestones according to the chronological order in which we expect them to occur.
-           // Convert milestone code into an ordered integer using EventCode enum.
            this.shipment.milestones = this.shipment.milestones.sort((m1, m2) => {
               const code1 = EventCode[m1.EventCode as keyof typeof EventCode];
               const code2 = EventCode[m2.EventCode as keyof typeof EventCode];
 
-              if (code1 === undefined && code2 === undefined) {
-                return 0;
-              } else if (code1 === undefined) {
-                // Move code1 to end:
-                return 1;
-              } else if (code2 === undefined) {
-                // Move code2 to end:
-                return -1;
-              } else {
-                return code1 - code2;
-              }              
+              return this.global.compareCodes(code1, code2);
             });
 
 

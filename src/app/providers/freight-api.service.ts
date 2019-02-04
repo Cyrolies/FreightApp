@@ -162,57 +162,65 @@ export class FreightMilestone {
   @Expose()
   @Type(() => Date)
   JS_SystemCreateTimeUtc: Date;
-  public getNextMilestones (
-
-  ) {
+  public getNextMilestones () {
     const nextMStones = new MilestonesNext();
-    if (this.ActualDelivery != null && this.ActualDelivery.length > 0) {
-      nextMStones.CompletedMilestoneCode = 'ATD';
-      nextMStones.CompletedMilestoneDescription = 'Actual Delivery'; 
-      nextMStones.CompletedActualDate = this.ActualDelivery;
+
+    if (this.ParcelDelivered != null && this.ParcelDelivered.length > 0) {
+      nextMStones.CompletedMilestoneCode = 'DCF';
+      nextMStones.CompletedMilestoneDescription = 'Parcel Delivered'; 
+      nextMStones.CompletedActualDate = this.ParcelDelivered;
+
    } else if (this.TruckerNotified != null && this.TruckerNotified.length > 0) {
-    nextMStones.CompletedMilestoneCode = 'ATA';
-    nextMStones.CompletedMilestoneDescription = 'Truck Notified'; 
-    nextMStones.CompletedActualDate = this.TruckerNotified;
-    nextMStones.NextMilestoneCode = 'ATD';
-    nextMStones.NextMilestoneDescription = 'Actual Delivery';
+      nextMStones.CompletedMilestoneCode = 'DCA';
+      nextMStones.CompletedMilestoneDescription = 'Truck Notified'; 
+      nextMStones.CompletedActualDate = this.TruckerNotified;
+      nextMStones.NextMilestoneCode = 'DCF';
+      nextMStones.NextMilestoneDescription = 'Parcel Delivered';
+
    } else if (this.ImportCustomsClearance != null && this.ImportCustomsClearance.length > 0) {
-    nextMStones.CompletedMilestoneCode = 'CLR';
-    nextMStones.CompletedMilestoneDescription = 'Customs Cleared'; 
-    nextMStones.CompletedActualDate = this.ImportCustomsClearance;
-    nextMStones.NextMilestoneCode = 'DCA';
-    nextMStones.NextMilestoneDescription = 'Truck Notified';
-  } else if (this.PortOfDischarge != null && this.PortOfDischarge.length > 0) {
-    nextMStones.CompletedMilestoneCode = 'POD';
-    nextMStones.CompletedMilestoneDescription = 'Actual Departure'; 
-    nextMStones.CompletedActualDate = this.PortOfDischarge;
-    nextMStones.NextMilestoneCode = 'CLR';
-    nextMStones.NextMilestoneDescription = 'Customs Cleared';
+      nextMStones.CompletedMilestoneCode = 'CLR';
+      nextMStones.CompletedMilestoneDescription = 'Customs Cleared'; 
+      nextMStones.CompletedActualDate = this.ImportCustomsClearance;
+      nextMStones.NextMilestoneCode = 'DCA';
+      nextMStones.NextMilestoneDescription = 'Truck Notified';
+
+  } else if (this.ActualDelivery != null && this.ActualDelivery.length > 0) {
+      nextMStones.CompletedMilestoneCode = 'ARV';
+      nextMStones.CompletedMilestoneDescription = 'Arrive at last POD'; 
+      nextMStones.CompletedActualDate = this.ActualDelivery;
+      nextMStones.NextMilestoneCode = 'CLR';
+      nextMStones.NextMilestoneDescription = 'Customs Cleared';
+
    } else if (this.ActualDeparture != null && this.ActualDeparture.length > 0) {
-    nextMStones.CompletedMilestoneCode = 'POD';
-    nextMStones.CompletedMilestoneDescription = 'Actual Departure'; 
-    nextMStones.CompletedActualDate = this.PortOfDischarge;
-    nextMStones.NextMilestoneCode = 'CLR';
-    nextMStones.NextMilestoneDescription = 'Customs Cleared';
+      nextMStones.CompletedMilestoneCode = 'DEP';
+      nextMStones.CompletedMilestoneDescription = 'Actual Departure'; 
+      nextMStones.CompletedActualDate = this.ActualDeparture;
+      nextMStones.NextMilestoneCode = 'ARV';
+      nextMStones.NextMilestoneDescription = 'Arrive at last POD';
+
    } else if (this.Pickup != null && this.Pickup.length > 0) {
-    nextMStones.CompletedMilestoneCode = 'PCK';
-    nextMStones.CompletedMilestoneDescription = 'Pickup'; 
-    nextMStones.CompletedActualDate = this.Pickup;
-    nextMStones.NextMilestoneCode = 'ATD';
-    nextMStones.NextMilestoneDescription = 'Actual Departure';
+      nextMStones.CompletedMilestoneCode = 'IRP';
+      nextMStones.CompletedMilestoneDescription = 'Pickup'; 
+      nextMStones.CompletedActualDate = this.Pickup;
+      nextMStones.NextMilestoneCode = 'DEP';
+      nextMStones.NextMilestoneDescription = 'Actual Departure';
+
    } else if (this.CargoBooked != null && this.CargoBooked.length > 0) {
-    nextMStones.CompletedMilestoneCode = 'ADD';
-    nextMStones.CompletedMilestoneDescription = 'Cargo Booked'; 
-    nextMStones.CompletedActualDate = this.CargoBooked;
-    nextMStones.NextMilestoneCode = 'PCK';
-    nextMStones.NextMilestoneDescription = 'Pickup';
-   } else {
-    nextMStones.CompletedMilestoneCode = 'ADD';
-    nextMStones.CompletedMilestoneDescription = 'Cargo Booked'; 
-    nextMStones.CompletedActualDate = this.CargoBooked;
-    nextMStones.NextMilestoneCode = 'PCK';
-    nextMStones.NextMilestoneDescription = 'Pickup';
+      nextMStones.CompletedMilestoneCode = 'ADD';
+      nextMStones.CompletedMilestoneDescription = 'Cargo Booked'; 
+      nextMStones.CompletedActualDate = this.CargoBooked;
+      nextMStones.NextMilestoneCode = 'IRP';
+      nextMStones.NextMilestoneDescription = 'Pickup';
+
+    } else {
+      nextMStones.CompletedMilestoneCode = 'NONE';
+      // nextMStones.CompletedMilestoneCode = 'ADD';
+      // nextMStones.CompletedMilestoneDescription = 'Cargo Booked'; 
+      // nextMStones.CompletedActualDate = this.CargoBooked;
+      // nextMStones.NextMilestoneCode = 'IRP';
+      // nextMStones.NextMilestoneDescription = 'Pickup';
    }
+
    this.milestonesNext = nextMStones;
   }
 }

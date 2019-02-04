@@ -80,7 +80,8 @@
                     <ion-row style="padding-top: 1%; padding-bottom: 1%">
                       <ion-col col-5 no-padding>
                             <!-- Icon one -->
-                            <ion-list class="caption-icon">
+                            <ion-list class="caption-icon"
+                                *ngIf="freightmilestone.milestonesNext.CompletedMilestoneCode">
                                 <ion-item>
                                     <ion-avatar style="margin:auto!important">
                                         <img  [src]="'../../../assets/img/' + freightmilestone.milestonesNext.CompletedMilestoneCode + '.png'">
@@ -113,7 +114,7 @@
                         <ion-col col-5 no-padding>
                                 <!-- Icon three -->
                                 <ion-list class="caption-icon"
-                                [hidden]="!freightmilestone.milestonesNext.NextMilestoneCode">
+                                    *ngIf="freightmilestone.milestonesNext.NextMilestoneCode">
                                     <ion-item>
                                         <ion-avatar style="margin:auto!important">
                                             <img  [src]="'../../../assets/img/' + freightmilestone.milestonesNext.NextMilestoneCode + '.png'">

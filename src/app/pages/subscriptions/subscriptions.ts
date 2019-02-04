@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { ToastController, LoadingController, NavController, NavParams, Events } from '@ionic/angular';
 import { environment } from '../../../environments/environment';
 import { UserData } from '../../providers/user-data';
-import { GlobalService } from '../../providers/global.service';
+import { GlobalService, EventCode } from '../../providers/global.service';
 
 
 @Component({
@@ -58,6 +58,13 @@ export class SubscriptionsPage {
       spinner.dismiss();
 
       this.topics = topics;
+
+      this.topics = this.topics.sort((t1, t2) => {
+        const code1 = EventCode[t1.code as keyof typeof EventCode];
+        const code2 = EventCode[t2.code as keyof typeof EventCode];
+
+        return this.global.compareCodes(code1, code2);
+      });
 
     }, (error) =>  {
 

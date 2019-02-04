@@ -1,25 +1,36 @@
 import { forEach } from '@angular/router/src/utils/collection';
-import { FreightMilestone, MilestonesNext } from './freight-api.service';
+import { FreightMilestone, MilestonesNext, Milestone, EventTopic } from './freight-api.service';
 import { Injectable } from '@angular/core';
 import { ToastOptions } from '@ionic/core';
 import { formatDate } from '@angular/common';
 
+export enum EventCode {
+    ADD = 0,
+    IRP = 1,
+    DEP = 2,
+    ARV = 3,
+    CLR = 4,
+    DCA = 5,
+    DCF = 6
+}
+
 @Injectable({
     providedIn: 'root'
 })
-export class GlobalService {  
+export class GlobalService { 
     
     public isDevice: boolean;
 
-    public readonly availableMilestoneImages: string[] = [
-        'ADD',
-        'ATA',
-        'ATD',
-        'CLR',
-        'DCA',
-        'PCK',
-        'POD'
-    ];
+    public readonly availableMilestoneImages: string[] = []; // Set in constructor.
+    // public readonly availableMilestoneImages: string[] = [
+    //     'ADD',
+    //     'IRP',
+    //     'DEP',
+    //     'ARV',
+    //     'CLR',
+    //     'DCA',
+    //     'DCF'
+    // ];
 
     public isMilestoneImageAvailable(eventCode: string) {
 
@@ -33,18 +44,20 @@ export class GlobalService {
 
     public getMilestoneImageKey(eventCode: string) { // TODO: Review mapping of codes to images, and to displayed codes.
         
-        switch (eventCode) {
-            case 'DEP':
-                return 'ATD';
-            case 'IRP':
-                return 'PCK';
-            case 'ARV':
-                return 'POD';
-            case 'DCF':
-                return 'ATA';
-            default:
-                return eventCode;
-        }
+        return eventCode;
+        
+        // switch (eventCode) {
+        //     case 'DEP':
+        //         return 'ATD';
+        //     case 'IRP':
+        //         return 'PCK';
+        //     case 'ARV':
+        //         return 'POD';
+        //     case 'DCF':
+        //         return 'ATA';
+        //     default:
+        //         return eventCode;
+        // }
     }
 
     public getMilestoneImageUrl(eventCode: string, isEventLate: boolean): string {
@@ -114,5 +127,29 @@ export class GlobalService {
         return spaced;
     }
 
-    constructor() {}
+    public compareCodes(code1: number, code2: number): number {
+        // To assist in functions that sort objects by a property that maps to a numeric code (like enums).
+
+        if (code1 === undefined && code2 === undefined) {
+            return 0;
+        } else if (code1 === undefined) {
+            // Move code1 object to end:
+            return 1;
+        } else if (code2 === undefined) {
+            // Move code2 object to end:
+            return -1;
+        } else {
+            return code1 - code2;
+        }
+    }
+
+    constructor() {
+
+        const enumLength = Object.keys(EventCode).length / 2;
+
+        for (let keyindex = 0; keyindex < enumLength; keyindex++) {
+            const eventCodeAsString = EventCode[keyindex];   
+            this.availableMilestoneImages.push(eventCodeAsString);     
+        }
+    }
 }

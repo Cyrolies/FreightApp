@@ -330,7 +330,7 @@ export class MapPage implements OnInit, OnDestroy {
     if (this.fromPort) {
       this.mapHostService.addIconPushpin(
         this.fromPort,
-        'assets/img/Sm-ADD.png',
+        'assets/img/Map-Startpoint.png',
         new Microsoft.Maps.Point(Math.ceil(this.circleIconDimensions.x / 2), this.circleIconDimensions.y),
         this.transportLeg.portOfLoading,
 
@@ -354,7 +354,7 @@ export class MapPage implements OnInit, OnDestroy {
     if (this.toPort) {
       this.mapHostService.addIconPushpin(
         this.toPort,
-        'assets/img/Sm-ATA.png',
+        'assets/img/Map-Endpoint.png',
         new Microsoft.Maps.Point(Math.ceil(this.circleIconDimensions.x / 2), this.circleIconDimensions.y),
         this.transportLeg.portOfDischarge,
 

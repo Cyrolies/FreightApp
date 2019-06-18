@@ -211,7 +211,9 @@ export class HomePage implements OnInit, OnDestroy {
           false
         ).subscribe((shipments: FreightMilestone[]) => {
         
-        this.dataLoaded = true;
+        this.dataLoaded = true; // Referenced in html
+
+        shipments = shipments.filter(s => !s.TransportMode || s.TransportMode.toUpperCase() !== 'COU'); // Filter out courier shipments
 
         this.totalShipmentsCount = shipments.length;
         let lateCount = 0;

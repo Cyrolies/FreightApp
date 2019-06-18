@@ -942,7 +942,7 @@ export class FreightApiService {
     .pipe(map(response => {
       const topics = response['topics'];
 
-      return plainToClass(EventTopic, topics);
+      return plainToClass(EventTopic, topics as any[]);
       // return topics.map((topic) => new EventTopic(topic));
     }));
     // .pipe(catchError(error => {
@@ -1001,7 +1001,7 @@ export class FreightApiService {
     .pipe(map((result: object[]) =>  {
 
       // const freightmilestones: FreightMilestone[] = new Array<FreightMilestone>();
-      const freightmilestones = plainToClass(FreightMilestone, result['Items']);
+      const freightmilestones = plainToClass(FreightMilestone, result['Items'] as any[]);
       if (isShipmentScreen) {
       freightmilestones.forEach ( (element) => {
         element.getNextMilestones();

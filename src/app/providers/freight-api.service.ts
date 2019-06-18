@@ -236,7 +236,7 @@ export class Milestone {
   ActualDate: Date;
   @Expose()
   @Type(() => Date)
-  EstimatedDate: Date;
+  EstimateDate: Date;
   @Expose()
   EventCode: string;
   @Expose()

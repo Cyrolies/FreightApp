@@ -118,7 +118,6 @@ export class AppComponent implements OnInit {
   //   }
   // ];
   loggedIn = false;
-  isMenuDisabled = true;
 
   constructor(
     private events: Events,
@@ -150,8 +149,6 @@ export class AppComponent implements OnInit {
       // this.network.initializeNetworkEvents();
 
       this.global.isDevice = this.platform.is('cordova');
-
-      this.isMenuDisabled = false || environment.production;
     });
   }
 
@@ -170,8 +167,6 @@ export class AppComponent implements OnInit {
   listenForLoginEvents() {
     this.events.subscribe('user:login', () => {
       this.updateLoggedInStatus(true);
-
-      this.isMenuDisabled = false;
     });
 
     this.events.subscribe('user:signup', () => {
@@ -180,8 +175,6 @@ export class AppComponent implements OnInit {
 
     this.events.subscribe('user:logout', () => {
       this.updateLoggedInStatus(false);
-
-      this.isMenuDisabled = true;
     });
   }
 

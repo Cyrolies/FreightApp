@@ -118,8 +118,6 @@ export class AppComponent implements OnInit {
   //   }
   // ];
   loggedIn = false;
-  isSplitViewDisabled = true;
-  isMenuDisabled = true;
 
   constructor(
     private events: Events,
@@ -151,9 +149,6 @@ export class AppComponent implements OnInit {
       // this.network.initializeNetworkEvents();
 
       this.global.isDevice = this.platform.is('cordova');
-
-      this.isMenuDisabled = false || environment.production;
-      this.isSplitViewDisabled = false || environment.production;
     });
   }
 
@@ -172,9 +167,6 @@ export class AppComponent implements OnInit {
   listenForLoginEvents() {
     this.events.subscribe('user:login', () => {
       this.updateLoggedInStatus(true);
-
-      this.isSplitViewDisabled = false;
-      this.isMenuDisabled = false;
     });
 
     this.events.subscribe('user:signup', () => {
@@ -183,9 +175,6 @@ export class AppComponent implements OnInit {
 
     this.events.subscribe('user:logout', () => {
       this.updateLoggedInStatus(false);
-
-      this.isSplitViewDisabled = true;
-      this.isMenuDisabled = true;
     });
   }
 

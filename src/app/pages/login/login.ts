@@ -74,6 +74,9 @@ export class LoginPage implements OnInit {
   }
 
   ionViewWillEnter() {
+
+    this.menu.enable(false);
+
     this.userData.getUsername().then((username) => {
       if (username) {
         this.login.username = username;
@@ -85,7 +88,9 @@ export class LoginPage implements OnInit {
     this.handleLogoCollision(this.logo, this.loginButton);
   }
 
-  ionViewDidLeave() { }
+  ionViewDidLeave() { 
+    this.menu.enable(true);    
+  }
 
   async onLogin(form: NgForm) {
 

@@ -196,8 +196,8 @@ export class HomePage implements OnInit, OnDestroy {
     const shipmentNo = '';
     const orderNo = '';
     const openShipments = true;
-    const fromDate = format(subMonths(new Date(), 6), 'yyyy-MM-dd');
-    const toDate = format(new Date(), 'yyyy-MM-dd');
+    const fromDate = format(subMonths(new Date().toISOString(), 6), 'yyyy-MM-dd');
+    const toDate = format(new Date().toISOString(), 'yyyy-MM-dd');
 
     const spinner = await this.loading.create();
     spinner.present().then(() => {

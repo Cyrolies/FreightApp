@@ -13,26 +13,19 @@
 
   <!--Shipment Detail Card-->
   <ion-card class="rounded" *ngIf="shipment" >
-      <ion-card-header color="primary">
-      <ion-row>
-        <ion-col>
-        <ion-item detail="false" lines="none">
-            <ion-text style="padding-right: 5px!important" color="secondary">SHIPMENT NO</ion-text>
-            <ion-text color="light"> {{shipment.ShipmentNo}}</ion-text> &nbsp;
-            <ion-text style="padding-right: 5px!important" color="secondary">MODE</ion-text>
-            <ion-text color="light"> {{shipment.transportMode}}</ion-text>
-        </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-      <ion-col>
-        <ion-item *ngIf="shipment.ReferenceAll">
-            <ion-text style="padding-right: 5px!important" color="secondary">REF</ion-text>
-            <ion-text color="light"> {{shipment["ReferenceAll"]}}</ion-text>
-        </ion-item>
-      </ion-col>
-      </ion-row>
-      </ion-card-header>
+
+        <ion-card-header color="primary">
+            <ion-item detail="false" lines="none">
+                <ion-text style="padding-right: 5px!important" color="secondary">SHIPMENT NO</ion-text>
+                <ion-text style="padding-right: 5px!important" color="light"> {{shipment.ShipmentNo}}</ion-text>
+                <ion-text style="padding-right: 5px!important" color="secondary">MODE</ion-text>
+                <ion-text style="padding-right: 5px!important" color="light"> {{shipment.transportMode}}</ion-text>
+            </ion-item>
+            <ion-item *ngIf="shipment.ReferenceAll" style="min-height: 0">
+                <ion-text style="padding-right: 5px!important" color="secondary">REF</ion-text>
+                <ion-text color="light" class="single-line-ellipsis"> {{shipment["ReferenceAll"]}}</ion-text>
+            </ion-item>
+        </ion-card-header>
 
         <ion-card-content>
             <ion-grid>
@@ -85,7 +78,10 @@
   </ion-card>
 
 </ion-header>
-<!-- &nbsp; -->
+
+<ion-item-divider style="min-height:0px">
+</ion-item-divider>
+
 <ion-content>
 
   <ion-tabs>

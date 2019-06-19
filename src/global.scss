@@ -116,3 +116,13 @@ ion-menu-button {
     /* autoprefixer: off */
     -webkit-box-orient: vertical;
   } 
+
+  .single-line-ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+
+    /* autoprefixer: off */
+    -webkit-box-orient: vertical;
+  } 

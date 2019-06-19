@@ -63,7 +63,7 @@ export class ShipmentDetailPage implements OnInit, OnDestroy {
       this.freightApiService.GetShipment(this.shipmentNumber).subscribe((result: Shipment) => {
 
         // tslint:disable-next-line:no-debugger
-        debugger;
+        // debugger;
 
         this.shipment =  result;
          if (this.shipment != null) {

@@ -110,7 +110,7 @@ export class ShipmentListPage implements OnInit, OnDestroy {
 
 
     // tslint:disable-next-line:no-debugger
-    debugger;
+    // debugger;
     this.freightmilestones =  result;
 
     this.displayedFreightmilestones = [];
@@ -173,7 +173,7 @@ export class ShipmentListPage implements OnInit, OnDestroy {
 
   goToShipmentDetail(FreightMilestone: any) {
     // tslint:disable-next-line:no-debugger
-    debugger;
+    // debugger;
 
     this.navCtrl.navigateForward(`shipments/details/${FreightMilestone.ShipmentRef}`);
   }

@@ -95,7 +95,7 @@ export class MapPage implements OnInit, OnDestroy {
 
     const params = this.navService.pop();
     // tslint:disable-next-line:no-debugger
-    debugger;
+    // debugger;
 
     this.returnToShipment = params['returnToShipment'];
     this.transportLeg = params['transportLeg'];
@@ -282,7 +282,7 @@ export class MapPage implements OnInit, OnDestroy {
     if (this.currentFreightLocation) { 
       
       // tslint:disable-next-line:no-debugger
-      debugger;
+      // debugger;
 
       this.mapHostService.addIconPushpin(
         this.currentFreightLocation,

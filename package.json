@@ -57,7 +57,7 @@
     "es6-promise-plugin": "4.2.2",
     "ionic-angular": "^3.9.2",
     "lodash": "^4.17.11",
-    "moment": "^2.23.0",
+    "moment": "^2.29.2",
     "ng2-charts": "^1.6.0",
     "powerbi-cli": "^1.0.9",
     "powerbi-client": "^2.6.5",

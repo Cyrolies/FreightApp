@@ -39,7 +39,7 @@
     "chartjs-plugin-datalabels": "^0.5.0",
     "chartjs-plugin-labels": "^1.1.0",
     "class-transformer": "^0.2.0",
-    "class-validator": "^0.9.1",
+    "class-validator": "^0.14.0",
     "color-convert": "^1.9.3",
     "cordova-android": "7.1.4",
     "cordova-ios": "4.5.5",
